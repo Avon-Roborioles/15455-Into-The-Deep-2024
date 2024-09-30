@@ -13,5 +13,7 @@ public class RobotConfig {
     public static class IntakeConstants {
         public static final double colorSensorRedToGreenThreshold =.3;
         public static final String colorSensorName = "colorSensor";
+
+
     }
 }

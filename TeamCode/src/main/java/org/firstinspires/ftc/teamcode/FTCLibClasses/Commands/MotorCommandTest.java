@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.MotorTest;
-
 public class MotorCommandTest extends CommandBase {
     MotorTest motor;
     int numTimes=0;

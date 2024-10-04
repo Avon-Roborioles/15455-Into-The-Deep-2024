@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.ServoEx;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,16 +16,34 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private ColorSensor colorSensor1;
     private ColorSensor colorSensor2;
-    private CRServo servo;
+
+    private CRServo intakeServo;
+
+    private ServoEx verticalServo;
+    private IntakeHeight verticalServoTarget;
+
+    private Motor extendMotor;
+
     private AllianceColor allianceColor;
+
+
     private String telemetryToReturn = "";
 
     public IntakeSubsystem(HardwareMap hMap, AllianceColor alliance){
         colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
         colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
 
-        servo = hMap.get(CRServo.class,RobotConfig.IntakeConstants.servoName);
+        intakeServo = hMap.get(CRServo.class,RobotConfig.IntakeConstants.intakeServoName);
         this.allianceColor = alliance;
+
+        verticalServo = new SimpleServo(
+                hMap,
+                RobotConfig.IntakeConstants.verticalServoName,
+                RobotConfig.IntakeConstants.verticalServoMinDegrees,
+                RobotConfig.IntakeConstants.verticalServoMaxDegrees
+        );
+        extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
+
     }
 
     public SampleState hasCorrectSample(){
@@ -64,6 +86,43 @@ public class IntakeSubsystem extends SubsystemBase {
     public String getTelemetry(){
         return telemetryToReturn;
     }
+
+    public void spinWheelsUp(){
+        intakeServo.setPower(RobotConfig.IntakeConstants.intakeServoUpDirection *1);
+    }
+
+    public void spinWheelsDown(){
+        intakeServo.setPower(RobotConfig.IntakeConstants.intakeServoUpDirection *-1);
+    }
+    public void stopIntake(){
+        intakeServo.setPower(0);
+    }
+    public void moveIntakeUp(){
+        verticalServo.setPosition(RobotConfig.IntakeConstants.verticalServoUpPosition);
+        verticalServoTarget = IntakeHeight.UP;
+    }
+
+    public void moveIntakeDown(){
+        verticalServo.setPosition(RobotConfig.IntakeConstants.verticalServoDownPosition);
+        verticalServoTarget = IntakeHeight.DOWN;
+    }
+
+    public boolean isVerticalMotionDone(){
+        switch (verticalServoTarget){
+            case UP:
+                return verticalServo.getPosition() == RobotConfig.IntakeConstants.verticalServoUpPosition;
+            case DOWN:
+                return verticalServo.getPosition() == RobotConfig.IntakeConstants.verticalServoDownPosition;
+        }
+        return false;
+    }
+
+
+    public enum IntakeHeight{
+        UP,
+        DOWN
+    }
+
     public enum SampleState {
         CORRESPONDING_SAMPLE,
         WRONG_SAMPLE,

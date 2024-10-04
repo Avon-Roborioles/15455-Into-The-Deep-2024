@@ -15,7 +15,17 @@ public class RobotConfig {
         public static final String colorSensor1Name = "leftColorSensor";
         public static final String colorSensor2Name = "rightColorSensor";
 
-        public static final String servoName = "intakeCRServo";
+        public static final String intakeServoName = "intakeCRServo";
+        public static final double intakeServoUpDirection = 1;
+
+        public static final String verticalServoName = "verticalServo";
+        public static final double verticalServoMinDegrees = 0;
+        public static final double verticalServoMaxDegrees = 1800;
+        public static final double verticalServoUpPosition = .7;
+        public static final double verticalServoDownPosition = .4;
+
+
+        public static final String extendMotorName = "extendMotor";
     }
 
 

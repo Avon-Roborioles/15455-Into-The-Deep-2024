@@ -13,7 +13,7 @@ public class ColorSensorTest extends SubsystemBase {
     private ColorSensor colorSensor;
 
     public ColorSensorTest(HardwareMap hMap){
-        colorSensor = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensorName);
+        colorSensor = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
     }
 
 

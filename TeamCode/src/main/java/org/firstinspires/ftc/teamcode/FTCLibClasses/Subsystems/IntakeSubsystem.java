@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.allianceColor = alliance;
     }
 
-    public PixelState hasCorrectSample(){
+    public SampleState hasCorrectSample(){
         double red = colorSensor1.red() + colorSensor2.red();
         double blue = colorSensor1.blue() + colorSensor2.blue();
         double green = colorSensor1.green() + colorSensor2.green();
@@ -41,33 +41,34 @@ public class IntakeSubsystem extends SubsystemBase {
         if(blue>red&&blue>green){
             switch(allianceColor){
                 case RED:
-                    return PixelState.WRONG_PIXEL;
+                    return SampleState.WRONG_SAMPLE;
                 case BLUE:
-                    return PixelState.CORRECT_PIXEL;
+                    return SampleState.CORRESPONDING_SAMPLE;
             }
         } else if (red>blue&&red>green){
             switch(allianceColor){
                 case RED:
-                    return PixelState.CORRECT_PIXEL;
+                    return SampleState.CORRESPONDING_SAMPLE;
                 case BLUE:
-                    return PixelState.WRONG_PIXEL;
+                    return SampleState.WRONG_SAMPLE;
             }
-            return PixelState.WRONG_PIXEL;
+            return SampleState.WRONG_SAMPLE;
         } else if (Math.abs(red-green) < RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold){
-            return PixelState.CORRECT_PIXEL;
+            return SampleState.YELLOW_SAMPLE;
         }
 
-        return PixelState.NO_PIXEL;
+        return SampleState.NO_SAMPLE;
 
     }
 
     public String getTelemetry(){
         return telemetryToReturn;
     }
-    public enum PixelState{
-        CORRECT_PIXEL,
-        WRONG_PIXEL,
-        NO_PIXEL
+    public enum SampleState {
+        CORRESPONDING_SAMPLE,
+        WRONG_SAMPLE,
+        YELLOW_SAMPLE,
+        NO_SAMPLE
     }
 
 }

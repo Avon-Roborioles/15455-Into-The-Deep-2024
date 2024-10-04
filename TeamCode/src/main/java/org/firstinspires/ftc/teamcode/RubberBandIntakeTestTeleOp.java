@@ -22,16 +22,19 @@ public class RubberBandIntakeTestTeleOp extends OpMode {
 
     @Override
     public void loop(){
-        IntakeSubsystem.PixelState state = intake.hasCorrectSample();
+        IntakeSubsystem.SampleState state = intake.hasCorrectSample();
         switch (state){
-            case NO_PIXEL:
-                telemetry.addLine("No Pixel");
+            case NO_SAMPLE:
+                telemetry.addLine("No Sample");
                 break;
-            case WRONG_PIXEL:
-                telemetry.addLine("Wrong Pixel");
+            case WRONG_SAMPLE:
+                telemetry.addLine("Wrong Sample");
                 break;
-            case CORRECT_PIXEL:
-                telemetry.addLine("Right Pixel");
+            case CORRESPONDING_SAMPLE:
+                telemetry.addLine("Right Sample");
+                break;
+            case YELLOW_SAMPLE:
+                telemetry.addLine("Yellow Sample");
                 break;
         }
         telemetry.addLine(intake.getTelemetry());

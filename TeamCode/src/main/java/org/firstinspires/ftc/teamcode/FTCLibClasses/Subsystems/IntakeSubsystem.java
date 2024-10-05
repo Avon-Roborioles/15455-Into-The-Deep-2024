@@ -7,10 +7,14 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.RobotConfig;
+
+import java.util.function.BooleanSupplier;
 
 public class IntakeSubsystem extends SubsystemBase {
 
@@ -23,13 +27,24 @@ public class IntakeSubsystem extends SubsystemBase {
     private IntakeHeight verticalServoTarget;
 
     private Motor extendMotor;
+    private double motorStartPos;
 
     private AllianceColor allianceColor;
+
+    private Telemetry telemetry;
+    private BooleanSupplier doTelemetry;
 
 
     private String telemetryToReturn = "";
 
-    public IntakeSubsystem(HardwareMap hMap, AllianceColor alliance){
+    private double combinedRedRaw = -1;
+    private double combinedBlueRaw = -1;
+    private double combinedGreenRaw = -1;
+
+
+    private Gamepad gamepad;
+
+    public IntakeSubsystem(HardwareMap hMap, AllianceColor alliance, Telemetry telemetry, BooleanSupplier doTelemetry, Gamepad gamepad){
         colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
         colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
 
@@ -43,48 +58,94 @@ public class IntakeSubsystem extends SubsystemBase {
                 RobotConfig.IntakeConstants.verticalServoMaxDegrees
         );
         extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
+
+        motorStartPos = extendMotor.getCurrentPosition();
+        this.telemetry = telemetry;
+        this.doTelemetry = doTelemetry;
+
+
 
     }
 
+
+    //This method doesn't run the bot. It's only for telemetry purposes.
+    // DO NOT PUT LOGIC INSIDE THIS
+    @Override
+    public void periodic(){
+        if(doTelemetry.getAsBoolean()) {
+            telemetry.addLine("============COLOR SENSORS============");
+            telemetry.addData("Combined Red Raw",colorSensor1.red()+colorSensor2.red());
+            telemetry.addData("Combined Blue Raw",colorSensor1.blue()+colorSensor2.blue());
+            telemetry.addData("Combined Green Raw", colorSensor1.green()+colorSensor2.green());
+
+            telemetry.addLine("============Intake Servo============");
+            telemetry.addData("Intake Servo Power",intakeServo.getPower());
+
+            telemetry.addLine("============Vertical Servo============");
+            telemetry.addData("Vertical Servo Position",verticalServo.getPosition());
+            telemetry.addData("Vertical Servo Target",verticalServoTarget);
+
+            telemetry.addLine("============Extend Motor============");
+            telemetry.addData("Motor Position",extendMotor.getCurrentPosition());
+
+
+        }
+    }
+
     public SampleState hasCorrectSample(){
-        double red = colorSensor1.red() + colorSensor2.red();
-        double blue = colorSensor1.blue() + colorSensor2.blue();
-        double green = colorSensor1.green() + colorSensor2.green();
+        //It adds both sensor values and then takes the proportion of the colors.
+        //We do this because the closer the sample is, the more color it shows,a nd we
+//        double red = colorSensor1.red() + colorSensor2.red();
+//        double blue = colorSensor1.blue() + colorSensor2.blue();
+//        double green = colorSensor1.green() + colorSensor2.green();
+//
+//        double max = Math.max(Math.max(red,blue),green);
+//
+//        red/=max;
+//        blue/=max;
+//        green/=max;
+//
+//
+//        telemetryToReturn = "Red: " +red+"\nBlue: " + blue+"\nGreen: " +green;
+//
+//
+//        if(blue>red&&blue>green){
+//            switch(allianceColor){
+//                case RED:
+//                    return SampleState.WRONG_SAMPLE;
+//                case BLUE:
+//                    return SampleState.CORRESPONDING_SAMPLE;
+//            }
+//        } else if (red>blue&&red>green){
+//            switch(allianceColor){
+//                case RED:
+//                    return SampleState.CORRESPONDING_SAMPLE;
+//                case BLUE:
+//                    return SampleState.WRONG_SAMPLE;
+//            }
+//            return SampleState.WRONG_SAMPLE;
+//        } else if (Math.abs(red-green) < RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold){
+//            return SampleState.YELLOW_SAMPLE;
+//        }
+//
+//        return SampleState.NO_SAMPLE;
 
-        double max = Math.max(Math.max(red,blue),green);
 
-        red/=max;
-        blue/=max;
-        green/=max;
-
-        telemetryToReturn = "Red: " +red+"\nBlue: " + blue+"\nGreen: " +green;
-
-
-        if(blue>red&&blue>green){
-            switch(allianceColor){
-                case RED:
-                    return SampleState.WRONG_SAMPLE;
-                case BLUE:
-                    return SampleState.CORRESPONDING_SAMPLE;
-            }
-        } else if (red>blue&&red>green){
-            switch(allianceColor){
-                case RED:
-                    return SampleState.CORRESPONDING_SAMPLE;
-                case BLUE:
-                    return SampleState.WRONG_SAMPLE;
-            }
-            return SampleState.WRONG_SAMPLE;
-        } else if (Math.abs(red-green) < RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold){
-            return SampleState.YELLOW_SAMPLE;
+        if (gamepad.a){
+            return SampleState.CORRESPONDING_SAMPLE;
         }
 
         return SampleState.NO_SAMPLE;
-
     }
 
     public String getTelemetry(){
         return telemetryToReturn;
+    }
+
+    public boolean extendFinished(){
+        return extendMotor.atTargetPosition();
     }
 
     public void spinWheelsUp(){
@@ -117,6 +178,28 @@ public class IntakeSubsystem extends SubsystemBase {
         return false;
     }
 
+    public void extendMotorOutFully(){
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMaxPosition);
+        extendMotor.set(1);
+    }
+
+    public void retractMotorFully(){
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMinPosition);
+        extendMotor.set(1);
+    }
+
+    public void slowRetractMotor(){
+        extendMotor.setRunMode(Motor.RunMode.RawPower);
+        extendMotor.set(RobotConfig.IntakeConstants.motorSlowRetractionRawPower);
+
+    }
+
+    private double getAdjustedMotorPos(){
+        return extendMotor.getCurrentPosition()-motorStartPos;
+    }
+
 
     public enum IntakeHeight{
         UP,
@@ -124,10 +207,21 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public enum SampleState {
-        CORRESPONDING_SAMPLE,
-        WRONG_SAMPLE,
-        YELLOW_SAMPLE,
-        NO_SAMPLE
+        CORRESPONDING_SAMPLE("Corresponding Sample"),
+        WRONG_SAMPLE("Wrong Sample"),
+        YELLOW_SAMPLE("Yellow Sample"),
+        NO_SAMPLE("No Sample");
+
+        private String name;
+        SampleState(String name){
+            this.name = name;
+        }
+        @Override
+        public String toString(){
+            return name;
+        }
     }
+
+
 
 }

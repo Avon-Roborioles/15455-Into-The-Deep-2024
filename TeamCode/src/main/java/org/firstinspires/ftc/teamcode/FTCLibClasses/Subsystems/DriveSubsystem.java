@@ -40,6 +40,8 @@ public class DriveSubsystem extends SubsystemBase {
         MotorEx backLeft = new MotorEx(hMap,RobotConfig.DriveConstants.backLeftWheelName);
         MotorEx backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
 
+        backLeft.setInverted(true);
+        backRight.setInverted(true);
 
 //        leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 //        rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -51,7 +53,7 @@ public class DriveSubsystem extends SubsystemBase {
         strafe = gamepad::getLeftX;
         rotate = gamepad::getRightX;
         toggleFieldToBotCentric = new ToggleButtonReader(gamepad, GamepadKeys.Button.RIGHT_BUMPER);
-        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
     }
 
@@ -75,38 +77,32 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry = t;
     }
 
-    @Override
-    public void periodic() {
-        if (!isAuto) {
-            driverControlDrive();
-        } else if(!isCurCommandScheduled){
-            curCommand.schedule();
-            isCurCommandScheduled = true;
-        } else {
-            isCurCommandScheduled = false;
-            isAuto = false;
-        }
-        if (telemetry!=null) {
-            telemetry.addData("isDrive Auto", isAuto);
-        }
-    }
+//    @Override
+//    public void periodic() {
+//        if (!isAuto) {
+//            driverControlDrive();
+//        } else if(!isCurCommandScheduled){
+//            curCommand.schedule();
+//            isCurCommandScheduled = true;
+//        } else {
+//            isCurCommandScheduled = false;
+//            isAuto = false;
+//        }
+//        if (telemetry!=null) {
+//            telemetry.addData("isDrive Auto", isAuto);
+//        }
+//    }
 
 
-    private void driverControlDrive(){
-        if (toggleFieldToBotCentric.getState()||true) {
-            drive.driveFieldCentric(
-                    -strafe.getAsDouble(),
-                    -forward.getAsDouble(),
-                    -rotate.getAsDouble(),
-                    heading.getAsDouble()
-            );
-        } else {
-            drive.driveRobotCentric(
-                    strafe.getAsDouble(),
-                    forward.getAsDouble(),
-                    rotate.getAsDouble()
-            );
-        }
+    public void driverControlDrive(){
+
+        drive.driveFieldCentric(
+                -strafe.getAsDouble(),
+                -forward.getAsDouble(),
+                rotate.getAsDouble(),
+                heading.getAsDouble()
+        );
+
     }
 
     public void goForwardAuto(){
@@ -136,15 +132,15 @@ public class DriveSubsystem extends SubsystemBase {
         }
         isAuto = true;
     }
-
-    public void doTeleOp(){
-        if (curCommand!=null){
-            curCommand.cancel();
-            curCommand = null;
-            isCurCommandScheduled =false;
-        }
-        isAuto = false;
-    }
+//
+//    public void doTeleOp(){
+//        if (curCommand!=null){
+//            curCommand.cancel();
+//            curCommand = null;
+//            isCurCommandScheduled =false;
+//        }
+//        isAuto = false;
+//    }
 
 
 

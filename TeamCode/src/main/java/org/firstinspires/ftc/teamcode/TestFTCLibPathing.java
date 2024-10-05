@@ -31,7 +31,7 @@ public class TestFTCLibPathing extends OpMode {
         );
 
         Trigger triggerY = new Trigger(() -> gamepad1Ex.getButton(GamepadKeys.Button.Y));
-        triggerY.whenActive(driveSubsystem::doTeleOp);
+        //triggerY.whenActive(driveSubsystem::doTeleOp);
         driveSubsystem.setTelemetry(telemetry);
 
     }

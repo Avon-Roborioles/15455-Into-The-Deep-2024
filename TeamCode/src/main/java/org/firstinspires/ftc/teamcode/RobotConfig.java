@@ -26,6 +26,13 @@ public class RobotConfig {
 
 
         public static final String extendMotorName = "extendMotor";
+        public static final int motorMaxPosition = 1000;
+        public static final int motorMinPosition = 0;
+        public static final double motorSlowRetractionRawPower = .3;
+        public static final double motorExtendSpeed = 1;
+        public static final double motorRetractSpeed = 1;
+        public static final double motorPCoefficient = 2;
+
     }
 
 

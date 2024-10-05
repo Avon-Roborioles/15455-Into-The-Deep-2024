@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,27 +17,13 @@ public class RubberBandIntakeTestTeleOp extends OpMode {
     @Override
     public void init(){
         gamepadEx1 = new GamepadEx(gamepad1);
-        intake = new IntakeSubsystem(hardwareMap,AllianceColor.BLUE);
+        intake = new IntakeSubsystem(hardwareMap,AllianceColor.BLUE,telemetry,() -> gamepadEx1.getButton(GamepadKeys.Button.A));
 
     }
 
     @Override
     public void loop(){
         IntakeSubsystem.SampleState state = intake.hasCorrectSample();
-        switch (state){
-            case NO_SAMPLE:
-                telemetry.addLine("No Sample");
-                break;
-            case WRONG_SAMPLE:
-                telemetry.addLine("Wrong Sample");
-                break;
-            case CORRESPONDING_SAMPLE:
-                telemetry.addLine("Right Sample");
-                break;
-            case YELLOW_SAMPLE:
-                telemetry.addLine("Yellow Sample");
-                break;
-        }
         telemetry.addLine(intake.getTelemetry());
         telemetry.update();
     }

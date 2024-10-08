@@ -3,8 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import java.util.function.DoubleSupplier;
 
 public class MotorTune {
 
@@ -12,16 +16,25 @@ public class MotorTune {
     private int startPos;
     private Telemetry telemetry;
     private Gamepad gamepad;
-    public MotorTune(HardwareMap hMap, String str, Gamepad gamepad, Telemetry telemetry){
-        this.motor = new Motor(hMap,str);
-        startPos = motor.getCurrentPosition();
-        motor.setRunMode(Motor.RunMode.PositionControl);
+    private DoubleSupplier getPos;
+
+    private Servo servo;
+
+
+    public MotorTune(HardwareMap hMap, String str, Gamepad gamepad, Telemetry telemetry, DoubleSupplier getPos){
+        servo = hMap.get(Servo.class,str);
+
         this.gamepad = gamepad;
+        this.telemetry = telemetry;
     }
+
+
     public void run(){
-        motor.setTargetPosition((int)(motor.getCurrentPosition()+gamepad.right_stick_y*10));
-        motor.set(1);
-        telemetry.addData("Motor Pos",motor.getCurrentPosition());
+
+        double pos = servo.getPosition() - gamepad.right_stick_y*.0005;
+        pos = Range.clip(pos,0,1);
+        servo.setPosition(pos);
+        telemetry.addData("Servo Pos",servo.getPosition());
     }
 
 }

@@ -14,10 +14,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.MotorCommandTest;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ServoCommandTest;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.MotorTest;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ServoTest;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.MotorCommandTest;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.ServoCommandTest;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.MotorTest;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.ServoTest;
 
 import java.util.List;
 

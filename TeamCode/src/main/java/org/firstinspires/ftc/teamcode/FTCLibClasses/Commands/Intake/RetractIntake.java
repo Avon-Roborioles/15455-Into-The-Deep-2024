@@ -4,25 +4,31 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 
-public class ExtendIntake extends CommandBase {
 
+public class RetractIntake extends CommandBase {
     private IntakeSubsystem intake;
 
-    public ExtendIntake(IntakeSubsystem intake){
+    public RetractIntake(IntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
     }
 
     @Override
+    public void initialize(){
+        intake.moveIntakeUp();
+    }
+
+    @Override
     public void execute(){
-        intake.extendMotorOutFully();
-        if (intake.intakeClearedBucket()){
-            intake.moveIntakeDown();
+        if (intake.isVerticalMotionDone()) {
+            intake.retractMotorFully();
+        }else {
+            intake.retractToClearPos();
         }
     }
 
     @Override
     public boolean isFinished(){
-        return intake.extendFinished()&& intake.isVerticalMotionDone();
+        return intake.extendFinished();
     }
 }

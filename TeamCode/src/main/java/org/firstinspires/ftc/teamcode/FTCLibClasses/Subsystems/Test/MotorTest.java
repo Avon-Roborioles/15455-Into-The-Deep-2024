@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.RobotConfig;
 
 public class MotorTest extends SubsystemBase {
     MotorEx motor;

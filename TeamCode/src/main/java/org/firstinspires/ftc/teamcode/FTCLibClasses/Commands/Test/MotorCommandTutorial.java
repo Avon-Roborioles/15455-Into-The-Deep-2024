@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test;
 
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.MotorTutorial;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.MotorTutorial;
 
 public class MotorCommandTutorial extends CommandBase {
     private MotorTutorial motor;

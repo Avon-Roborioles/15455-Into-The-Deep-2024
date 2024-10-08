@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 

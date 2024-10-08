@@ -28,6 +28,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private Motor extendMotor;
     private double motorStartPos;
+    private ExtendPos extendPos = ExtendPos.IN;
 
     private AllianceColor allianceColor;
 
@@ -41,12 +42,13 @@ public class IntakeSubsystem extends SubsystemBase {
     private double combinedBlueRaw = -1;
     private double combinedGreenRaw = -1;
 
-
+    private int motorTargetPos;
     private Gamepad gamepad;
 
+
     public IntakeSubsystem(HardwareMap hMap, AllianceColor alliance, Telemetry telemetry, BooleanSupplier doTelemetry, Gamepad gamepad){
-        colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
-        colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
+        //colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
+        //colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
 
         intakeServo = hMap.get(CRServo.class,RobotConfig.IntakeConstants.intakeServoName);
         this.allianceColor = alliance;
@@ -59,14 +61,14 @@ public class IntakeSubsystem extends SubsystemBase {
         );
         extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
+
 
         motorStartPos = extendMotor.getCurrentPosition();
         this.telemetry = telemetry;
         this.doTelemetry = doTelemetry;
-
-
-
+        this.gamepad = gamepad;
     }
 
 
@@ -74,11 +76,11 @@ public class IntakeSubsystem extends SubsystemBase {
     // DO NOT PUT LOGIC INSIDE THIS
     @Override
     public void periodic(){
-        if(doTelemetry.getAsBoolean()) {
+        //if(doTelemetry.getAsBoolean()) {
             telemetry.addLine("============COLOR SENSORS============");
-            telemetry.addData("Combined Red Raw",colorSensor1.red()+colorSensor2.red());
-            telemetry.addData("Combined Blue Raw",colorSensor1.blue()+colorSensor2.blue());
-            telemetry.addData("Combined Green Raw", colorSensor1.green()+colorSensor2.green());
+//            telemetry.addData("Combined Red Raw",colorSensor1.red()+colorSensor2.red());
+//            telemetry.addData("Combined Blue Raw",colorSensor1.blue()+colorSensor2.blue());
+//            telemetry.addData("Combined Green Raw", colorSensor1.green()+colorSensor2.green());
 
             telemetry.addLine("============Intake Servo============");
             telemetry.addData("Intake Servo Power",intakeServo.getPower());
@@ -91,7 +93,7 @@ public class IntakeSubsystem extends SubsystemBase {
             telemetry.addData("Motor Position",extendMotor.getCurrentPosition());
 
 
-        }
+       // }
     }
 
     public SampleState hasCorrectSample(){
@@ -140,14 +142,6 @@ public class IntakeSubsystem extends SubsystemBase {
         return SampleState.NO_SAMPLE;
     }
 
-    public String getTelemetry(){
-        return telemetryToReturn;
-    }
-
-    public boolean extendFinished(){
-        return extendMotor.atTargetPosition();
-    }
-
     public void spinWheelsUp(){
         intakeServo.setPower(RobotConfig.IntakeConstants.intakeServoUpDirection *1);
     }
@@ -155,9 +149,11 @@ public class IntakeSubsystem extends SubsystemBase {
     public void spinWheelsDown(){
         intakeServo.setPower(RobotConfig.IntakeConstants.intakeServoUpDirection *-1);
     }
-    public void stopIntake(){
+
+    public void stopIntakeWheels(){
         intakeServo.setPower(0);
     }
+
     public void moveIntakeUp(){
         verticalServo.setPosition(RobotConfig.IntakeConstants.verticalServoUpPosition);
         verticalServoTarget = IntakeHeight.UP;
@@ -181,13 +177,23 @@ public class IntakeSubsystem extends SubsystemBase {
     public void extendMotorOutFully(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
         extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMaxPosition);
-        extendMotor.set(1);
+        extendMotor.set(RobotConfig.IntakeConstants.motorExtendSpeed);
+        extendPos = ExtendPos.OUT;
     }
 
     public void retractMotorFully(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
         extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMinPosition);
-        extendMotor.set(1);
+        extendMotor.set(RobotConfig.IntakeConstants.motorSlowRetractionRawPower);
+        extendPos = ExtendPos.OUT;
+    }
+
+
+    public void retractToClearPos(){
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setTargetPosition((int)RobotConfig.IntakeConstants.intakeClearBucketPos);
+        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed);
+        extendPos = ExtendPos.CLEAR;
     }
 
     public void slowRetractMotor(){
@@ -196,16 +202,38 @@ public class IntakeSubsystem extends SubsystemBase {
 
     }
 
-    private double getAdjustedMotorPos(){
-        return extendMotor.getCurrentPosition()-motorStartPos;
+    public boolean extendFinished(){
+        switch (extendPos){
+            case IN:
+                return extendMotor.getCurrentPosition()<
+                        RobotConfig.IntakeConstants.motorMinPosition+RobotConfig.IntakeConstants.motorDegreeOfError;
+            case OUT:
+                return extendMotor.getCurrentPosition()>
+                        RobotConfig.IntakeConstants.motorMaxPosition-RobotConfig.IntakeConstants.motorDegreeOfError;
+            case CLEAR:
+                return extendMotor.getCurrentPosition()>
+                        RobotConfig.IntakeConstants.intakeClearBucketPos-RobotConfig.IntakeConstants.motorDegreeOfError;
+        }
+        return extendMotor.atTargetPosition();
     }
 
+    private double getAdjustedMotorPos(){
+        return extendMotor.getCurrentPosition();
+    }
+
+    public boolean intakeClearedBucket(){
+        return extendMotor.getCurrentPosition()>= RobotConfig.IntakeConstants.intakeClearBucketPos;
+    }
 
     public enum IntakeHeight{
         UP,
         DOWN
     }
-
+    public enum ExtendPos{
+        OUT,
+        CLEAR,
+        IN
+    }
     public enum SampleState {
         CORRESPONDING_SAMPLE("Corresponding Sample"),
         WRONG_SAMPLE("Wrong Sample"),
@@ -221,7 +249,4 @@ public class IntakeSubsystem extends SubsystemBase {
             return name;
         }
     }
-
-
-
 }

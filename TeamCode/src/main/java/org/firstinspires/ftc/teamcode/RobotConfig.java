@@ -21,8 +21,8 @@ public class RobotConfig {
         public static final String verticalServoName = "verticalServo";
         public static final double verticalServoMinDegrees = 0;
         public static final double verticalServoMaxDegrees = 1800;
-        public static final double verticalServoUpPosition = .1272;
-        public static final double verticalServoDownPosition = 0;
+        public static final double verticalServoUpPosition = 1;
+        public static final double verticalServoDownPosition = .8472;
 
 
         public static final String extendMotorName = "extendMotor";

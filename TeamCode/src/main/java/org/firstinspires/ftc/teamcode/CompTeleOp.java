@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -41,7 +42,7 @@ public class CompTeleOp extends OpMode {
                         RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
-        while(imu.initialize(imuParams)){
+        while(!imu.initialize(imuParams)){
             continue;
         }
 
@@ -54,8 +55,8 @@ public class CompTeleOp extends OpMode {
         spinIntake = new SpinIntake(intake);
         retractIntake = new RetractIntake(intake);
 
-        Trigger extendTrigger = new Trigger(() -> drivePad.getButton(GamepadKeys.Button.A));
-
+        drivePad.getGamepadButton(GamepadKeys.Button.X).whenActive(extendIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.Y).whenActive(spinIntake);
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
         //extendTrigger.whenActive(spinIntake);
     }
@@ -66,9 +67,14 @@ public class CompTeleOp extends OpMode {
         gamepadEx2.readButtons();
         driveCommand.schedule();
 
-        spinIntake.schedule();
 
         CommandScheduler.getInstance().run();
+    }
+
+
+    @Override
+    public void stop(){
+        CommandScheduler.getInstance().disable();
     }
 
 

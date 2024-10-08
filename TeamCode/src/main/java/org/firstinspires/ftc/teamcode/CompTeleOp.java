@@ -56,8 +56,8 @@ public class CompTeleOp extends OpMode {
 
         Trigger extendTrigger = new Trigger(() -> drivePad.getButton(GamepadKeys.Button.A));
 
-        fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
-        extendTrigger.whenActive(fullIntakeRoutine);
+        //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
+        //extendTrigger.whenActive(spinIntake);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CompTeleOp extends OpMode {
         gamepadEx2.readButtons();
         driveCommand.schedule();
 
-
+        spinIntake.schedule();
 
         CommandScheduler.getInstance().run();
     }

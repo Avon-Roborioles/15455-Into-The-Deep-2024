@@ -135,7 +135,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //        return SampleState.NO_SAMPLE;
 
 
-        if (gamepad.a){
+        if (gamepad.b){
             return SampleState.CORRESPONDING_SAMPLE;
         }
 

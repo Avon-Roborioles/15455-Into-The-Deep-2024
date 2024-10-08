@@ -31,6 +31,7 @@ public class MotorCommandTest extends CommandBase {
 
     @Override
     public boolean isFinished(){
+
         return Math.abs(motor.getValue()-2000) < 50;
     }
 

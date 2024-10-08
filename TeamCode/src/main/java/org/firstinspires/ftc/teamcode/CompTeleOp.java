@@ -31,8 +31,6 @@ public class CompTeleOp extends OpMode {
 
     @Override
     public void init(){
-        telemetry.addLine("Init Started");
-        telemetry.update();
         drivePad = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         IMU imu = hardwareMap.get(IMU.class,"imu");
@@ -43,7 +41,7 @@ public class CompTeleOp extends OpMode {
                         RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
-        while(!imu.initialize(imuParams)){
+        while(imu.initialize(imuParams)){
             continue;
         }
 
@@ -58,10 +56,8 @@ public class CompTeleOp extends OpMode {
 
         Trigger extendTrigger = new Trigger(() -> drivePad.getButton(GamepadKeys.Button.A));
 
-        //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
-        extendTrigger.whenActive(spinIntake);
-        telemetry.addLine("Init Finished");
-        telemetry.update();
+        fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
+        extendTrigger.whenActive(fullIntakeRoutine);
     }
 
     @Override
@@ -70,10 +66,8 @@ public class CompTeleOp extends OpMode {
         gamepadEx2.readButtons();
         driveCommand.schedule();
 
-        if(gamepad1.a){
-            telemetry.addLine("A pressed");
-        }
-        telemetry.update();
+
+
         CommandScheduler.getInstance().run();
     }
 

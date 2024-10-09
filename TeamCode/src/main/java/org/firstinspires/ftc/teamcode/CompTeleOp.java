@@ -32,6 +32,8 @@ public class CompTeleOp extends OpMode {
 
     @Override
     public void init(){
+
+        CommandScheduler.getInstance().enable();
         drivePad = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         IMU imu = hardwareMap.get(IMU.class,"imu");
@@ -75,6 +77,7 @@ public class CompTeleOp extends OpMode {
     @Override
     public void stop(){
         CommandScheduler.getInstance().disable();
+        CommandScheduler.getInstance().cancelAll();
     }
 
 

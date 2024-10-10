@@ -42,7 +42,6 @@ public class IntakeSubsystem extends SubsystemBase {
     private double combinedBlueRaw = -1;
     private double combinedGreenRaw = -1;
 
-    private int motorTargetPos;
     private Gamepad gamepad;
 
 
@@ -61,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
         );
         extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        //extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
 
 
@@ -98,7 +97,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public SampleState hasCorrectSample(){
         //It adds both sensor values and then takes the proportion of the colors.
-        //We do this because the closer the sample is, the more color it shows,a nd we
+        //We do this because the closer the sample is, the more color it receives
+        //The proportion of the colors is what matters
+
+
+
 //        double red = colorSensor1.red() + colorSensor2.red();
 //        double blue = colorSensor1.blue() + colorSensor2.blue();
 //        double green = colorSensor1.green() + colorSensor2.green();
@@ -189,11 +192,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 
-    public void retractToClearPos(){
-        extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        extendMotor.setTargetPosition((int)RobotConfig.IntakeConstants.intakeClearBucketPos);
-        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed);
-        extendPos = ExtendPos.CLEAR;
+    public boolean isExtendAtClearPos(){
+        return (extendMotor.getCurrentPosition()< RobotConfig.IntakeConstants.intakeClearBucketPos+ RobotConfig.IntakeConstants.motorDegreeOfError)
+                ||(extendMotor.getCurrentPosition()>RobotConfig.IntakeConstants.intakeClearBucketPos - RobotConfig.IntakeConstants.motorDegreeOfError);
     }
 
     public void slowRetractMotor(){
@@ -213,9 +214,7 @@ public class IntakeSubsystem extends SubsystemBase {
             case OUT:
                 return extendMotor.getCurrentPosition()>
                         RobotConfig.IntakeConstants.motorMaxPosition-RobotConfig.IntakeConstants.motorDegreeOfError;
-            case CLEAR:
-                return extendMotor.getCurrentPosition()>
-                        RobotConfig.IntakeConstants.intakeClearBucketPos-RobotConfig.IntakeConstants.motorDegreeOfError;
+
         }
         return extendMotor.atTargetPosition();
     }

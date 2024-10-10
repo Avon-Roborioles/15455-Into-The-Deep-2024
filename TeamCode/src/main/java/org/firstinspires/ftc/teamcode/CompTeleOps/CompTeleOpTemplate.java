@@ -36,7 +36,6 @@ public abstract class CompTeleOpTemplate extends OpMode {
         setAllianceColor();
 
 
-        CommandScheduler.getInstance().enable();
         drivePad = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         IMU imu = hardwareMap.get(IMU.class,"imu");
@@ -61,16 +60,20 @@ public abstract class CompTeleOpTemplate extends OpMode {
         retractIntake = new RetractIntake(intake);
 
         drivePad.getGamepadButton(GamepadKeys.Button.X).whenActive(extendIntake);
-        drivePad.getGamepadButton(GamepadKeys.Button.Y).whenActive(spinIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(spinIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.B).whenActive(retractIntake);
+
+
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
         //extendTrigger.whenActive(spinIntake);
+        driveSubsystem.setDefaultCommand(driveCommand);
     }
 
     @Override
     public final void loop(){
         drivePad.readButtons();
         gamepadEx2.readButtons();
-        driveCommand.schedule();
+
 
 
         CommandScheduler.getInstance().run();
@@ -79,7 +82,6 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
     @Override
     public void stop(){
-        CommandScheduler.getInstance().disable();
         CommandScheduler.getInstance().cancelAll();
     }
 

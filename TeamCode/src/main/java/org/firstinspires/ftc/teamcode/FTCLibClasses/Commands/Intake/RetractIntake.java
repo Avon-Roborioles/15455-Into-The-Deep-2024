@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 
 
 public class RetractIntake extends CommandBase {
-    private IntakeSubsystem intake;
+    private final IntakeSubsystem intake;
 
     public RetractIntake(IntakeSubsystem intake){
         this.intake = intake;
@@ -20,10 +20,14 @@ public class RetractIntake extends CommandBase {
 
     @Override
     public void execute(){
-        if (intake.isVerticalMotionDone()) {
+        if(intake.isExtendAtClearPos()){
+            if(intake.isVerticalMotionDone()){
+                intake.retractMotorFully();
+            } else {
+                intake.stopExtend();
+            }
+        }  else {
             intake.retractMotorFully();
-        }else {
-            intake.retractToClearPos();
         }
     }
 

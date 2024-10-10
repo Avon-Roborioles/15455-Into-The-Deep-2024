@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TestOpModes;
 
 
 import com.arcrobotics.ftclib.command.Command;
@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.MotorCommandTe
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.ServoCommandTest;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.MotorTest;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.ServoTest;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 
 import java.util.List;
 

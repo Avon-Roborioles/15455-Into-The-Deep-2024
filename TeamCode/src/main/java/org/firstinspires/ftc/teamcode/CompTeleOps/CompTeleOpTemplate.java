@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.CompTeleOps;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
@@ -18,8 +16,8 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TeleOpDriveCom
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 
-@TeleOp
-public class CompTeleOp extends OpMode {
+
+public abstract class CompTeleOpTemplate extends OpMode {
 
     private GamepadEx drivePad;
     private GamepadEx gamepadEx2;
@@ -30,8 +28,13 @@ public class CompTeleOp extends OpMode {
     private RetractIntake retractIntake;
     private SequentialCommandGroup fullIntakeRoutine;
 
+    protected AllianceColor allianceColor;
+
     @Override
-    public void init(){
+    public final void init(){
+
+        setAllianceColor();
+
 
         CommandScheduler.getInstance().enable();
         drivePad = new GamepadEx(gamepad1);
@@ -51,7 +54,7 @@ public class CompTeleOp extends OpMode {
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
 
-        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, AllianceColor.BLUE, telemetry, () -> true, gamepad1);
+        IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, allianceColor, telemetry, () -> true, gamepad1);
 
         extendIntake = new ExtendIntake(intake);
         spinIntake = new SpinIntake(intake);
@@ -64,7 +67,7 @@ public class CompTeleOp extends OpMode {
     }
 
     @Override
-    public void loop(){
+    public final void loop(){
         drivePad.readButtons();
         gamepadEx2.readButtons();
         driveCommand.schedule();
@@ -80,5 +83,5 @@ public class CompTeleOp extends OpMode {
         CommandScheduler.getInstance().cancelAll();
     }
 
-
+    public abstract void setAllianceColor();
 }

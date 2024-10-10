@@ -1,38 +1,29 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.RobotConfig;
 // ADD MORE COMMENTS FOR FUTURE REFERENCE
 
 public class LiftSubsystem extends SubsystemBase {
-    public static class LiftNames{
-        public static final String armLiftname = "armLift";
-        public static final String armOuttakeName = "armOuttake";
-    }
+
     int startPos;
     MotorEx armLift;
-    GamepadEx armPad;
 
 
 
     public LiftSubsystem(HardwareMap hMap){
-        armLift = new MotorEx(hMap, LiftNames.armLiftname);
+        armLift = new MotorEx(hMap, RobotConfig.OuttakeConstants.armLiftName);
         armLift.setRunMode(Motor.RunMode.PositionControl);
         armLift.set(1);
 
 
         armLift.setInverted(false);
         armLift.setPositionTolerance(20);
-        armLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
-
-
-
-
-
+        //armLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
 

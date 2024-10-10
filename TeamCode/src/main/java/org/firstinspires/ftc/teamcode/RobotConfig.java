@@ -38,5 +38,9 @@ public class RobotConfig {
 
     }
 
+    public static class OuttakeConstants{
+        public static String armLiftName = "armLift";
+        public static String armOuttakeName = "armOuttake";
+    }
 
 }

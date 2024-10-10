@@ -5,13 +5,15 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.RobotConfig;
+
 public class ArmSubsystem extends SubsystemBase {
     int startPos;
     MotorEx armSwing;
 
 
     public ArmSubsystem(HardwareMap hMap){
-        armSwing = new MotorEx(hMap, LiftSubsystem.LiftNames.armOuttakeName);
+        armSwing = new MotorEx(hMap, RobotConfig.OuttakeConstants.armOuttakeName);
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.set(1);
 

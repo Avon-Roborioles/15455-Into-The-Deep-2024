@@ -21,7 +21,7 @@ public class SpinIntake extends CommandBase {
     }
     @Override
     public void execute(){
-        intake.spinWheelsDown();
+        intake.spinWheelsUp();
 //        switch(intake.hasCorrectSample()){
 //            case YELLOW_SAMPLE:
 //            case CORRESPONDING_SAMPLE:

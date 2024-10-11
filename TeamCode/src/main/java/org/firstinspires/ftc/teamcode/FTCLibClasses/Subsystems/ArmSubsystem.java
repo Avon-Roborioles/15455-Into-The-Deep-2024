@@ -5,14 +5,17 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotConfig;
+import org.opencv.core.Mat;
 
 public class ArmSubsystem extends SubsystemBase {
     int startPos;
     MotorEx armSwing;
+    private Telemetry telemetry;
 
 
-    public ArmSubsystem(HardwareMap hMap){
+    public ArmSubsystem(HardwareMap hMap, Telemetry telemetry){
         armSwing = new MotorEx(hMap, RobotConfig.OuttakeConstants.armOuttakeName);
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.set(1);
@@ -20,9 +23,20 @@ public class ArmSubsystem extends SubsystemBase {
 
         armSwing.setInverted(false);
         armSwing.setPositionTolerance(20);
-        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        //armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.telemetry = telemetry;
     }
 
+
+    public void dunkHighPos(){
+        armSwing.setRunMode(Motor.RunMode.PositionControl);
+        armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingHighDunkPos);
+        armSwing.set(1);
+    }
+
+    public boolean hasDunked(){
+        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingHighDunkPos)<150;
+    }
 
     public void start(int value){
         armSwing.set(1);
@@ -33,6 +47,10 @@ public class ArmSubsystem extends SubsystemBase {
         armSwing.set(0);
     }
 
+    @Override
+    public void periodic(){
+        telemetry.addData("Dunk Pos", armSwing.getCurrentPosition());
+    }
 
 
 }

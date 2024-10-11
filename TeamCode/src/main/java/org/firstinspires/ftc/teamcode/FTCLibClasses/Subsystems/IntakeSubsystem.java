@@ -60,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
         );
         extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        //extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
 
 
@@ -68,6 +68,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
         this.doTelemetry = doTelemetry;
         this.gamepad = gamepad;
+
+
     }
 
 

@@ -9,6 +9,7 @@ public class TeleOpDriveCommand extends CommandBase {
 
     public TeleOpDriveCommand(DriveSubsystem drive){
         this.drive = drive;
+        addRequirements(drive);
     }
 
     @Override

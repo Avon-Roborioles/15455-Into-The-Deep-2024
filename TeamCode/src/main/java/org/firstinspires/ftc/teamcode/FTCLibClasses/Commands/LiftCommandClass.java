@@ -10,45 +10,41 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
 
 public class LiftCommandClass extends ParallelCommandGroup {
     LiftSubsystem armLift;
-    ArmSubsystem armSwing;
     GamepadEx armPad;
     int numTimes = 0;
 
-    public LiftCommandClass(LiftSubsystem armLift,ArmSubsystem armSwing){
-        this.armSwing = armSwing;
+    public LiftCommandClass(LiftSubsystem armLift) {
         this.armLift = armLift;
         addRequirements(armLift);
-        addRequirements(armSwing);
 
     }
 
     @Override
-    public void initialize(){
-        armLift.stop();
-        armSwing.stop();
+    public void initialize() {
 
 
     }
 
     @Override
-    public void execute(){
+    public void execute() {
 //        armLift.run();
-        armLift.buttonHold(5*(numTimes+1));
-        armSwing.start(2*(numTimes+1));
+        armLift.goToHighDunk();
 
 
     }
+
     @Override
-    public void end(boolean b){
+    public void end(boolean b) {
         armLift.stop();
-        armSwing.stop();
+
     }
 
     @Override
-    public boolean isFinished(){
-        return Math.abs(armLift.getValue())>50;
-        }
+    public boolean isFinished() {
+
+        return armLift.finishedHighDunk();
 
     }
+}
 
 

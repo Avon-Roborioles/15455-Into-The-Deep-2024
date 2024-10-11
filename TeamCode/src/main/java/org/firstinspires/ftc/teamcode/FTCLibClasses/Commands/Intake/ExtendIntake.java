@@ -17,7 +17,7 @@ public class ExtendIntake extends CommandBase {
     public void execute(){
         intake.extendMotorOutFully();
         if (intake.intakeClearedBucket()){
-            intake.moveIntakeDown();
+            //intake.moveIntakeDown();
         }
     }
     @Override
@@ -27,6 +27,6 @@ public class ExtendIntake extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return intake.extendFinished()&& intake.isVerticalMotionDone();
+        return intake.extendFinished();
     }
 }

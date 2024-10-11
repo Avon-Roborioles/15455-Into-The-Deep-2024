@@ -16,7 +16,7 @@ public class RobotConfig {
         public static final String colorSensor2Name = "rightColorSensor";
 
         public static final String intakeServoName = "intakeCRServo";
-        public static final double intakeServoUpDirection = -1;
+        public static final double intakeServoUpDirection = 1;
 
         public static final String verticalServoName = "verticalServo";
         public static final double verticalServoMinDegrees = 0;
@@ -26,21 +26,25 @@ public class RobotConfig {
 
 
         public static final String extendMotorName = "extendMotor";
-        public static final int motorMaxPosition = 7891;
+        public static final int motorMaxPosition = 2300;
         public static final int motorMinPosition = 0;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = 1;
         public static final double motorPCoefficient = .005;
         //The farthest in the intake can be before lowering it.
-        public static final double intakeClearBucketPos = 4000;
+        public static final double intakeClearBucketPos = 1700;
         public static final int motorDegreeOfError = 200;
 
     }
 
     public static class OuttakeConstants{
         public static String armLiftName = "armLift";
+        public static int armLiftHighDunkPos = -4910;
+
+
         public static String armOuttakeName = "armOuttake";
+        public static int armSwingHighDunkPos = 432;
     }
 
 }

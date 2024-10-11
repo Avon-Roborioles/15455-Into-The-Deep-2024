@@ -9,12 +9,19 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.MoveIntakeDown;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.MoveIntakeUp;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.PassIntoBucket;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftCommandClass;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TeleOpDriveCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
 
 
 public abstract class CompTeleOpTemplate extends OpMode {
@@ -26,9 +33,19 @@ public abstract class CompTeleOpTemplate extends OpMode {
     private ExtendIntake extendIntake;
     private SpinIntake spinIntake;
     private RetractIntake retractIntake;
+    private PassIntoBucket passIntoBucket;
+    private MoveIntakeUp moveIntakeUp;
+    private MoveIntakeDown moveIntakeDown;
     private SequentialCommandGroup fullIntakeRoutine;
 
     protected AllianceColor allianceColor;
+
+    private LiftSubsystem liftSubsystem;
+    private LiftCommandClass liftCommand;
+
+    private ArmSubsystem armSubsystem;
+    private ArmCommand armCommand;
+
 
     @Override
     public final void init(){
@@ -58,15 +75,41 @@ public abstract class CompTeleOpTemplate extends OpMode {
         extendIntake = new ExtendIntake(intake);
         spinIntake = new SpinIntake(intake);
         retractIntake = new RetractIntake(intake);
+        passIntoBucket = new PassIntoBucket(intake);
+        moveIntakeUp = new MoveIntakeUp(intake);
+        moveIntakeDown = new MoveIntakeDown(intake);
 
-        drivePad.getGamepadButton(GamepadKeys.Button.X).whenActive(extendIntake);
+        //SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake);
+
+
+        liftSubsystem = new LiftSubsystem(hardwareMap,telemetry);
+        armSubsystem = new ArmSubsystem(hardwareMap,telemetry);
+
+        liftCommand = new LiftCommandClass(liftSubsystem);
+        armCommand = new ArmCommand(armSubsystem);
+
+        SequentialCommandGroup dunk = new SequentialCommandGroup(liftCommand,armCommand);
+
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(extendIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(retractIntake);
+
+
         drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(spinIntake);
-        drivePad.getGamepadButton(GamepadKeys.Button.B).whenActive(retractIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.A).whenActive(passIntoBucket);
+
+
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(moveIntakeUp);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(moveIntakeDown);
+
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenActive(dunk);
 
 
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
         //extendTrigger.whenActive(spinIntake);
         driveSubsystem.setDefaultCommand(driveCommand);
+
+
     }
 
     @Override

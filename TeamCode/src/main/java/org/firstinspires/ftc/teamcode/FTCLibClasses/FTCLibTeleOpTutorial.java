@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.MotorCommandTutorial;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.MotorTutorial;
 
+@Disabled
 @TeleOp
 public class FTCLibTeleOpTutorial extends OpMode {
 

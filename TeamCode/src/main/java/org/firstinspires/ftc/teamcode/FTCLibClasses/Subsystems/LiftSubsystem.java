@@ -64,7 +64,15 @@ public class LiftSubsystem extends SubsystemBase {
         return Math.abs(armLift.getCurrentPosition()-RobotConfig.OuttakeConstants.armLiftHighDunkPos)<150;
     }
     
+    public void goDown(){
+        armLift.setRunMode(Motor.RunMode.PositionControl);
+        armLift.setTargetPosition(RobotConfig.OuttakeConstants.armLiftDefaultPos);
+        armLift.set(1);
+    }
 
+    public boolean isDown(){
+        return Math.abs(armLift.getCurrentPosition()-RobotConfig.OuttakeConstants.armLiftDefaultPos)<150;
+    }
 
 
 

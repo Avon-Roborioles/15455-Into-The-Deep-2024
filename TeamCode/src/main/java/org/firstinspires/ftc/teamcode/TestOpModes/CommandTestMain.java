@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.CommandsGroup;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.TestGroupS1;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.TestGroupS2;
 
+@Disabled
 @TeleOp
 public class CommandTestMain extends OpMode {
     // Subsystems

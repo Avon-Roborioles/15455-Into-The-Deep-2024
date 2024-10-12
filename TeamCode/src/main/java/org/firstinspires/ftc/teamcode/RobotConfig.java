@@ -22,7 +22,7 @@ public class RobotConfig {
         public static final double verticalServoMinDegrees = 0;
         public static final double verticalServoMaxDegrees = 1800;
         public static final double verticalServoUpPosition = 1;
-        public static final double verticalServoDownPosition = .8472;
+        public static final double verticalServoDownPosition = .8239;
 
 
         public static final String extendMotorName = "extendMotor";
@@ -41,10 +41,12 @@ public class RobotConfig {
     public static class OuttakeConstants{
         public static String armLiftName = "armLift";
         public static int armLiftHighDunkPos = -4910;
+        public static int armLiftDefaultPos = 0;
 
 
         public static String armOuttakeName = "armOuttake";
         public static int armSwingHighDunkPos = 432;
+        public static int armSwingDefaultPos = 0;
     }
 
 }

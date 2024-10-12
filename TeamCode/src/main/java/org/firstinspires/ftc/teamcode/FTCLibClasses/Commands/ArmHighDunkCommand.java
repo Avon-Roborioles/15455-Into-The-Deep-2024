@@ -1,15 +1,14 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 
-public class ArmCommand extends CommandBase {
+public class ArmHighDunkCommand extends CommandBase {
 
     private ArmSubsystem armSubsystem;
 
-    public ArmCommand(ArmSubsystem armSubsystem){
+    public ArmHighDunkCommand(ArmSubsystem armSubsystem){
         this.armSubsystem = armSubsystem;
         addRequirements(armSubsystem);
     }

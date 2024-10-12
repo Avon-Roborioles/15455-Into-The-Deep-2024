@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode.CompTeleOps;
+package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmHighDunkCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
@@ -27,8 +25,8 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
 
-
-public abstract class CompTeleOpTemplate extends OpMode {
+@TeleOp
+public  class HardwareTestOpMode extends OpMode {
 
     private GamepadEx drivePad;
     private GamepadEx gamepadEx2;
@@ -42,7 +40,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
     private MoveIntakeDown moveIntakeDown;
     private SequentialCommandGroup fullIntakeRoutine;
 
-    protected AllianceColor allianceColor;
+    protected AllianceColor allianceColor = AllianceColor.BLUE;
 
     private LiftSubsystem liftSubsystem;
     private LiftHighBasketCommand liftCommand;
@@ -57,7 +55,6 @@ public abstract class CompTeleOpTemplate extends OpMode {
     @Override
     public final void init(){
 
-        setAllianceColor();
 
 
         drivePad = new GamepadEx(gamepad1);
@@ -86,14 +83,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         moveIntakeUp = new MoveIntakeUp(intake);
         moveIntakeDown = new MoveIntakeDown(intake);
 
-        SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake);
-        SequentialCommandGroup groupExtendIntake = new SequentialCommandGroup(
-                extendIntake,
-                new ParallelCommandGroup(
-                        moveIntakeDown,
-                        new ProxyScheduleCommand(spinIntake)
-                        )
-        );
+        //SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake);
 
 
         liftSubsystem = new LiftSubsystem(hardwareMap,telemetry);
@@ -104,29 +94,25 @@ public abstract class CompTeleOpTemplate extends OpMode {
         armCommand = new ArmHighDunkCommand(armSubsystem);
         armDownCommand = new ArmDownCommand(armSubsystem);
 
-        SequentialCommandGroup dunk = new SequentialCommandGroup(liftCommand,armCommand);
+        //SequentialCommandGroup dunk = new SequentialCommandGroup(liftCommand,armCommand);
 
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(groupExtendIntake);
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(groupRetractIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.Y).whenActive(spinIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(extendIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(retractIntake);
 
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(extendIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(retractIntake);
-//
-//
-//        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(spinIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.A).whenActive(passIntoBucket);
-//
-//
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(moveIntakeUp);
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(moveIntakeDown);
-//
-//
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(liftCommand);
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(liftDownCommand);
-//
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(armDownCommand);
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(armCommand);
+
+        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(spinIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.A).whenActive(passIntoBucket);
+
+
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(moveIntakeUp);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(moveIntakeDown);
+
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(liftCommand);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(liftDownCommand);
+
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(armDownCommand);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(armCommand);
 
 
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
@@ -149,9 +135,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
     @Override
     public void stop(){
-
-        spinIntake.cancel();
+        CommandScheduler.getInstance().cancelAll();
     }
 
-    public abstract void setAllianceColor();
 }

@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.TestOpModes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.TutorialDriveSubsystem;
 
-
+@Disabled
 @TeleOp
 public class DriveTest extends OpMode {
 

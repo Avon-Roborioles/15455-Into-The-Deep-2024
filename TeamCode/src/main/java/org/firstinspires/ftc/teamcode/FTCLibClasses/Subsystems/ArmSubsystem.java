@@ -23,7 +23,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         armSwing.setInverted(false);
         armSwing.setPositionTolerance(20);
-        //armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.telemetry = telemetry;
     }
 
@@ -47,10 +47,20 @@ public class ArmSubsystem extends SubsystemBase {
         armSwing.set(0);
     }
 
+    public void goDown(){
+        armSwing.setRunMode(Motor.RunMode.PositionControl);
+        armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingDefaultPos);
+        armSwing.set(1);
+    }
+    public boolean isDown(){
+        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;
+    }
+
     @Override
     public void periodic(){
         telemetry.addData("Dunk Pos", armSwing.getCurrentPosition());
     }
+
 
 
 }

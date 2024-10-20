@@ -16,7 +16,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.TestTwoWheelOdometry;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.TwoWheelLocalizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.DashboardPoseTracker;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Drawing;
 
@@ -50,7 +53,7 @@ public class LocalizationTest extends OpMode {
     @Override
     public void init() {
         poseUpdater = new PoseUpdater(hardwareMap);
-
+        TestTwoWheelOdometry testTwoWheelOdometry = new TestTwoWheelOdometry(hardwareMap);
         dashboardPoseTracker = new DashboardPoseTracker(poseUpdater);
 
         leftFront = hardwareMap.get(DcMotorEx.class, leftFrontMotorName);
@@ -94,6 +97,12 @@ public class LocalizationTest extends OpMode {
         double y = -gamepad1.left_stick_y; // Remember, this is reversed!
         double x = gamepad1.left_stick_x; // this is strafing
         double rx = gamepad1.right_stick_x;
+        double ry = gamepad1.right_stick_y;
+
+
+//
+//        y = 0;
+//        x = 0;
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio, but only when
@@ -108,11 +117,18 @@ public class LocalizationTest extends OpMode {
         leftRear.setPower(leftRearPower);
         rightFront.setPower(rightFrontPower);
         rightRear.setPower(rightRearPower);
+        TwoWheelLocalizer twoWheelLocalizer = (TwoWheelLocalizer) poseUpdater.getLocalizer();
+        Pose leftEncoderPose = twoWheelLocalizer.getLeftEncoderPose();
+
+        leftEncoderPose.setX(leftEncoderPose.getX()-gamepad1.left_stick_y*.05);
+
 
         telemetryA.addData("x", poseUpdater.getPose().getX());
         telemetryA.addData("y", poseUpdater.getPose().getY());
         telemetryA.addData("heading", poseUpdater.getPose().getHeading());
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
+        telemetryA.addData("Left Encoder X Pos", leftEncoderPose.getX());
+        telemetryA.addData("Forward Encoder Total Inches",twoWheelLocalizer.getForwardEncoderInches());
         telemetryA.update();
 
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");

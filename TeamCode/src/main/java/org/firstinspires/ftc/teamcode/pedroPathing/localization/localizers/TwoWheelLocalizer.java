@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Localizer;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Matrix;
@@ -59,8 +60,10 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
     private double previousIMUOrientation;
     private double deltaRadians;
     private double totalHeading;
-    public static double FORWARD_TICKS_TO_INCHES = 8192 * 1.37795 * 2 * Math.PI * 0.5008239963;
-    public static double STRAFE_TICKS_TO_INCHES = 8192 * 1.37795 * 2 * Math.PI * 0.5018874659;
+    public static double FORWARD_TICKS_TO_INCHES = RobotConfig.DriveConstants.forwardMultiplier;
+    public static double STRAFE_TICKS_TO_INCHES = RobotConfig.DriveConstants.lateralMultiplier;
+
+
 
     /**
      * This creates a new TwoWheelLocalizer from a HardwareMap, with a starting Pose at (0,0)
@@ -81,21 +84,22 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
      */
     public TwoWheelLocalizer(HardwareMap map, Pose setStartPose) {
         // TODO: replace these with your encoder positions
-        forwardEncoderPose = new Pose(-18.5/25.4 - 0.1, 164.4/25.4, 0);
-        strafeEncoderPose = new Pose(-107.9/25.4+0.25, -1.1/25.4-0.23, Math.toRadians(90));
+
+        forwardEncoderPose = new Pose(-.25, 6.89, 0);
+        strafeEncoderPose = new Pose(3.5, 2.5, Math.toRadians(90));
 
         hardwareMap = map;
 
         imu = hardwareMap.get(IMU.class, "imu");
         // TODO: replace this with your IMU's orientation
-        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.LEFT)));
+        imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD)));
 
         // TODO: replace these with your encoder ports
-        forwardEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftRear"));
-        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "strafeEncoder"));
+        forwardEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotConfig.DriveConstants.frontLeftWheelName));
+        strafeEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, RobotConfig.DriveConstants.backLeftWheelName));
 
         // TODO: reverse any encoders necessary
-        forwardEncoder.setDirection(Encoder.REVERSE);
+        forwardEncoder.setDirection(Encoder.FORWARD);
         strafeEncoder.setDirection(Encoder.FORWARD);
 
         setStartPose(setStartPose);
@@ -104,8 +108,21 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
         displacementPose = new Pose();
         currentVelocity = new Pose();
 
+
+
         previousIMUOrientation = MathFunctions.normalizeAngle(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
         deltaRadians = 0;
+    }
+
+    public void setLeftEncoderPose(Pose pose){
+        forwardEncoderPose = pose;
+    }
+    public Pose getLeftEncoderPose(){
+        return strafeEncoderPose;
+    }
+
+    public double getForwardEncoderInches(){
+        return forwardEncoder.getCurrentPosition()*FORWARD_TICKS_TO_INCHES;
     }
 
     /**

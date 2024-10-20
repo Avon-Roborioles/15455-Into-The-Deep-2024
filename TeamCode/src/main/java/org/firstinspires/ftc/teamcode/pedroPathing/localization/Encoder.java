@@ -50,7 +50,9 @@ public class Encoder {
         currentPosition = motor.getCurrentPosition();
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-
+    public double getCurrentPosition(){
+        return motor.getCurrentPosition();
+    }
     /**
      * This updates the Encoder's tracked current position and previous position.
      */

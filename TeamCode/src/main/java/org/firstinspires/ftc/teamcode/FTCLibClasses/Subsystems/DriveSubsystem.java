@@ -98,9 +98,9 @@ public class DriveSubsystem extends SubsystemBase {
     public void driverControlDrive(){
 
         drive.driveFieldCentric(
-                -strafe.getAsDouble(),
-                -forward.getAsDouble(),
                 rotate.getAsDouble(),
+                -forward.getAsDouble(),
+                -strafe.getAsDouble(),
                 heading.getAsDouble()
         );
 

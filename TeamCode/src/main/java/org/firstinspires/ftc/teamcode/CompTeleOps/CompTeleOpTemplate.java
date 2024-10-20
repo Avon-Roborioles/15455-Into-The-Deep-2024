@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.CompTeleOps;
 
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
+import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -26,6 +29,8 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
+
+import java.util.HashMap;
 
 
 public abstract class CompTeleOpTemplate extends OpMode {
@@ -79,8 +84,8 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, allianceColor, telemetry, () -> true, gamepad1);
 
-        extendIntake = new ExtendIntake(intake);
         spinIntake = new SpinIntake(intake);
+        extendIntake = new ExtendIntake(intake);
         retractIntake = new RetractIntake(intake);
         passIntoBucket = new PassIntoBucket(intake);
         moveIntakeUp = new MoveIntakeUp(intake);
@@ -94,7 +99,18 @@ public abstract class CompTeleOpTemplate extends OpMode {
                         new ProxyScheduleCommand(spinIntake)
                         )
         );
-
+//        Command inlineSpinIntake = new SelectCommand(
+//                new HashMap<Object,Command>() {{
+//                    put(IntakeSubsystem.SampleState.NO_SAMPLE,new FunctionalCommand(
+//                            () ->{},
+//                            () -> {intake.spinWheelsUp();},
+//                            (Boolean b) ->{intake.stopIntakeWheels();},
+//                            () ->{return intake.}
+//                    ))
+//                }
+//
+//                }
+//        )
 
         liftSubsystem = new LiftSubsystem(hardwareMap,telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap,telemetry);
@@ -105,28 +121,14 @@ public abstract class CompTeleOpTemplate extends OpMode {
         armDownCommand = new ArmDownCommand(armSubsystem);
 
         SequentialCommandGroup dunk = new SequentialCommandGroup(liftCommand,armCommand);
+        SequentialCommandGroup armAndLiftDown = new SequentialCommandGroup(liftDownCommand,armDownCommand);
+
 
         drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(groupExtendIntake);
         drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(groupRetractIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.Y).whenActive(spinIntake);
 
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(extendIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(retractIntake);
-//
-//
-//        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(spinIntake);
-//        drivePad.getGamepadButton(GamepadKeys.Button.A).whenActive(passIntoBucket);
-//
-//
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(moveIntakeUp);
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(moveIntakeDown);
-//
-//
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(liftCommand);
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(liftDownCommand);
-//
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(armDownCommand);
-//        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(armCommand);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(dunk);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(armAndLiftDown);
 
 
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
@@ -147,11 +149,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
     }
 
 
-    @Override
-    public void stop(){
 
-        spinIntake.cancel();
-    }
 
     public abstract void setAllianceColor();
 }

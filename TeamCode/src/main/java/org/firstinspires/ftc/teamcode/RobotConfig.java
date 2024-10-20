@@ -8,6 +8,12 @@ public class RobotConfig {
         public static final String frontRightWheelName = "frontRight";
         public static final String backLeftWheelName = "backLeft";
         public static final String backRightWheelName = "backRight";
+
+        public static final double forwardMultiplier = 0.0029805169566404065;
+        public static final double lateralMultiplier = 0.002965149766084306;
+
+        //IN KILOGRAMS!!!
+        public static final double mass = 12.05;
     }
 
     public static class IntakeConstants {
@@ -21,7 +27,7 @@ public class RobotConfig {
         public static final String verticalServoName = "verticalServo";
         public static final double verticalServoMinDegrees = 0;
         public static final double verticalServoMaxDegrees = 1800;
-        public static final double verticalServoUpPosition = 1;
+        public static final double verticalServoUpPosition = .9817;
         public static final double verticalServoDownPosition = .8239;
 
 

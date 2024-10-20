@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.pedroPathing.util;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.PoseUpdater;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.TestTwoWheelOdometry;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,8 @@ public class DashboardPoseTracker {
     private final long UPDATE_TIME = 50;
     private final int TRACKING_SIZE = TRACKING_LENGTH / (int) UPDATE_TIME;
 
+    private TestTwoWheelOdometry testTwoWheelOdometry;
+
     /**
      * This creates a new DashboardPoseTracker from a PoseUpdater.
      *
@@ -39,6 +42,18 @@ public class DashboardPoseTracker {
 
         lastUpdateTime = System.currentTimeMillis() - UPDATE_TIME;
     }
+    public DashboardPoseTracker(TestTwoWheelOdometry localizer){
+        this.testTwoWheelOdometry = localizer;
+        xPositions = new double[TRACKING_SIZE];
+        yPositions = new double[TRACKING_SIZE];
+
+        for (int i = 0; i < TRACKING_SIZE; i++) {
+            xPositions[i] = localizer.getPose().getX();
+            yPositions[i] = localizer.getPose().getY();
+        }
+
+        lastUpdateTime = System.currentTimeMillis() - UPDATE_TIME;
+    }
 
     /**
      * This updates the DashboardPoseTracker. When the specified update time has passed from the last
@@ -51,8 +66,13 @@ public class DashboardPoseTracker {
                 xPositions[i] = xPositions[i - 1];
                 yPositions[i] = yPositions[i - 1];
             }
-            xPositions[0] = poseUpdater.getPose().getX();
-            yPositions[0] = poseUpdater.getPose().getY();
+            if (poseUpdater !=null) {
+                xPositions[0] = poseUpdater.getPose().getX();
+                yPositions[0] = poseUpdater.getPose().getY();
+            } else {
+                xPositions[0] = testTwoWheelOdometry.getPose().getY();
+                yPositions[0] = testTwoWheelOdometry.getPose().getX();
+            }
         }
     }
 

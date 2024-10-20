@@ -24,6 +24,11 @@ public class RetractIntake extends CommandBase {
     }
 
     @Override
+    public void end(boolean b){
+        intake.stopExtend();
+    }
+
+    @Override
     public boolean isFinished(){
         return intake.extendFinished();
     }

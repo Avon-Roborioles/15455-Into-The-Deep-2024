@@ -15,7 +15,7 @@ public class RetractIntake extends CommandBase {
 
     @Override
     public void initialize(){
-        //intake.moveIntakeUp();
+        intake.retractMotorFully();
     }
 
     @Override

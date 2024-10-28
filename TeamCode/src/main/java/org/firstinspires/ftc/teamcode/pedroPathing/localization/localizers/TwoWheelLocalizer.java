@@ -100,7 +100,7 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
 
         // TODO: reverse any encoders necessary
         forwardEncoder.setDirection(Encoder.FORWARD);
-        strafeEncoder.setDirection(Encoder.FORWARD);
+        strafeEncoder.setDirection(Encoder.REVERSE);
 
         setStartPose(setStartPose);
         timer = new NanoTimer();
@@ -114,16 +114,9 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
         deltaRadians = 0;
     }
 
-    public void setLeftEncoderPose(Pose pose){
-        forwardEncoderPose = pose;
-    }
-    public Pose getLeftEncoderPose(){
-        return strafeEncoderPose;
-    }
 
-    public double getForwardEncoderInches(){
-        return forwardEncoder.getCurrentPosition()*FORWARD_TICKS_TO_INCHES;
-    }
+
+
 
     /**
      * This returns the current pose estimate.
@@ -238,7 +231,8 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
         strafeEncoder.update();
 
         double currentIMUOrientation = MathFunctions.normalizeAngle(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS));
-        deltaRadians = MathFunctions.getTurnDirection(previousIMUOrientation, currentIMUOrientation) * MathFunctions.getSmallestAngleDifference(currentIMUOrientation, previousIMUOrientation);
+        deltaRadians = MathFunctions.getTurnDirection(previousIMUOrientation, currentIMUOrientation)
+                * MathFunctions.getSmallestAngleDifference(currentIMUOrientation, previousIMUOrientation);
         previousIMUOrientation = currentIMUOrientation;
     }
 
@@ -256,15 +250,23 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
      *
      * @return returns a Matrix containing the robot relative movement.
      */
+    /*
+    forwardEncoderPose = new Pose(-.25, 6.89, 0);
+        strafeEncoderPose = new Pose(3.5, 2.5, Math.toRadians(90));
+     */
     public Matrix getRobotDeltas() {
         Matrix returnMatrix = new Matrix(3,1);
         // x/forward movement
-        returnMatrix.set(0,0, FORWARD_TICKS_TO_INCHES * (forwardEncoder.getDeltaPosition() - forwardEncoderPose.getY() * deltaRadians));
+        returnMatrix.set(0,0, FORWARD_TICKS_TO_INCHES * (forwardEncoder.getDeltaPosition() - -6.75 * deltaRadians/FORWARD_TICKS_TO_INCHES));
         //y/strafe movement
-        returnMatrix.set(1,0, STRAFE_TICKS_TO_INCHES * (strafeEncoder.getDeltaPosition() - strafeEncoderPose.getX() * deltaRadians));
+        returnMatrix.set(1,0, STRAFE_TICKS_TO_INCHES * (strafeEncoder.getDeltaPosition() - -3.2 * deltaRadians/STRAFE_TICKS_TO_INCHES));
         // theta/turning
         returnMatrix.set(2,0, deltaRadians);
         return returnMatrix;
+    }
+
+    public double getDeltaRadians(){
+        return deltaRadians;
     }
 
     /**

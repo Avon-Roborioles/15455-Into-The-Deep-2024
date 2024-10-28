@@ -483,4 +483,68 @@ public class Path {
     public double[][] getDashboardDrawingPoints() {
         return curve.getDashboardDrawingPoints();
     }
+
+
+    public static class PathBuilder {
+        private Path path;
+        public PathBuilder(BezierCurve curve){
+            path = new Path(curve);
+        }
+
+        public PathBuilder setConstantHeadingInterpolation(double set){
+            path.setConstantHeadingInterpolation(set);
+            return this;
+        }
+
+        public PathBuilder setLinearHeadingInterpolation(double startHeading, double endHeading, double endTime){
+            path.setLinearHeadingInterpolation(startHeading,endHeading,endTime);
+            return this;
+        }
+
+        public PathBuilder setLinearHeadingInterpolation(double startHeading, double endHeading){
+            path.setLinearHeadingInterpolation(startHeading,endHeading);
+            return this;
+        }
+
+        public PathBuilder setTangentHeadingInterpolation(){
+            path.setTangentHeadingInterpolation();
+            return this;
+        }
+
+        public PathBuilder setZeroPowerAccelerationMultiplier(double set){
+            path.setZeroPowerAccelerationMultiplier(set);
+            return this;
+        }
+
+        public PathBuilder setPathEndTranslationalConstraint(double set){
+            path.setPathEndTranslationalConstraint(set);
+            return this;
+        }
+
+        public PathBuilder setPathEndVelocityConstraint(double set){
+            path.setPathEndVelocityConstraint(set);
+            return this;
+        }
+
+        public PathBuilder setPathEndTimeoutConstraint(double set){
+            path.setPathEndTimeoutConstraint(set);
+            return this;
+        }
+
+        public PathBuilder setPathEndTValueConstraint(double set){
+            path.setPathEndTValueConstraint(set);
+            return this;
+        }
+
+        public PathBuilder setPathEndHeadingConstraint(double set){
+            path.setPathEndHeadingConstraint(set);
+            return this;
+        }
+
+        public Path build(){
+            return path;
+        }
+    }
+
 }
+

@@ -13,20 +13,20 @@ import java.util.ArrayList;
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/11/2024
  */
-public class PathBuilder {
+public class PathChainBuilder {
     private ArrayList<Path> paths = new ArrayList<>();
 
     private ArrayList<PathCallback> callbacks = new ArrayList<>();
 
     /**
-     * This is an empty constructor for the PathBuilder class so it can get started.
-     * The PathBuilder allows for easier construction of PathChains.
+     * This is an empty constructor for the PathChainBuilder class so it can get started.
+     * The PathChainBuilder allows for easier construction of PathChains.
      * The proper usage is using an instance of the Follower class:
      * Follower follower = new Follower(hardwareMap);
      * Then calling "follower.pathBuilder.[INSERT PATH BUILDING METHODS].build();
      * Of course, you can split up the method calls onto separate lines for readability.
      */
-    public PathBuilder() {
+    public PathChainBuilder() {
     }
 
     /**
@@ -35,7 +35,7 @@ public class PathBuilder {
      * @param path The Path being added.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder addPath(Path path) {
+    public PathChainBuilder addPath(Path path) {
         this.paths.add(path);
         return this;
     }
@@ -46,7 +46,7 @@ public class PathBuilder {
      * @param curve The curve is turned into a Path and added.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder addPath(BezierCurve curve) {
+    public PathChainBuilder addPath(BezierCurve curve) {
         this.paths.add(new Path(curve));
         return this;
     }
@@ -59,7 +59,7 @@ public class PathBuilder {
      *                   This will be reached at the end of the Path if no end time is specified.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setLinearHeadingInterpolation(double startHeading, double endHeading) {
+    public PathChainBuilder setLinearHeadingInterpolation(double startHeading, double endHeading) {
         this.paths.get(paths.size()-1).setLinearHeadingInterpolation(startHeading, endHeading);
         return this;
     }
@@ -74,7 +74,7 @@ public class PathBuilder {
      *                This value goes from [0, 1] since Bezier curves are parametric functions.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setLinearHeadingInterpolation(double startHeading, double endHeading, double endTime) {
+    public PathChainBuilder setLinearHeadingInterpolation(double startHeading, double endHeading, double endTime) {
         this.paths.get(paths.size()-1).setLinearHeadingInterpolation(startHeading, endHeading, endTime);
         return this;
     }
@@ -85,7 +85,7 @@ public class PathBuilder {
      * @param setHeading The constant heading specified.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setConstantHeadingInterpolation(double setHeading) {
+    public PathChainBuilder setConstantHeadingInterpolation(double setHeading) {
         this.paths.get(paths.size()-1).setConstantHeadingInterpolation(setHeading);
         return this;
     }
@@ -97,7 +97,7 @@ public class PathBuilder {
      *            Conversely, this sets a tangent following if this parameter is false.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setReversed(boolean set) {
+    public PathChainBuilder setReversed(boolean set) {
         this.paths.get(paths.size()-1).setReversed(set);
         return this;
     }
@@ -106,7 +106,7 @@ public class PathBuilder {
      * There really shouldn't be a reason to use this since the default heading interpolation is
      * tangential but it's here.
      */
-    public PathBuilder setTangentHeadingInterpolation() {
+    public PathChainBuilder setTangentHeadingInterpolation() {
         this.paths.get(paths.size()-1).setTangentHeadingInterpolation();
         return this;
     }
@@ -117,7 +117,7 @@ public class PathBuilder {
      * @param set This sets the multiplier for the goal for the deceleration of the robot.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setZeroPowerAccelerationMultiplier(double set) {
+    public PathChainBuilder setZeroPowerAccelerationMultiplier(double set) {
         this.paths.get(paths.size()-1).setZeroPowerAccelerationMultiplier(set);
         return this;
     }
@@ -128,7 +128,7 @@ public class PathBuilder {
      * @param set This sets the path end velocity constraint.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setPathEndVelocityConstraint(double set) {
+    public PathChainBuilder setPathEndVelocityConstraint(double set) {
         this.paths.get(paths.size()-1).setPathEndVelocityConstraint(set);
         return this;
     }
@@ -139,7 +139,7 @@ public class PathBuilder {
      * @param set This sets the path end translational constraint.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setPathEndTranslationalConstraint(double set) {
+    public PathChainBuilder setPathEndTranslationalConstraint(double set) {
         this.paths.get(paths.size()-1).setPathEndTranslationalConstraint(set);
         return this;
     }
@@ -150,7 +150,7 @@ public class PathBuilder {
      * @param set This sets the path end heading constraint.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setPathEndHeadingConstraint(double set) {
+    public PathChainBuilder setPathEndHeadingConstraint(double set) {
         this.paths.get(paths.size()-1).setPathEndHeadingConstraint(set);
         return this;
     }
@@ -161,7 +161,7 @@ public class PathBuilder {
      * @param set This sets the path end t-value (parametric time) constraint.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setPathEndTValueConstraint(double set) {
+    public PathChainBuilder setPathEndTValueConstraint(double set) {
         this.paths.get(paths.size()-1).setPathEndTValueConstraint(set);
         return this;
     }
@@ -172,7 +172,7 @@ public class PathBuilder {
      * @param set This sets the path end timeout constraint.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder setPathEndTimeoutConstraint(double set) {
+    public PathChainBuilder setPathEndTimeoutConstraint(double set) {
         this.paths.get(paths.size()-1).setPathEndTimeoutConstraint(set);
         return this;
     }
@@ -186,7 +186,7 @@ public class PathBuilder {
      * @param runnable This sets the code for the callback to run. Use lambda statements for this.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder addTemporalCallback(double time, Runnable runnable) {
+    public PathChainBuilder addTemporalCallback(double time, Runnable runnable) {
         this.callbacks.add(new PathCallback(time, runnable, PathCallback.TIME, paths.size()-1));
         return this;
     }
@@ -199,7 +199,7 @@ public class PathBuilder {
      * @param runnable This sets the code for the callback to run. Use lambda statements for this.
      * @return This returns itself with the updated data.
      */
-    public PathBuilder addParametricCallback(double t, Runnable runnable) {
+    public PathChainBuilder addParametricCallback(double t, Runnable runnable) {
         this.callbacks.add(new PathCallback(t, runnable, PathCallback.PARAMETRIC, paths.size()-1));
         return this;
     }

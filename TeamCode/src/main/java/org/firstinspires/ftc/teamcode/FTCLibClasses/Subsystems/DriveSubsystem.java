@@ -21,12 +21,12 @@ import java.util.function.DoubleSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
-    private final MecanumDrive drive;
-    private final DoubleSupplier forward;
-    private final DoubleSupplier strafe;
-    private final DoubleSupplier rotate;
-    private final ToggleButtonReader toggleFieldToBotCentric;
-    private final DoubleSupplier heading;
+    private  MecanumDrive drive;
+    private  DoubleSupplier forward;
+    private  DoubleSupplier strafe;
+    private  DoubleSupplier rotate;
+    private  ToggleButtonReader toggleFieldToBotCentric;
+    private  DoubleSupplier heading;
 
     private boolean isAuto = false;
 
@@ -41,6 +41,9 @@ public class DriveSubsystem extends SubsystemBase {
         MotorEx backLeft = new MotorEx(hMap,RobotConfig.DriveConstants.backLeftWheelName);
         MotorEx backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
 
+
+        leftFront.setInverted(true);
+        rightFront.setInverted(true);
         backLeft.setInverted(true);
         backRight.setInverted(true);
 
@@ -49,12 +52,12 @@ public class DriveSubsystem extends SubsystemBase {
 //        backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 //        backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        this.drive = new MecanumDrive(leftFront, rightFront,backRight,backLeft);
+        this.drive = new MecanumDrive(leftFront, rightFront,backLeft,backRight);
         forward = gamepad::getLeftY;
         strafe = gamepad::getLeftX;
         rotate = gamepad::getRightX;
         toggleFieldToBotCentric = new ToggleButtonReader(gamepad, GamepadKeys.Button.RIGHT_BUMPER);
-        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
     }
 
@@ -78,29 +81,18 @@ public class DriveSubsystem extends SubsystemBase {
         telemetry = t;
     }
 
-//    @Override
-//    public void periodic() {
-//        if (!isAuto) {
-//            driverControlDrive();
-//        } else if(!isCurCommandScheduled){
-//            curCommand.schedule();
-//            isCurCommandScheduled = true;
-//        } else {
-//            isCurCommandScheduled = false;
-//            isAuto = false;
-//        }
-//        if (telemetry!=null) {
-//            telemetry.addData("isDrive Auto", isAuto);
-//        }
-//    }
+    @Override
+    public void periodic() {
+        telemetry.addData("Heading (radians)",heading.getAsDouble());
+    }
 
 
     public void driverControlDrive(){
 
         drive.driveFieldCentric(
+                strafe.getAsDouble(),
+                forward.getAsDouble(),
                 rotate.getAsDouble(),
-                -forward.getAsDouble(),
-                -strafe.getAsDouble(),
                 heading.getAsDouble()
         );
 

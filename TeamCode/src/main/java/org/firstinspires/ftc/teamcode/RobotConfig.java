@@ -13,7 +13,7 @@ public class RobotConfig {
         public static final double lateralMultiplier = 0.002965149766084306;
 
         //IN KILOGRAMS!!!
-        public static final double mass = 12.05;
+        public static final double mass = 14.318;
     }
 
     public static class IntakeConstants {

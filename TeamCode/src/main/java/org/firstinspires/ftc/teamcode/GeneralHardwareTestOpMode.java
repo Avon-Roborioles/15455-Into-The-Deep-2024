@@ -26,7 +26,7 @@ public class GeneralHardwareTestOpMode extends OpMode {
         devices = hardwareMap.getAll(HardwareDevice.class);
         devicePluses = new ArrayList<HardwareDevicePlus>();
         for (HardwareDevice device:devices){
-            devicePluses.add(new HardwareDevicePlus(device,telemetry));
+            devicePluses.add(new HardwareDevicePlus(device,telemetry,hardwareMap));
         }
         listSize = devicePluses.size();
     }
@@ -45,6 +45,9 @@ public class GeneralHardwareTestOpMode extends OpMode {
             lastTickLBChanged = false;
             lastTickRBChanged = false;
         }
+
+        lastTickRBChanged = gamepad1.right_bumper;
+        lastTickLBChanged = gamepad1.left_bumper;
 
         devicePluses.get(curDevice%listSize).changePos(gamepad1.right_stick_y);
         telemetry.update();

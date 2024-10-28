@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.CompTeleOps;
+package org.firstinspires.ftc.teamcode.CompOpModes.CompTeleOps;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -81,6 +81,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
+        driveSubsystem.setTelemetry(telemetry);
 
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, allianceColor, telemetry, () -> true, gamepad1);
 

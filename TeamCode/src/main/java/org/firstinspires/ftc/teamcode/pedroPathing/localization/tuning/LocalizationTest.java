@@ -117,18 +117,19 @@ public class LocalizationTest extends OpMode {
         leftRear.setPower(leftRearPower);
         rightFront.setPower(rightFrontPower);
         rightRear.setPower(rightRearPower);
-        TwoWheelLocalizer twoWheelLocalizer = (TwoWheelLocalizer) poseUpdater.getLocalizer();
-        Pose leftEncoderPose = twoWheelLocalizer.getLeftEncoderPose();
+        //TwoWheelLocalizer twoWheelLocalizer = (TwoWheelLocalizer) poseUpdater.getLocalizer();
+        //Pose leftEncoderPose = twoWheelLocalizer.getLeftEncoderPose();
 
-        leftEncoderPose.setX(leftEncoderPose.getX()-gamepad1.left_stick_y*.05);
+        //leftEncoderPose.setX(leftEncoderPose.getX()-gamepad1.left_stick_y*.05);
 
 
         telemetryA.addData("x", poseUpdater.getPose().getX());
         telemetryA.addData("y", poseUpdater.getPose().getY());
         telemetryA.addData("heading", poseUpdater.getPose().getHeading());
         telemetryA.addData("total heading", poseUpdater.getTotalHeading());
-        telemetryA.addData("Left Encoder X Pos", leftEncoderPose.getX());
-        telemetryA.addData("Forward Encoder Total Inches",twoWheelLocalizer.getForwardEncoderInches());
+        //telemetryA.addData("Left Encoder X Pos", leftEncoderPose.getX());
+        //telemetryA.addData("Forward Encoder Total Inches",twoWheelLocalizer.getForwardEncoderInches());
+        telemetryA.addData("Delta Radians",((TwoWheelLocalizer)poseUpdater.getLocalizer()).getDeltaRadians());
         telemetryA.update();
 
         Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");

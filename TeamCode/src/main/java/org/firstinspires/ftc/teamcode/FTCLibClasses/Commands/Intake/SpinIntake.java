@@ -36,7 +36,7 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return hasCorrectSample;
+        return true;
     }
 
     @Override

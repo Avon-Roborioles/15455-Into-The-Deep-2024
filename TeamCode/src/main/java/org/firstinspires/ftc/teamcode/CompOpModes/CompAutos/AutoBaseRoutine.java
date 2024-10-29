@@ -27,6 +27,7 @@ import org.firstinspires.ftc.teamcode.NoAprilTagFoundException;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.PedroPathAutoCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
@@ -91,6 +92,18 @@ abstract class AutoBaseRoutine extends OpMode {
         )
                 .setConstantHeadingInterpolation(PI/2)
                 .build();
+        Path goal = new Path.PathBuilder(
+                new BezierCurve(
+                        new Point(new Pose(-11.4,-15.29,Math.toRadians(270))),
+                        new Point(new Pose(-30.765,-29.3)),
+                        new Point(new Pose(95,-3.2))
+
+                )
+        )
+                .setConstantHeadingInterpolation((5*PI)/4)
+                        .build();
+
+
 //        new Path(
 //                new BezierLine(
 //                        new Point(follower.getPose()),
@@ -115,15 +128,21 @@ abstract class AutoBaseRoutine extends OpMode {
                         new ProxyScheduleCommand(spinIntake)
                 )
         );
+        SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake,passIntoBucket);
+
 
 
 
         PedroPathAutoCommand goRightCommand = new PedroPathAutoCommand(followerSubsystem,goRight);
+        PedroPathAutoCommand goalCommand = new PedroPathAutoCommand(followerSubsystem, goal);
         SequentialCommandGroup moveAndIntake = new SequentialCommandGroup(
                 goRightCommand,
-                groupExtendIntake
+                //groupExtendIntake,
+                //groupRetractIntake,
+                goalCommand
         );
         moveAndIntake.schedule();
+
     }
     @Override
     public void loop(){

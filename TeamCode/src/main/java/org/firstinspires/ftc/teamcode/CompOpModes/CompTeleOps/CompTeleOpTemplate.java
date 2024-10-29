@@ -92,7 +92,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         moveIntakeUp = new MoveIntakeUp(intake);
         moveIntakeDown = new MoveIntakeDown(intake);
 
-        SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake);
+        SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake,passIntoBucket);
         SequentialCommandGroup groupExtendIntake = new SequentialCommandGroup(
                 extendIntake,
                 new ParallelCommandGroup(
@@ -125,8 +125,8 @@ public abstract class CompTeleOpTemplate extends OpMode {
         SequentialCommandGroup armAndLiftDown = new SequentialCommandGroup(liftDownCommand,armDownCommand);
 
 
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(groupExtendIntake);
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(groupRetractIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(groupExtendIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(groupRetractIntake);
 
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(dunk);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(armAndLiftDown);

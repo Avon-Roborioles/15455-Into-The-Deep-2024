@@ -69,6 +69,8 @@ public class IntakeSubsystem extends SubsystemBase {
         this.doTelemetry = doTelemetry;
         this.gamepad = gamepad;
 
+        intakeServo.setPower(0);
+
 
     }
 

@@ -67,9 +67,7 @@ public  class HardwareTestOpMode extends OpMode {
                         RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 )
         );
-        while(!imu.initialize(imuParams)){
-            continue;
-        }
+        imu.initialize(imuParams);
 
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
@@ -126,16 +124,6 @@ public  class HardwareTestOpMode extends OpMode {
     public final void loop(){
         drivePad.readButtons();
         gamepadEx2.readButtons();
-
-
-
         CommandScheduler.getInstance().run();
     }
-
-
-    @Override
-    public void stop(){
-        CommandScheduler.getInstance().cancelAll();
-    }
-
 }

@@ -1,30 +1,35 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
-import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
-public class PedroPathCommand extends CommandBase {
+import java.util.concurrent.TimeUnit;
+
+public class PedroPathAutoCommand extends CommandBase {
 
     private FollowerSubsystem follower;
     private PathChain pathChain=null;
     private Path path = null;
 
     private PathType type;
+    private Timing.Timer timer;
 
-    public PedroPathCommand(FollowerSubsystem follower, Path path){
+    private boolean isBusy;
+
+    public PedroPathAutoCommand(FollowerSubsystem follower, Path path){
         type = PathType.PATH;
 
         this.follower = follower;
         this.path = path;
         addRequirements(follower);
+        timer = new Timing.Timer(1500,TimeUnit.MILLISECONDS);
     }
 
-    public PedroPathCommand(FollowerSubsystem follower,PathChain pathChain){
+    public PedroPathAutoCommand(FollowerSubsystem follower, PathChain pathChain){
         this.follower = follower;
         this.pathChain = pathChain;
         addRequirements(follower);
@@ -34,11 +39,12 @@ public class PedroPathCommand extends CommandBase {
     public void initialize(){
         switch (type) {
             case PATH:
-                follower.getFollower().followPath(path);
+                follower.getFollower().followPath(path,true);
                 break;
             case PATH_CHAIN:
-                follower.getFollower().followPath(pathChain);
+                follower.getFollower().followPath(pathChain,true);
         }
+        isBusy = true;
     }
     @Override
     public void execute(){
@@ -47,12 +53,23 @@ public class PedroPathCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return !follower.getFollower().isBusy();
+        isBusy = follower.getFollower().isBusy();
+        if (!isBusy){
+            if (!timer.isTimerOn()) timer.start();
+        } else {
+            timer.pause();
+        }
+
+        if (timer.done()){
+            return true;
+        }
+        return  false;
     }
 
     @Override
     public void end(boolean b){
         follower.getFollower().breakFollowing();
+
     }
     enum PathType {
         PATH_CHAIN,

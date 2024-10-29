@@ -36,6 +36,6 @@ public class PassIntoBucket extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return timer.done();
+        return intake.hasCorrectSample() == IntakeSubsystem.SampleState.NO_SAMPLE;
     }
 }

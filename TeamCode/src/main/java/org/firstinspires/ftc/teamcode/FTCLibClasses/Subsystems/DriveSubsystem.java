@@ -83,7 +83,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        telemetry.addData("Heading (radians)",heading.getAsDouble());
+        //telemetry.addData("Heading (radians)",heading.getAsDouble());
     }
 
 

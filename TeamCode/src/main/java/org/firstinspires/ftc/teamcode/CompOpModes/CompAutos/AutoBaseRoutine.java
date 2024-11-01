@@ -62,6 +62,10 @@ abstract class AutoBaseRoutine extends OpMode {
 //                .build();
 //        aprilTagReader = new AprilTagReader(aprilTagProcessor,telemetry);
 
+
+        Point blueGoal = new Point(new Pose(95,-3.2));
+        Point leftSpike = new Point(new Pose(-11.4,-15.29,Math.toRadians(270)));
+
         Pose startPose;
         follower = new Follower(hardwareMap);
         followerSubsystem =new FollowerSubsystem(follower);
@@ -94,9 +98,9 @@ abstract class AutoBaseRoutine extends OpMode {
                 .build();
         Path goal = new Path.PathBuilder(
                 new BezierCurve(
-                        new Point(new Pose(-11.4,-15.29,Math.toRadians(270))),
+                        leftSpike,
                         new Point(new Pose(-30.765,-29.3)),
-                        new Point(new Pose(95,-3.2))
+                        blueGoal
 
                 )
         )
@@ -123,7 +127,7 @@ abstract class AutoBaseRoutine extends OpMode {
         MoveIntakeDown moveIntakeDown = new MoveIntakeDown(intake);
         SequentialCommandGroup groupExtendIntake = new SequentialCommandGroup(
                 extendIntake,
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                         moveIntakeDown,
                         new ProxyScheduleCommand(spinIntake)
                 )
@@ -137,8 +141,8 @@ abstract class AutoBaseRoutine extends OpMode {
         PedroPathAutoCommand goalCommand = new PedroPathAutoCommand(followerSubsystem, goal);
         SequentialCommandGroup moveAndIntake = new SequentialCommandGroup(
                 goRightCommand,
-                //groupExtendIntake,
-                //groupRetractIntake,
+                groupExtendIntake,
+                groupRetractIntake,
                 goalCommand
         );
         moveAndIntake.schedule();

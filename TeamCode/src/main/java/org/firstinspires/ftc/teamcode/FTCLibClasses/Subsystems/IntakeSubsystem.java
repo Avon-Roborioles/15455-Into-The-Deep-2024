@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private CRServo intakeServo;
 
     private ServoEx verticalServo;
-    private IntakeHeight verticalServoTarget;
+    private IntakeHeight verticalServoTarget= IntakeHeight.UP;
 
     private Motor extendMotor;
     private double motorStartPos;
@@ -60,7 +60,7 @@ public class IntakeSubsystem extends SubsystemBase {
         );
         extendMotor = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        //extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
 
 
@@ -84,6 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
 //            telemetry.addData("Combined Red Raw",colorSensor1.red()+colorSensor2.red());
 //            telemetry.addData("Combined Blue Raw",colorSensor1.blue()+colorSensor2.blue());
 //            telemetry.addData("Combined Green Raw", colorSensor1.green()+colorSensor2.green());
+        telemetry.addData("SAMPLE STATE",hasCorrectSample());
 
             telemetry.addLine("============Intake Servo============");
             telemetry.addData("Intake Servo Power",intakeServo.getPower());
@@ -94,6 +95,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
             telemetry.addLine("============Extend Motor============");
             telemetry.addData("Motor Position",extendMotor.getCurrentPosition());
+            telemetry.addData("Extend Target",extendPos);
 
 
        // }
@@ -172,11 +174,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public boolean isVerticalMotionDone(){
+        double thresh = 0;
         switch (verticalServoTarget){
             case UP:
-                return verticalServo.getPosition() == RobotConfig.IntakeConstants.verticalServoUpPosition;
+                return verticalServo.getPosition() >= RobotConfig.IntakeConstants.verticalServoUpPosition-thresh;
             case DOWN:
-                return verticalServo.getPosition() == RobotConfig.IntakeConstants.verticalServoDownPosition;
+                return verticalServo.getPosition() <= RobotConfig.IntakeConstants.verticalServoDownPosition+thresh;
         }
         return false;
     }
@@ -191,8 +194,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void retractMotorFully(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
         extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMinPosition);
-        extendMotor.set(RobotConfig.IntakeConstants.motorSlowRetractionRawPower);
-        extendPos = ExtendPos.OUT;
+        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed);
+        extendPos = ExtendPos.IN;
     }
 
 
@@ -236,9 +239,17 @@ public class IntakeSubsystem extends SubsystemBase {
         DOWN
     }
     public enum ExtendPos{
-        OUT,
-        CLEAR,
-        IN
+        OUT("OUT"),
+        CLEAR("CLEAR"),
+        IN("IN");
+        private String string;
+        ExtendPos (String desc){
+            this.string = desc;
+        }
+
+        public String toString(){
+            return string;
+        }
     }
     public enum SampleState {
         CORRESPONDING_SAMPLE("Corresponding Sample"),
@@ -253,6 +264,10 @@ public class IntakeSubsystem extends SubsystemBase {
         @Override
         public String toString(){
             return name;
+        }
+
+        public boolean equals(SampleState other){
+            return this.toString().equals(other.toString());
         }
     }
 }

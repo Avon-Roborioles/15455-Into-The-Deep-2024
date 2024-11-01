@@ -95,7 +95,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake,passIntoBucket);
         SequentialCommandGroup groupExtendIntake = new SequentialCommandGroup(
                 extendIntake,
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                         moveIntakeDown,
                         new ProxyScheduleCommand(spinIntake)
                         )
@@ -144,8 +144,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         drivePad.readButtons();
         gamepadEx2.readButtons();
 
-
-
+        telemetry.addData("Retract Finished",retractIntake.isFinished());
         CommandScheduler.getInstance().run();
     }
 

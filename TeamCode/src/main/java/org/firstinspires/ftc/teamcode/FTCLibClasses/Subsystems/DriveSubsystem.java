@@ -33,6 +33,8 @@ public class DriveSubsystem extends SubsystemBase {
     private Command curCommand=null;
     private boolean isCurCommandScheduled =false;
 
+    private double startHeading;
+
     private Telemetry telemetry = null;
 
     public DriveSubsystem(HardwareMap hMap, GamepadEx gamepad, IMU imu){
@@ -57,7 +59,8 @@ public class DriveSubsystem extends SubsystemBase {
         strafe = gamepad::getLeftX;
         rotate = gamepad::getRightX;
         toggleFieldToBotCentric = new ToggleButtonReader(gamepad, GamepadKeys.Button.RIGHT_BUMPER);
-        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        startHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)-startHeading;
 
     }
 

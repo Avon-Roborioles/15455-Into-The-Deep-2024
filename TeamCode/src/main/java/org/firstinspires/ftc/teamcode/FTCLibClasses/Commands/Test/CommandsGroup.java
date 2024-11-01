@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TestGroupC1;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TestGroupC2;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.TestGroupS1;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.TestGroupS2;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.TestGroupS1;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.TestGroupS2;
 
 public class CommandsGroup extends ParallelCommandGroup {
 

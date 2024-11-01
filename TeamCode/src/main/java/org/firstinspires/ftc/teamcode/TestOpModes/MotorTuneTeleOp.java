@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.TestOpModes;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.MotorTune;
+import org.firstinspires.ftc.teamcode.UtilityOpModes.MotorTune;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 
 

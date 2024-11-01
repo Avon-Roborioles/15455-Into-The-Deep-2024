@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode.CompOpModes.CompTeleOps;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
-import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -24,13 +21,11 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntak
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftHighBasketCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TeleOpDriveCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
-
-import java.util.HashMap;
 
 
 public abstract class CompTeleOpTemplate extends OpMode {
@@ -95,7 +90,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(moveIntakeUp,retractIntake,passIntoBucket);
         SequentialCommandGroup groupExtendIntake = new SequentialCommandGroup(
                 extendIntake,
-                new SequentialCommandGroup(
+                new ParallelCommandGroup(
                         moveIntakeDown,
                         new ProxyScheduleCommand(spinIntake)
                         )

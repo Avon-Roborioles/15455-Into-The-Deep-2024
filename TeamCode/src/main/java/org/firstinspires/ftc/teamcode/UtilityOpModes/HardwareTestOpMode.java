@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.UtilityOpModes;
 
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmHighDunkCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
@@ -19,13 +20,13 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntak
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftHighBasketCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TeleOpDriveCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
 
-@TeleOp
+@TeleOp(name = "Partial Auto Hardware Test", group = "Utility")
 public  class HardwareTestOpMode extends OpMode {
 
     private GamepadEx drivePad;

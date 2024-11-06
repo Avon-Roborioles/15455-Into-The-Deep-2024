@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.UtilityOpModes;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.function.DoubleSupplier;
 
-@TeleOp(name = "Hardware Tune",group = "Utility")
-public class MotorTune {
+
+public class MotorTune  {
 
     private Motor motor;
     private int startPos;

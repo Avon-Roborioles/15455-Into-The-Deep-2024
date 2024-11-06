@@ -1,18 +1,23 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
+import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
+
+import java.util.concurrent.TimeUnit;
 
 public class SpinIntake extends CommandBase {
 
     private IntakeSubsystem intake;
     private boolean hasCorrectSample;
+    private Timing.Timer timer;
 
 
     public SpinIntake(IntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
+        timer = new Timing.Timer(100 , TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -26,17 +31,18 @@ public class SpinIntake extends CommandBase {
             case YELLOW_SAMPLE:
             case CORRESPONDING_SAMPLE:
                 hasCorrectSample = true;
-                intake.stopIntakeWheels();
+                timer.start();
             case WRONG_SAMPLE:
                 intake.spinWheelsDown();
             case NO_SAMPLE:
                 intake.spinWheelsUp();
         }
+
     }
 
     @Override
     public boolean isFinished(){
-        return hasCorrectSample;
+        return hasCorrectSample&&timer.done();
     }
 
     @Override

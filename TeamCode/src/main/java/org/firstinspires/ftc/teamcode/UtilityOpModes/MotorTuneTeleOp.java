@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode.TestOpModes;
+package org.firstinspires.ftc.teamcode.UtilityOpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.UtilityOpModes.MotorTune;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 
 
-@TeleOp
+@TeleOp(name = "Hardware Tune",group = "Utility")
 public class MotorTuneTeleOp extends OpMode {
 
     private MotorTune motorTune;

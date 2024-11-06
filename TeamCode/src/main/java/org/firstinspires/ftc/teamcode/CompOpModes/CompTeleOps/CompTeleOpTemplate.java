@@ -76,7 +76,6 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
-        driveSubsystem.setTelemetry(telemetry);
 
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, allianceColor, telemetry, () -> true, gamepad1);
 

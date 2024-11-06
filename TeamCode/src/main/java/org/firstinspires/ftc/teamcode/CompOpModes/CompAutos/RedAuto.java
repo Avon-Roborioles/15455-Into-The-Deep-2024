@@ -12,4 +12,9 @@ public class RedAuto extends AutoBaseRoutine{
     public void setAllianceColor(){
         allianceColor = AllianceColor.RED;
     }
+
+    @Override
+    public void specificInit(){
+
+    }
 }

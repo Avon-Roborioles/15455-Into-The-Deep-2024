@@ -15,7 +15,7 @@ public class MoveIntakeDown extends CommandBase {
     public MoveIntakeDown(IntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
-        timer = new Timing.Timer(1000, TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(500, TimeUnit.MILLISECONDS);
 
 
     }

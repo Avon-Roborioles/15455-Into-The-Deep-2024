@@ -26,9 +26,9 @@ public class RobotConfig {
 
         public static final String verticalServoName = "verticalServo";
         public static final double verticalServoMinDegrees = 0;
-        public static final double verticalServoMaxDegrees = 1800;
-        public static final double verticalServoUpPosition = .9817;
-        public static final double verticalServoDownPosition = .8239;
+        public static final double verticalServoMaxDegrees = 300;
+        public static final double verticalServoUpPosition = 1;
+        public static final double verticalServoDownPosition = 0;
 
 
         public static final String extendMotorName = "extendMotor";
@@ -45,14 +45,21 @@ public class RobotConfig {
     }
 
     public static class OuttakeConstants{
-        public static String armLiftName = "armLift";
-        public static int armLiftHighDunkPos = -4910;
-        public static int armLiftDefaultPos = 0;
+        public static final String armLiftName = "armLift";
+        public static final int armLiftHighDunkPos = -4910;
+        public static final int armLiftDefaultPos = 0;
 
 
-        public static String armOuttakeName = "armOuttake";
+        public static final String armOuttakeName = "armOuttake";
         public static int armSwingHighDunkPos = 432;
         public static int armSwingDefaultPos = 0;
+    }
+
+    public static class CameraConstants{
+        public static final float fx = 790.088f;
+        public static final float fy = 790.088f;
+        public static final float cx = 320.002f;
+        public static final float cy = 240.001f;
     }
 
 }

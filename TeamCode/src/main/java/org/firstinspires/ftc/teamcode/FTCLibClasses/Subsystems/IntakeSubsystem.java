@@ -71,6 +71,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
         intakeServo.setPower(0);
 
+        verticalServo.setPosition(RobotConfig.IntakeConstants.verticalServoUpPosition);
+
 
     }
 

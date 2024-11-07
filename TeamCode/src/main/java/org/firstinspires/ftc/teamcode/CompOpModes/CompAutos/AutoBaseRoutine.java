@@ -4,6 +4,7 @@ import static java.lang.Math.PI;
 
 import android.util.Size;
 
+import com.arcrobotics.ftclib.command.CommandGroupBase;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
@@ -67,6 +68,7 @@ abstract class AutoBaseRoutine extends OpMode {
 
     @Override
     public void init(){
+
         setAllianceColor();
 
 
@@ -98,6 +100,7 @@ abstract class AutoBaseRoutine extends OpMode {
         armAndLiftDown = new SequentialCommandGroup(liftDownCommand,armDownCommand);
 
 
+        CommandGroupBase.clearGroupedCommands();
 
         specificInit();
     }
@@ -108,6 +111,9 @@ abstract class AutoBaseRoutine extends OpMode {
     public void loop(){
         CommandScheduler.getInstance().run();
     }
+
+    @Override
+    public void stop(){        CommandScheduler.getInstance().reset();}
 
     abstract public void setAllianceColor();
 }

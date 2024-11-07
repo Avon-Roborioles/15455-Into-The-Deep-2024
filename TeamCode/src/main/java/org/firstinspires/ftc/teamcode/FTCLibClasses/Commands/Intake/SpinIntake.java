@@ -17,7 +17,7 @@ public class SpinIntake extends CommandBase {
     public SpinIntake(IntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
-        timer = new Timing.Timer(100 , TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(150 , TimeUnit.MILLISECONDS);
     }
 
     @Override

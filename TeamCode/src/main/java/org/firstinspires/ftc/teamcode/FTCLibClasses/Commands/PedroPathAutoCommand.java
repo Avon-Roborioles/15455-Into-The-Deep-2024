@@ -26,7 +26,7 @@ public class PedroPathAutoCommand extends CommandBase {
         this.follower = follower;
         this.path = path;
         addRequirements(follower);
-        timer = new Timing.Timer(1500,TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(750,TimeUnit.MILLISECONDS);
     }
 
     public PedroPathAutoCommand(FollowerSubsystem follower, PathChain pathChain){

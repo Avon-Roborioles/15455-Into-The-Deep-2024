@@ -143,7 +143,10 @@ public abstract class CompTeleOpTemplate extends OpMode {
     }
 
 
-
+    @Override
+    public void stop(){
+        CommandScheduler.getInstance().reset();
+    }
 
     public abstract void setAllianceColor();
 }

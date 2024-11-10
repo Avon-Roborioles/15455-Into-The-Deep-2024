@@ -84,7 +84,7 @@ public class FollowerConstants {
 
 
     // Mass of robot in kilograms
-    public static double mass = RobotConfig.DriveConstants.mass;
+    public static double mass = RobotConfig.DriveConstants.practiceBotMass;
 
     // Centripetal force to power scaling
     public static double centripetalScaling = 0.0005;

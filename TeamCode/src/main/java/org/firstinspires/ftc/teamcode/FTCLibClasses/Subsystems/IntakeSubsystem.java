@@ -46,8 +46,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
     public IntakeSubsystem(HardwareMap hMap, AllianceColor alliance, Telemetry telemetry, BooleanSupplier doTelemetry, Gamepad gamepad){
-        colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
-        colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
+//        colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
+//        colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
 
         intakeServo = hMap.get(CRServo.class,RobotConfig.IntakeConstants.intakeServoName);
         this.allianceColor = alliance;
@@ -104,46 +104,47 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public SampleState hasCorrectSample(){
-        //It adds both sensor values and then takes the proportion of the colors.
-        //We do this because the closer the sample is, the more color it receives
-        //The proportion of the colors is what matters
-
-
-
-        double red = colorSensor1.red() + colorSensor2.red();
-        double blue = colorSensor1.blue() + colorSensor2.blue();
-        double green = colorSensor1.green() + colorSensor2.green();
-
-        double max = Math.max(Math.max(red,blue),green);
-
-        red/=max;
-        blue/=max;
-        green/=max;
-
-
-        telemetryToReturn = "Red: " +red+"\nBlue: " + blue+"\nGreen: " +green;
-
-
-        if(blue>red&&blue>green){
-            switch(allianceColor){
-                case RED:
-                    return SampleState.WRONG_SAMPLE;
-                case BLUE:
-                    return SampleState.CORRESPONDING_SAMPLE;
-            }
-        } else if (red>blue&&red>green){
-            switch(allianceColor){
-                case RED:
-                    return SampleState.CORRESPONDING_SAMPLE;
-                case BLUE:
-                    return SampleState.WRONG_SAMPLE;
-            }
-            return SampleState.WRONG_SAMPLE;
-        } else if (Math.abs(red-green) < RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold){
-            return SampleState.YELLOW_SAMPLE;
-        }
-
         return SampleState.NO_SAMPLE;
+//        //It adds both sensor values and then takes the proportion of the colors.
+//        //We do this because the closer the sample is, the more color it receives
+//        //The proportion of the colors is what matters
+//
+//
+//
+//        double red = colorSensor1.red() + colorSensor2.red();
+//        double blue = colorSensor1.blue() + colorSensor2.blue();
+//        double green = colorSensor1.green() + colorSensor2.green();
+//
+//        double max = Math.max(Math.max(red,blue),green);
+//
+//        red/=max;
+//        blue/=max;
+//        green/=max;
+//
+//
+//        telemetryToReturn = "Red: " +red+"\nBlue: " + blue+"\nGreen: " +green;
+//
+//
+//        if(blue>red&&blue>green){
+//            switch(allianceColor){
+//                case RED:
+//                    return SampleState.WRONG_SAMPLE;
+//                case BLUE:
+//                    return SampleState.CORRESPONDING_SAMPLE;
+//            }
+//        } else if (red>blue&&red>green){
+//            switch(allianceColor){
+//                case RED:
+//                    return SampleState.CORRESPONDING_SAMPLE;
+//                case BLUE:
+//                    return SampleState.WRONG_SAMPLE;
+//            }
+//            return SampleState.WRONG_SAMPLE;
+//        } else if (Math.abs(red-green) < RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold){
+//            return SampleState.YELLOW_SAMPLE;
+//        }
+//
+//        return SampleState.NO_SAMPLE;
 
 
 //        if (gamepad.b){

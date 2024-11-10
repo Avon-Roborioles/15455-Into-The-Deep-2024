@@ -37,9 +37,9 @@ public class DriveSubsystem extends SubsystemBase {
         MotorEx backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
 
 
-        leftFront.setInverted(true);
+        leftFront.setInverted(false);
         rightFront.setInverted(true);
-        backLeft.setInverted(true);
+        backLeft.setInverted(false);
         backRight.setInverted(true);
 
 
@@ -64,11 +64,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driverControlDrive(){
 
-        drive.driveFieldCentric(
+        drive.driveRobotCentric(
                 strafe.getAsDouble(),
                 forward.getAsDouble(),
-                rotate.getAsDouble(),
-                heading.getAsDouble()
+                rotate.getAsDouble()
+                //heading.getAsDouble()
         );
 
         if (gamepadEx.gamepad.left_bumper&&gamepadEx.gamepad.right_bumper){

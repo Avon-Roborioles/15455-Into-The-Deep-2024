@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmHighDunkCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
@@ -26,6 +27,9 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
+import org.firstinspires.ftc.teamcode.RobotConfig;
+
+import java.util.Objects;
 
 
 public abstract class CompTeleOpTemplate extends OpMode {
@@ -42,6 +46,8 @@ public abstract class CompTeleOpTemplate extends OpMode {
     private MoveIntakeDown moveIntakeDown;
     private SequentialCommandGroup fullIntakeRoutine;
 
+    private Bot curBot = Bot.COMP;
+
     protected AllianceColor allianceColor;
 
     private LiftSubsystem liftSubsystem;
@@ -53,29 +59,32 @@ public abstract class CompTeleOpTemplate extends OpMode {
     private ArmHighDunkCommand armCommand;
     private ArmDownCommand armDownCommand;
 
+    @Override
+    public void init_loop(){
+        if (gamepad1.b) {
+            curBot = Bot.COMP;
+        } else if (gamepad1.a){
+            curBot = Bot.PRACTICE;
+        }
+        switch (curBot) {
+            case COMP:
+                telemetry.addLine("Initiating Comp Bot Opmode");
+            case PRACTICE:
+                telemetry.addLine("Initiating Practice Bot Opmode");
+        }
+        telemetry.addLine("Press b to initiate the comp opmode and a to initiate the practice bot opmode");
+        telemetry.update();
+    }
 
     @Override
     public final void init(){
+
 
         setAllianceColor();
 
 
         drivePad = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
-        IMU imu = hardwareMap.get(IMU.class,"imu");
-
-        IMU.Parameters imuParams= new IMU.Parameters(
-                new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-                )
-        );
-        while(!imu.initialize(imuParams)){
-            continue;
-        }
-
-        DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
-        driveCommand = new TeleOpDriveCommand(driveSubsystem);
 
         IntakeSubsystem intake = new IntakeSubsystem(hardwareMap, allianceColor, telemetry, () -> true, gamepad1);
 
@@ -128,8 +137,26 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
         //fullIntakeRoutine = new SequentialCommandGroup(extendIntake,spinIntake,retractIntake);
         //extendTrigger.whenActive(spinIntake);
-        driveSubsystem.setDefaultCommand(driveCommand);
 
+
+    }
+
+    @Override
+    public void start(){
+        IMU imu = hardwareMap.get(IMU.class,"imu");
+
+        IMU.Parameters imuParams = RobotConfig.DriveConstants.compIMUOrientation;
+
+        if (Objects.requireNonNull(curBot) == Bot.PRACTICE) {
+            imuParams = RobotConfig.DriveConstants.practiceIMUOrientation;
+        }
+        while(!imu.initialize(imuParams)){
+            continue;
+        }
+
+        DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
+        driveCommand = new TeleOpDriveCommand(driveSubsystem);
+        driveSubsystem.setDefaultCommand(driveCommand);
 
     }
 

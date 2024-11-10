@@ -73,8 +73,9 @@ abstract class AutoBaseRoutine extends OpMode {
 
 
         follower = new Follower(hardwareMap);
-        followerSubsystem =new FollowerSubsystem(follower);
 
+        followerSubsystem = new FollowerSubsystem(follower);
+        followerSubsystem.setTelemetry(telemetry);
 
         telemetry.update();
 

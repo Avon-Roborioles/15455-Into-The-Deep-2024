@@ -86,22 +86,27 @@ public class RedLeftAuto extends AutoBaseRoutine{
                 .build();
 
 
-        followerSubsystem.setTelemetry(telemetry);
+
+        //makes paths into commands
         PedroPathAutoCommand startToGoalCommand = new PedroPathAutoCommand(followerSubsystem,startToGoal);
         PedroPathAutoCommand fromGoalToRightSpikeCommand = new PedroPathAutoCommand(followerSubsystem, fromGoalToRightSpike);
         PedroPathAutoCommand fromRightSpikeToGoalCommand = new PedroPathAutoCommand(followerSubsystem, fromRightSpikeToGoal);
         PedroPathAutoCommand fromGoalToMiddleSpikeCommand = new PedroPathAutoCommand(followerSubsystem,fromGoalToMiddleSpike);
         PedroPathAutoCommand fromMiddleSpikeToGoalCommand = new PedroPathAutoCommand(followerSubsystem,fromMiddleSpikeToGoal);
 
+
+        //have to clear the grouped commands so that we can reuse the commands for multiple command groups
         CommandGroupBase.clearGroupedCommands();
 
-
+        //dunks
         SequentialCommandGroup dunkRoutine = new SequentialCommandGroup(
                 dunk,
                 armAndLiftDown
         );
         CommandGroupBase.clearGroupedCommands();
 
+
+        //goes from the start to the goal and dunks
         SequentialCommandGroup startGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                         startToGoalCommand,
@@ -112,8 +117,8 @@ public class RedLeftAuto extends AutoBaseRoutine{
 
         CommandGroupBase.clearGroupedCommands();
 
-
-        SequentialCommandGroup goalDunkSpikeIntakePass = new SequentialCommandGroup(
+        //goes from the goal to the right spike, intakes the sample, and passes the sample into the bucket
+        SequentialCommandGroup goalRightSpikeIntakePass = new SequentialCommandGroup(
                 fromGoalToRightSpikeCommand,
                 new ParallelCommandGroup(
                         moveIntakeDown,
@@ -124,6 +129,8 @@ public class RedLeftAuto extends AutoBaseRoutine{
 
         CommandGroupBase.clearGroupedCommands();
 
+
+        //goes to the goal from the right spike, extends the intake and dunks
         SequentialCommandGroup rightSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                         extendIntake,
@@ -134,7 +141,7 @@ public class RedLeftAuto extends AutoBaseRoutine{
 
         CommandGroupBase.clearGroupedCommands();
 
-
+        //goes to the middle spike from the goal, intakes and passes it in
         SequentialCommandGroup goalMiddleSpikeIntakePass = new SequentialCommandGroup(
                 fromGoalToMiddleSpikeCommand,
                 new ParallelCommandGroup(
@@ -145,6 +152,7 @@ public class RedLeftAuto extends AutoBaseRoutine{
         );
         CommandGroupBase.clearGroupedCommands();
 
+        //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup middleSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                         extendIntake,
@@ -153,19 +161,16 @@ public class RedLeftAuto extends AutoBaseRoutine{
                 dunkRoutine
         );
 
-        SequentialCommandGroup moveAndIntake = new SequentialCommandGroup(
-                //Goes to goal, extends, and dunks
+        //puts all commands together
+        SequentialCommandGroup autoRoutine = new SequentialCommandGroup(
                 startGoalDunk,
-                //goes to the right spike and picks up the sample, and it retracts and passes in the sample
-                goalDunkSpikeIntakePass,
-
-                //goes to the goal from the right spike and dunks
+                goalRightSpikeIntakePass,
                 rightSpikeGoalDunk,
                 goalMiddleSpikeIntakePass,
                 middleSpikeGoalDunk
         );
 
-        moveAndIntake.schedule();
+        autoRoutine.schedule();
 
     }
 }

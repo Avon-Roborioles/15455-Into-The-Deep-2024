@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.IMU;
+
 //USE THIS CLASS TO PUT ALL CONSTANTS LIKE HARDWARE NAMES AND CONSTANTS
 public class RobotConfig {
     public static class DriveConstants {
@@ -12,8 +15,23 @@ public class RobotConfig {
         public static final double forwardMultiplier = 0.0029805169566404065;
         public static final double lateralMultiplier = 0.002965149766084306;
 
+        public static final IMU.Parameters practiceIMUOrientation = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                )
+        );
+
+        public static final IMU.Parameters compIMUOrientation = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.UP
+                )
+        );
+
         //IN KILOGRAMS!!!
-        public static final double mass = 14.318;
+        public static final double practiceBotMass = 14.318;
+        public static final double compBotMass = 12.05;
     }
 
     public static class IntakeConstants {

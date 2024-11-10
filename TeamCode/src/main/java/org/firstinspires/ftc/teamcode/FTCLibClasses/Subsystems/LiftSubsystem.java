@@ -29,13 +29,13 @@ public class LiftSubsystem extends SubsystemBase {
     }
 
 
-   public void buttonHold(int value){
-       armLift.set(1);
-       armLift.setTargetPosition(value+startPos);
+    public void buttonHold(int value){
+        armLift.set(1);
+        armLift.setTargetPosition(value+startPos);
 
-   }
+    }
 
-   public int getValue(){return armLift.getCurrentPosition()-startPos;}
+    public int getValue(){return armLift.getCurrentPosition()-startPos;}
 
     public void run(){
         armLift.set(1);

@@ -25,7 +25,9 @@ public class DriveSubsystem extends SubsystemBase {
     private  ToggleButtonReader toggleFieldToBotCentric;
     private  DoubleSupplier heading;
 
-        private double startHeading;
+    private double startHeading;
+
+    private String telemetry = "";
 
 
     private GamepadEx gamepadEx;
@@ -58,7 +60,9 @@ public class DriveSubsystem extends SubsystemBase {
 
 
     public String getTelemetry(){
-        return "";
+        String tele = ""+telemetry;
+        telemetry = "";
+        return tele;
     }
 
 
@@ -73,6 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         if (gamepadEx.gamepad.left_bumper&&gamepadEx.gamepad.right_bumper){
             startHeading = heading.getAsDouble();
+            telemetry = telemetry + "\nForward Set";
         }
 
     }

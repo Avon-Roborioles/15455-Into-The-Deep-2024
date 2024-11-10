@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -27,7 +26,8 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.RobotConfig;
+import static org.firstinspires.ftc.teamcode.RobotConfig.DriveConstants;
+import org.firstinspires.ftc.teamcode.pedroPathing.tuning.FollowerConstants;
 
 import java.util.Objects;
 
@@ -145,10 +145,12 @@ public abstract class CompTeleOpTemplate extends OpMode {
     public void start(){
         IMU imu = hardwareMap.get(IMU.class,"imu");
 
-        IMU.Parameters imuParams = RobotConfig.DriveConstants.compIMUOrientation;
+        IMU.Parameters imuParams = DriveConstants.compIMUOrientation;
+        FollowerConstants.mass = DriveConstants.compBotMass;
 
         if (Objects.requireNonNull(curBot) == Bot.PRACTICE) {
-            imuParams = RobotConfig.DriveConstants.practiceIMUOrientation;
+            imuParams = DriveConstants.practiceIMUOrientation;
+            FollowerConstants.mass = DriveConstants.practiceBotMass;
         }
         while(!imu.initialize(imuParams)){
             continue;
@@ -156,6 +158,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
 
         DriveSubsystem driveSubsystem = new DriveSubsystem(hardwareMap,drivePad,imu);
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
+
         driveSubsystem.setDefaultCommand(driveCommand);
 
     }
@@ -165,6 +168,7 @@ public abstract class CompTeleOpTemplate extends OpMode {
         drivePad.readButtons();
         gamepadEx2.readButtons();
 
+        telemetry.addData("Retract Scheduled",retractIntake.isScheduled());
         telemetry.addData("Retract Finished",retractIntake.isFinished());
         CommandScheduler.getInstance().run();
     }

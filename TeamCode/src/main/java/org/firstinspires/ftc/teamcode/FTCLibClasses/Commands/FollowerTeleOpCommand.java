@@ -8,10 +8,12 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
+import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 
 public class FollowerTeleOpCommand extends CommandBase {
 
     private FollowerSubsystem followerSubsystem;
+    private Follower follower;
     private GamepadEx gamepadEx;
     private IMU imu;
 
@@ -19,24 +21,29 @@ public class FollowerTeleOpCommand extends CommandBase {
         followerSubsystem = subsystem;
         this.gamepadEx = gamepadEx;
         this.imu = imu;
+        follower = followerSubsystem.getFollower();
     }
 
 
-
+    @Override
+    public void initialize(){
+        follower.startTeleopDrive();
+    }
 
 
     @Override
     public void execute(){
-        followerSubsystem.getFollower().setTeleOpMovementVectors(
+        follower.setTeleOpMovementVectors(
                 gamepadEx.getLeftY(),
                 gamepadEx.getLeftX(),
                 gamepadEx.getRightX(),
-                false
+                true
         );
+        follower.update();
     }
 
     @Override
     public void end(boolean b){
-        followerSubsystem.getFollower().breakFollowing();
+        follower.breakFollowing();
     }
 }

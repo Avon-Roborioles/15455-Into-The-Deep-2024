@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.util.Timing;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.VerticalIntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.VerticalIntakeSubsystem;
 
 import java.util.concurrent.TimeUnit;
 

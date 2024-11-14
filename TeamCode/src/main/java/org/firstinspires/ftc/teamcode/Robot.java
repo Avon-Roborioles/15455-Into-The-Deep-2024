@@ -6,25 +6,25 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmDownCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.ArmHighDunkCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.FollowerTeleOpCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.ArmDownCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.ArmHighDunkCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.FollowerTeleOpCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.MoveIntakeDown;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.MoveIntakeUp;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.PassIntoBucket;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftDownCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.LiftHighBasketCommand;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TeleOpDriveCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.LiftDownCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.LiftHighBasketCommand;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.TeleOpDriveCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ExtendMotorSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.ExtendMotorSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.SpinIntakeSubsystem;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.VerticalIntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.SpinIntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.VerticalIntakeSubsystem;
 
 public class Robot {
     public GamepadEx drivePad;

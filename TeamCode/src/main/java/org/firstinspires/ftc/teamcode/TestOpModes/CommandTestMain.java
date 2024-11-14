@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TestGroupC1;
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.TestGroupC2;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TestGroupC1;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.TestGroupC2;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Test.CommandsGroup;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.TestGroupS1;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Test.TestGroupS2;

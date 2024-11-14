@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 

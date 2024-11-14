@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.ExtendMotorSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.ExtendMotorSubsystem;
 
 
 public class RetractIntake extends CommandBase {

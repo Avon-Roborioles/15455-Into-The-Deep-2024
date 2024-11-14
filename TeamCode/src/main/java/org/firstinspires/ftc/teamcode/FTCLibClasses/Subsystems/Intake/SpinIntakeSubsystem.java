@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
+package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;

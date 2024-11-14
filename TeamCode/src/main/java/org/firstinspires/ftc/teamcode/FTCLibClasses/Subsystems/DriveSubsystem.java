@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 
 import java.util.function.DoubleSupplier;
@@ -27,6 +28,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     private double startHeading;
 
+    private IMU imu;
+
+    private double timer=0;
+
+
     private String telemetry = "";
 
 
@@ -39,12 +45,12 @@ public class DriveSubsystem extends SubsystemBase {
         MotorEx backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
 
 
-        leftFront.setInverted(false);
+        leftFront.setInverted(true);
         rightFront.setInverted(true);
-        backLeft.setInverted(false);
-        backRight.setInverted(true);
+        backLeft.setInverted(true);
+        backRight.setInverted(false);
 
-
+        imu.initialize(RobotConfig.DriveConstants.compIMUOrientation);
 
         this.drive = new MecanumDrive(leftFront, rightFront,backLeft,backRight);
         forward = gamepad::getLeftY;
@@ -53,11 +59,18 @@ public class DriveSubsystem extends SubsystemBase {
         toggleFieldToBotCentric = new ToggleButtonReader(gamepad, GamepadKeys.Button.RIGHT_BUMPER);
         startHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
         heading = () -> imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES)-startHeading;
-
+        this.imu = imu;
 
         this.gamepadEx = gamepad;
     }
 
+    public void setBot(Bot bot){
+        if (bot == Bot.COMP){
+            imu.initialize(RobotConfig.DriveConstants.compIMUOrientation);
+        } else {
+            imu.initialize(RobotConfig.DriveConstants.practiceIMUOrientation);
+        }
+    }
 
     public String getTelemetry(){
         String tele = ""+telemetry;
@@ -68,11 +81,25 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driverControlDrive(){
 
-        drive.driveRobotCentric(
+        double headingNum = heading.getAsDouble();
+
+        if (Math.abs(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-startHeading%Math.PI/4)<=Math.toRadians(5)){
+            timer+=.001;
+            headingNum *=-1;
+            telemetry = telemetry + "\nsnapping";
+        }
+
+        if(timer>=1){
+            timer = 0;
+            headingNum = heading.getAsDouble();
+        }
+
+        drive.driveFieldCentric(
                 strafe.getAsDouble(),
                 forward.getAsDouble(),
-                rotate.getAsDouble()
-                //heading.getAsDouble()
+                rotate.getAsDouble(),
+                headingNum,
+                true
         );
 
         if (gamepadEx.gamepad.left_bumper&&gamepadEx.gamepad.right_bumper){

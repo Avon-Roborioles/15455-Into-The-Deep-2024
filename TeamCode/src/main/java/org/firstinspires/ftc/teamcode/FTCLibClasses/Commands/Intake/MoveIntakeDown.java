@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.util.Timing;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.VerticalIntakeSubsystem;
 
 import java.util.concurrent.TimeUnit;
 
 public class MoveIntakeDown extends CommandBase {
 
-    private IntakeSubsystem intake;
+    private VerticalIntakeSubsystem intake;
     private Timing.Timer timer;
 
-    public MoveIntakeDown(IntakeSubsystem intake){
+    public MoveIntakeDown(VerticalIntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
         timer = new Timing.Timer(500, TimeUnit.MILLISECONDS);

@@ -4,9 +4,6 @@ import static java.lang.Math.PI;
 
 import com.arcrobotics.ftclib.command.CommandGroupBase;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
-import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -34,13 +31,11 @@ public class RedLeftAuto extends AutoBaseRoutine{
         Point middleWhiteSpike = new Point(new Pose(16,-26.24));
         Point leftWhiteSpike = new Point(new Pose(18.29,-33.29));
 
-        Pose startPose;
-
-        followerSubsystem.getFollower().setPose(new Pose(0,0,3*PI/2));
+        robot.followerSubsystem.getFollower().setPose(new Pose(0,0,3*PI/2));
 
         Path startToGoal =  new Path.PathBuilder(
                 new BezierLine(
-                        new Point(followerSubsystem.getFollower().getPose()),
+                        new Point(robot.followerSubsystem.getFollower().getPose()),
                         blueGoal
                 )
 
@@ -88,20 +83,26 @@ public class RedLeftAuto extends AutoBaseRoutine{
 
 
         //makes paths into commands
-        PedroPathAutoCommand startToGoalCommand = new PedroPathAutoCommand(followerSubsystem,startToGoal);
-        PedroPathAutoCommand fromGoalToRightSpikeCommand = new PedroPathAutoCommand(followerSubsystem, fromGoalToRightSpike);
-        PedroPathAutoCommand fromRightSpikeToGoalCommand = new PedroPathAutoCommand(followerSubsystem, fromRightSpikeToGoal);
-        PedroPathAutoCommand fromGoalToMiddleSpikeCommand = new PedroPathAutoCommand(followerSubsystem,fromGoalToMiddleSpike);
-        PedroPathAutoCommand fromMiddleSpikeToGoalCommand = new PedroPathAutoCommand(followerSubsystem,fromMiddleSpikeToGoal);
+        PedroPathAutoCommand startToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,startToGoal);
+        PedroPathAutoCommand fromGoalToRightSpikeCommand = new PedroPathAutoCommand(robot.followerSubsystem, fromGoalToRightSpike);
+        PedroPathAutoCommand fromRightSpikeToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem, fromRightSpikeToGoal);
+        PedroPathAutoCommand fromGoalToMiddleSpikeCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromGoalToMiddleSpike);
+        PedroPathAutoCommand fromMiddleSpikeToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromMiddleSpikeToGoal);
 
+
+        SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(robot.moveIntakeUp,robot.retractIntake,robot.passIntoBucket);
 
         //have to clear the grouped commands so that we can reuse the commands for multiple command groups
         CommandGroupBase.clearGroupedCommands();
 
         //dunks
         SequentialCommandGroup dunkRoutine = new SequentialCommandGroup(
-                dunk,
-                armAndLiftDown
+                robot.liftCommand,
+                robot.armCommand,
+                new ParallelCommandGroup(
+                        robot.liftDownCommand,
+                        robot.armDownCommand
+                )
         );
         CommandGroupBase.clearGroupedCommands();
 
@@ -110,7 +111,7 @@ public class RedLeftAuto extends AutoBaseRoutine{
         SequentialCommandGroup startGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                         startToGoalCommand,
-                        extendIntake
+                        robot.extendIntake
                 ),
                 dunkRoutine
         );
@@ -121,8 +122,8 @@ public class RedLeftAuto extends AutoBaseRoutine{
         SequentialCommandGroup goalRightSpikeIntakePass = new SequentialCommandGroup(
                 fromGoalToRightSpikeCommand,
                 new ParallelCommandGroup(
-                        moveIntakeDown,
-                        new ProxyScheduleCommand(spinIntake)
+                        robot.moveIntakeDown,
+                        robot.spinIntake
                 ),
                 groupRetractIntake
         );
@@ -133,7 +134,7 @@ public class RedLeftAuto extends AutoBaseRoutine{
         //goes to the goal from the right spike, extends the intake and dunks
         SequentialCommandGroup rightSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        extendIntake,
+                        robot.extendIntake,
                         fromRightSpikeToGoalCommand
                 ),
                 dunkRoutine
@@ -145,8 +146,8 @@ public class RedLeftAuto extends AutoBaseRoutine{
         SequentialCommandGroup goalMiddleSpikeIntakePass = new SequentialCommandGroup(
                 fromGoalToMiddleSpikeCommand,
                 new ParallelCommandGroup(
-                        moveIntakeDown,
-                        new ProxyScheduleCommand(spinIntake)
+                        robot.moveIntakeDown,
+                        robot.spinIntake
                 ),
                 groupRetractIntake
         );
@@ -155,7 +156,7 @@ public class RedLeftAuto extends AutoBaseRoutine{
         //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup middleSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        extendIntake,
+                        robot.extendIntake,
                         fromMiddleSpikeToGoalCommand
                 ),
                 dunkRoutine

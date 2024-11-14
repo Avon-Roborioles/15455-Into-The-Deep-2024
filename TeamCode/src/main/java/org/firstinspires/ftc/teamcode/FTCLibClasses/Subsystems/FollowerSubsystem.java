@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
@@ -13,6 +14,9 @@ public class FollowerSubsystem extends SubsystemBase {
 
     public FollowerSubsystem(Follower follower){
         this.follower = follower;
+    }
+    public FollowerSubsystem(HardwareMap hardwareMap){
+        this.follower = new Follower(hardwareMap);
     }
 
     public void setTelemetry(Telemetry telemetry){

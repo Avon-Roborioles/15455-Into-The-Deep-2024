@@ -3,12 +3,16 @@ package org.firstinspires.ftc.teamcode.UtilityOpModes;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 
 import java.util.function.DoubleSupplier;
 
@@ -21,11 +25,12 @@ public class MotorTune  {
     private Gamepad gamepad;
     private DoubleSupplier getPos;
 
-    private Servo servo;
+    private DcMotor servo;
 
 
     public MotorTune(HardwareMap hMap, String str, Gamepad gamepad, Telemetry telemetry, DoubleSupplier getPos){
-        servo = hMap.get(Servo.class,str);
+//        servo = hMap.get(Servo.class, RobotConfig.IntakeConstants.verticalServoName);
+        servo = hMap.get(DcMotor.class,RobotConfig.IntakeConstants.extendMotorName);
 
         this.gamepad = gamepad;
         this.telemetry = telemetry;
@@ -34,10 +39,10 @@ public class MotorTune  {
 
     public void run(){
 
-        double pos = servo.getPosition() - gamepad.right_stick_y*.0005;
-        pos = Range.clip(pos,0,1);
-        servo.setPosition(pos);
-        telemetry.addData("Servo Pos",servo.getPosition());
+//        double pos = servo.getPosition() - gamepad.right_stick_y*.0005;
+//        pos = Range.clip(pos,0,1);
+//        servo.setPosition(pos);
+//        telemetry.addData("Servo Pos",servo.getPosition());
     }
 
 }

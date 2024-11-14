@@ -15,12 +15,13 @@ public class FollowerTeleOpCommand extends CommandBase {
     private FollowerSubsystem followerSubsystem;
     private Follower follower;
     private GamepadEx gamepadEx;
-    private IMU imu;
 
-    public FollowerTeleOpCommand(FollowerSubsystem subsystem, Telemetry telemetry, GamepadEx gamepadEx, IMU imu){
+
+    private int lockCount=0;
+
+    public FollowerTeleOpCommand(FollowerSubsystem subsystem, Telemetry telemetry, GamepadEx gamepadEx){
         followerSubsystem = subsystem;
         this.gamepadEx = gamepadEx;
-        this.imu = imu;
         follower = followerSubsystem.getFollower();
     }
 
@@ -33,11 +34,23 @@ public class FollowerTeleOpCommand extends CommandBase {
 
     @Override
     public void execute(){
+        double heading = gamepadEx.getRightX();
+
+        if (Math.abs(follower.getPose().getHeading()%(Math.PI/4))<=Math.toRadians(5)){
+            heading = 0;
+            lockCount++;
+        }
+
+        if (lockCount>10){
+            heading = gamepadEx.getRightX();
+            lockCount = 0;
+        }
+
         follower.setTeleOpMovementVectors(
                 gamepadEx.getLeftY(),
                 gamepadEx.getLeftX(),
-                gamepadEx.getRightX(),
-                true
+                heading,
+                false
         );
         follower.update();
     }

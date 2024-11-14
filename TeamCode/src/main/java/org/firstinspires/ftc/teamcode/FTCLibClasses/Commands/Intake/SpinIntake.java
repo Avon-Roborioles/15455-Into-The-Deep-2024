@@ -3,18 +3,20 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.util.Timing;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.SpinIntakeSubsystem;
 
 import java.util.concurrent.TimeUnit;
 
 public class SpinIntake extends CommandBase {
 
-    private IntakeSubsystem intake;
-    private boolean hasCorrectSample;
+    private SpinIntakeSubsystem intake;
+    private boolean detectsCorrectSample;
     private Timing.Timer timer;
+    private boolean correctSampleInIntake=false;
+    private boolean spinFinished = false;
 
 
-    public SpinIntake(IntakeSubsystem intake){
+    public SpinIntake(SpinIntakeSubsystem intake){
         this.intake = intake;
         addRequirements(intake);
         timer = new Timing.Timer(150 , TimeUnit.MILLISECONDS);
@@ -22,27 +24,44 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void initialize(){
-        hasCorrectSample = false;
+        detectsCorrectSample = false;
+        correctSampleInIntake =false;
     }
+
+
+
+
+
+
     @Override
     public void execute(){
         intake.spinWheelsUp();
-        switch(intake.hasCorrectSample()){
-            case YELLOW_SAMPLE:
-            case CORRESPONDING_SAMPLE:
-                hasCorrectSample = true;
-                timer.start();
-            case WRONG_SAMPLE:
-                intake.spinWheelsDown();
-            case NO_SAMPLE:
-                intake.spinWheelsUp();
+        SpinIntakeSubsystem.SampleState state = intake.hasCorrectSample();
+        detectsCorrectSample = state.correctSample;
+
+        if (!correctSampleInIntake) {
+            switch (state) {
+                case YELLOW_SAMPLE:
+                case CORRESPONDING_SAMPLE:
+                    correctSampleInIntake = true;
+                    break;
+                case WRONG_SAMPLE:
+                    intake.spinWheelsDown();
+                    break;
+                case NO_SAMPLE:
+                    intake.spinWheelsUp();
+                    break;
+            }
+        }
+        if (correctSampleInIntake&&detectsCorrectSample){
+            intake.stopIntakeWheels();
         }
 
     }
 
     @Override
     public boolean isFinished(){
-        return hasCorrectSample&&timer.done();
+        return detectsCorrectSample ;
     }
 
     @Override

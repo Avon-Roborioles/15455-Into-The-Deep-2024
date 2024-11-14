@@ -37,6 +37,7 @@ public class PedroPathAutoCommand extends CommandBase {
 
     @Override
     public void initialize(){
+        follower.getFollower().breakFollowing();
         switch (type) {
             case PATH:
                 follower.getFollower().followPath(path,true);
@@ -45,6 +46,7 @@ public class PedroPathAutoCommand extends CommandBase {
                 follower.getFollower().followPath(pathChain,true);
         }
         isBusy = true;
+
     }
     @Override
     public void execute(){

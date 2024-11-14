@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Encoder;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Localizer;
@@ -116,7 +117,13 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
 
 
 
-
+    public void setBot(Bot bot){
+        if (bot == Bot.COMP){
+            imu.initialize(RobotConfig.DriveConstants.compIMUOrientation);
+        } else {
+            imu.initialize(RobotConfig.DriveConstants.practiceIMUOrientation);
+        }
+    }
 
     /**
      * This returns the current pose estimate.

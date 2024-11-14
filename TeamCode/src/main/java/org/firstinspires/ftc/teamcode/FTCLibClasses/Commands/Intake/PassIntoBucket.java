@@ -3,20 +3,19 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.util.Timing;
 
-import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.RobotConfig;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.SpinIntakeSubsystem;
 
 import java.util.concurrent.TimeUnit;
 
 
 public class PassIntoBucket extends CommandBase {
 
-    private IntakeSubsystem intake;
+    private SpinIntakeSubsystem intake;
     private Timing.Timer timer;
 
-    public PassIntoBucket(IntakeSubsystem intake){
+    public PassIntoBucket(SpinIntakeSubsystem intake){
         this.intake = intake;
-        timer = new Timing.Timer(2, TimeUnit.SECONDS);
+        timer = new Timing.Timer(500, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -36,6 +35,6 @@ public class PassIntoBucket extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return intake.hasCorrectSample() == IntakeSubsystem.SampleState.NO_SAMPLE;
+        return intake.hasCorrectSample() == SpinIntakeSubsystem.SampleState.NO_SAMPLE;
     }
 }

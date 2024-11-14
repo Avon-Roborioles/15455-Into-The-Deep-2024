@@ -15,7 +15,7 @@ public class MotorTuneTeleOp extends OpMode {
     @Override
     public void init(){
 
-        motorTune = new MotorTune(hardwareMap, RobotConfig.IntakeConstants.verticalServoName,gamepad1,telemetry,()->0);
+        motorTune = new MotorTune(hardwareMap, RobotConfig.IntakeConstants.extendMotorName,gamepad1,telemetry,()->0);
     }
 
     @Override

@@ -120,6 +120,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         SequentialCommandGroup dunkRoutine = new SequentialCommandGroup(
                 robot.liftCommand,
                 robot.armCommand,
+                new WaitCommand(150),
                 new ParallelCommandGroup(
                         robot.liftDownCommand,
                         robot.armDownCommand

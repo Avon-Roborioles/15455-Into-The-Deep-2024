@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void dunkHighPos(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingHighDunkPos);
-        armSwing.set(.9);
+        armSwing.set(.5);
     }
 
     public boolean hasDunked(){

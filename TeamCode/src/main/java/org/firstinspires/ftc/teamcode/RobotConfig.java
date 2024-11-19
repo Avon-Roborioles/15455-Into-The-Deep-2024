@@ -64,7 +64,7 @@ public class RobotConfig {
 
     public static class OuttakeConstants{
         public static final String armLiftName = "armLift";
-        public static final int armLiftHighDunkPos = -4910;
+        public static final int armLiftHighDunkPos = -1910;
         public static final int armLiftDefaultPos = 0;
 
 

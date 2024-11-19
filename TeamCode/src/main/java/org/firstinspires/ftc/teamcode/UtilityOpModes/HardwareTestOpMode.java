@@ -22,20 +22,20 @@ public class HardwareTestOpMode extends RobotOpMode {
         drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.retractIntake);
 
 
-        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
+        drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveContinuous(
                 new FunctionalCommand(
                         ()->{},
                         ()->robot.spinIntakeSubsystem.spinWheelsUp(),
-                        (Boolean b) ->{},
+                        (Boolean b) ->{robot.spinIntakeSubsystem.stopIntakeWheels();},
                         ()-> false,
                         robot.spinIntakeSubsystem
                 )
         );
-        drivePad.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+        drivePad.getGamepadButton(GamepadKeys.Button.A).whileActiveContinuous(
                 new FunctionalCommand(
                         ()->{},
                         ()->robot.spinIntakeSubsystem.spinWheelsDown(),
-                        (Boolean b) ->{},
+                        (Boolean b) ->{robot.spinIntakeSubsystem.stopIntakeWheels();},
                         ()-> false,
                         robot.spinIntakeSubsystem
                 )

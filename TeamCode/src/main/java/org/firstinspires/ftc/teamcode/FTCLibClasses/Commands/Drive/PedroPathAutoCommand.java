@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.util.Timing;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 
@@ -19,6 +22,10 @@ public class PedroPathAutoCommand extends CommandBase {
     private Timing.Timer timer;
 
     private boolean isBusy;
+    private boolean doRoughlyEquals=false;
+
+    Pose lastPose;
+
 
     public PedroPathAutoCommand(FollowerSubsystem follower, Path path){
         type = PathType.PATH;
@@ -26,13 +33,38 @@ public class PedroPathAutoCommand extends CommandBase {
         this.follower = follower;
         this.path = path;
         addRequirements(follower);
-        timer = new Timing.Timer(750,TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(350,TimeUnit.MILLISECONDS);
+        lastPose = follower.getFollower().getPose();
+
+    }
+    public PedroPathAutoCommand(FollowerSubsystem follower, Path path,boolean doRoughlyEquals){
+        type = PathType.PATH;
+
+        this.follower = follower;
+        this.path = path;
+        addRequirements(follower);
+        timer = new Timing.Timer(250,TimeUnit.MILLISECONDS);
+        lastPose = follower.getFollower().getPose();
+        this.doRoughlyEquals = doRoughlyEquals;
+
+    }
+    public PedroPathAutoCommand(FollowerSubsystem follower, Path path, int timeout, TimeUnit unit){
+        type = PathType.PATH;
+
+        this.follower = follower;
+        this.path = path;
+        addRequirements(follower);
+        timer = new Timing.Timer(timeout,unit);
+        lastPose = follower.getFollower().getPose();
+
     }
 
     public PedroPathAutoCommand(FollowerSubsystem follower, PathChain pathChain){
         this.follower = follower;
         this.pathChain = pathChain;
         addRequirements(follower);
+        lastPose = follower.getFollower().getPose();
+
     }
 
     @Override
@@ -51,19 +83,28 @@ public class PedroPathAutoCommand extends CommandBase {
     @Override
     public void execute(){
         follower.getFollower().update();
+        Limelight3A limelight3A;
+
     }
 
     @Override
     public boolean isFinished(){
-        isBusy = follower.getFollower().isBusy();
-        if (!isBusy){
-            if (!timer.isTimerOn()) timer.start();
-        } else {
-            timer.pause();
-        }
+        if (!doRoughlyEquals) {
+            isBusy = follower.getFollower().isBusy();
+            if (!isBusy){
+                if (!timer.isTimerOn()) timer.start();
+            } else {
+                timer.pause();
+            }
 
-        if (timer.done()){
-            return true;
+            return timer.done();
+        } else {
+            if (lastPose.roughlyEquals(follower.getFollower().getPose(),.01)){
+
+                return  true;
+            }
+            lastPose = follower.getFollower().getPose();
+
         }
         return  false;
     }

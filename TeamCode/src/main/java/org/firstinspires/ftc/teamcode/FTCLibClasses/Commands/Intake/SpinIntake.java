@@ -26,10 +26,9 @@ public class SpinIntake extends CommandBase {
     public void initialize(){
         detectsCorrectSample = false;
         correctSampleInIntake =false;
+        timer.start();
+        timer.pause();
     }
-
-
-
 
 
 
@@ -54,14 +53,14 @@ public class SpinIntake extends CommandBase {
             }
         }
         if (correctSampleInIntake&&detectsCorrectSample){
-            intake.stopIntakeWheels();
+            timer.resume();
         }
 
     }
 
     @Override
     public boolean isFinished(){
-        return detectsCorrectSample ;
+        return timer.done() ;
     }
 
     @Override

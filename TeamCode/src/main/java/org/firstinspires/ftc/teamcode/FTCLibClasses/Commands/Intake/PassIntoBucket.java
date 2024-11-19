@@ -15,7 +15,7 @@ public class PassIntoBucket extends CommandBase {
 
     public PassIntoBucket(SpinIntakeSubsystem intake){
         this.intake = intake;
-        timer = new Timing.Timer(500, TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(850, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class PassIntoBucket extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return intake.hasCorrectSample() == SpinIntakeSubsystem.SampleState.NO_SAMPLE;
+        return timer.done();
     }
 }

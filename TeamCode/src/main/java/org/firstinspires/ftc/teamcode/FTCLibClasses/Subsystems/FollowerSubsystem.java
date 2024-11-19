@@ -30,7 +30,8 @@ public class FollowerSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-//        telemetry.addData("X",follower.getPose().getX());
-//        telemetry.addData("Y",follower.getPose().getY());
+        telemetry.addData("X",follower.getPose().getX());
+        telemetry.addData("Y",follower.getPose().getY());
+        telemetry.addData("Heading",follower.getPose().getHeading());
     }
 }

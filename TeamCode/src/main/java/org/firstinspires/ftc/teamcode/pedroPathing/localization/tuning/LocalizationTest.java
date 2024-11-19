@@ -91,6 +91,10 @@ public class LocalizationTest extends OpMode {
      */
     @Override
     public void loop() {
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        //rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         poseUpdater.update();
         dashboardPoseTracker.update();
 

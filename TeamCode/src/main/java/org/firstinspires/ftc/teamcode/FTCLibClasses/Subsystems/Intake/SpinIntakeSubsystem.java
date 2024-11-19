@@ -21,15 +21,13 @@ public class SpinIntakeSubsystem extends SubsystemBase {
     private CRServo intakeServo;
 
 
-
-    private Motor extendMotor;
-
     private AllianceColor allianceColor;
 
     private Telemetry telemetry;
-    private BooleanSupplier doTelemetry;
 
     private Bot curBot = Bot.COMP;
+
+
 
 
     public SpinIntakeSubsystem(HardwareMap hMap, AllianceColor alliance, Telemetry telemetry){
@@ -51,11 +49,34 @@ public class SpinIntakeSubsystem extends SubsystemBase {
     // DO NOT PUT LOGIC INSIDE THIS
     @Override
     public void periodic(){
+        double c1Red = colorSensor1.red();
+        double c1Blue = colorSensor1.blue();
+        double c1Green = colorSensor1.green();
+
+        double c2Red = colorSensor2.red();
+        double c2Blue = colorSensor2.blue();
+        double c2Green = colorSensor2.green();
+
+        double red = c1Red + c2Red;
+        double blue = c1Blue + c2Blue;
+        double green = c1Green + c2Green;
+
+        double max = red+blue+green;
+        double[] percents = getPercents(red,blue, green);
+        red = percents[0];
+        green=percents[1];
+        blue=percents[2];
+
+
+
         //if(doTelemetry.getAsBoolean()) {
         telemetry.addLine("============COLOR SENSORS============");
-        telemetry.addData("Combined Red Raw",colorSensor1.red()+colorSensor2.red());
-        telemetry.addData("Combined Blue Raw",colorSensor1.blue()+colorSensor2.blue());
-        telemetry.addData("Combined Green Raw", colorSensor1.green()+colorSensor2.green());
+        telemetry.addData("Percent Red",red);
+        telemetry.addData("Percent Blue Raw",blue);
+        telemetry.addData("Percent Green Raw", green);
+        telemetry.addData("Red Raw",c1Red+c2Red);
+        telemetry.addData("Blue Raw",c1Blue+c2Blue);
+        telemetry.addData("Green Raw",c1Green+c2Green);
         telemetry.addData("SAMPLE STATE",hasCorrectSample());
 
         telemetry.addLine("============Intake Servo============");
@@ -93,37 +114,43 @@ public class SpinIntakeSubsystem extends SubsystemBase {
     }
 
 
+    public double[] getPercents(double red, double blue, double green){
+        double max = red+blue+green;
+        double[] toRet = new double[3];
+        toRet[0] = red/max;
+        toRet[1] = green/max;
+        toRet[2] = blue/max;
+        return toRet;
+    }
+
+
     private SampleState calculateSampleColor(double red, double green, double blue){
-        double max = Math.max(Math.max(red,blue),green);
+        double[] percents = getPercents(red,blue, green);
+        red = percents[0];
+        green=percents[1];
+        blue=percents[2];
 
-        red/=max;
-        blue/=max;
-        green/=max;
-
-        double redToGreenThreshold=.3;
-
-        if (curBot == Bot.COMP){
-            redToGreenThreshold = RobotConfig.IntakeConstants.colorSensorRedToGreenThreshold;
-        }
-
-        if(blue>red&&blue>green){
+        if (blue>.42){
             switch(allianceColor){
                 case RED:
                     return SampleState.WRONG_SAMPLE;
                 case BLUE:
                     return SampleState.CORRESPONDING_SAMPLE;
             }
-        } else if (red>blue&&red>green){
-            switch(allianceColor){
-                case RED:
-                    return SampleState.CORRESPONDING_SAMPLE;
-                case BLUE:
-                    return SampleState.WRONG_SAMPLE;
+        } else if (.26<red){
+            if (green<.40) {
+                switch (allianceColor) {
+                    case RED:
+                        return SampleState.CORRESPONDING_SAMPLE;
+                    case BLUE:
+                        return SampleState.WRONG_SAMPLE;
+                }
+            } else {
+                return SampleState.YELLOW_SAMPLE;
+
             }
-            return SampleState.WRONG_SAMPLE;
-        } else if (Math.abs(red-green) < redToGreenThreshold){
-            return SampleState.YELLOW_SAMPLE;
         }
+
         return SampleState.NO_SAMPLE;
     }
 

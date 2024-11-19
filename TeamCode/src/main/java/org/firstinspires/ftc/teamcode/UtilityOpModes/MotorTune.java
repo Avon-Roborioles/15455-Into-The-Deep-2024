@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.UtilityOpModes;
 
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,13 +26,14 @@ public class MotorTune  {
     private Gamepad gamepad;
     private DoubleSupplier getPos;
 
-    private DcMotor servo;
+    private Servo servo;
 
 
-    public MotorTune(HardwareMap hMap, String str, Gamepad gamepad, Telemetry telemetry, DoubleSupplier getPos){
-//        servo = hMap.get(Servo.class, RobotConfig.IntakeConstants.verticalServoName);
-        servo = hMap.get(DcMotor.class,RobotConfig.IntakeConstants.extendMotorName);
+    public MotorTune(HardwareMap hMap, Gamepad gamepad, Telemetry telemetry){
+        servo = hMap.get(Servo.class, RobotConfig.IntakeConstants.verticalServoName);
+        //servo = new MotorEx(hMap,RobotConfig.IntakeConstants.extendMotorName);
 
+        //servo.setRunMode(Motor.RunMode.RawPower);
         this.gamepad = gamepad;
         this.telemetry = telemetry;
     }
@@ -39,10 +41,14 @@ public class MotorTune  {
 
     public void run(){
 
-//        double pos = servo.getPosition() - gamepad.right_stick_y*.0005;
-//        pos = Range.clip(pos,0,1);
-//        servo.setPosition(pos);
-//        telemetry.addData("Servo Pos",servo.getPosition());
+//        servo.set(gamepad.left_stick_y*-1);
+//        telemetry.addData("Power",gamepad.left_stick_y*-1);
+//        telemetry.addData("Position",servo.getCurrentPosition());
+
+        double pos = servo.getPosition() - gamepad.right_stick_y*.0005;
+        pos = Range.clip(pos,0,1);
+        servo.setPosition(pos);
+        telemetry.addData("Servo Pos",servo.getPosition());
     }
 
 }

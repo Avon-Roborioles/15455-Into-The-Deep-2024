@@ -5,10 +5,6 @@ import org.firstinspires.ftc.teamcode.CompOpModes.RobotOpMode;
 
 abstract class AutoBaseRoutine extends RobotOpMode {
 
-
-
-
-
     @Override
     public void createLogic(){
         specificInit();

@@ -1,6 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandGroupBase;
+import com.arcrobotics.ftclib.command.FunctionalCommand;
+import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
+import com.arcrobotics.ftclib.command.ProxyScheduleCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -46,6 +54,7 @@ public class Robot {
     public PassIntoBucket passIntoBucket;
     public MoveIntakeUp moveIntakeUp;
     public MoveIntakeDown moveIntakeDown;
+    public ParallelCommandGroup verticalAndSpin;
 
 
     public LiftSubsystem liftSubsystem;
@@ -75,6 +84,26 @@ public class Robot {
         passIntoBucket = new PassIntoBucket(spinIntakeSubsystem);
         moveIntakeDown = new MoveIntakeDown(verticalIntakeSubsystem);
         moveIntakeUp = new MoveIntakeUp(verticalIntakeSubsystem);
+        CommandGroupBase.clearGroupedCommands();
+
+        verticalAndSpin = new ParallelCommandGroup(
+                new SequentialCommandGroup(
+                        moveIntakeDown,
+                        new WaitCommand(750),
+                        moveIntakeUp
+                ),
+
+                new FunctionalCommand(
+                        spinIntakeSubsystem::spinWheelsUp,
+                        () ->{},
+                        (Boolean b) ->{
+//                                    robot.spinIntakeSubsystem.stopIntakeWheels();
+
+                        },
+                        ()-> true,
+                        spinIntakeSubsystem
+                )
+        );
 
 
         /*
@@ -96,6 +125,7 @@ public class Robot {
         driveCommand = new TeleOpDriveCommand(driveSubsystem);
 
         followerSubsystem = new FollowerSubsystem(hMap);
+        followerSubsystem.setTelemetry(telemetry);
         followerTeleOpCommand = new FollowerTeleOpCommand(followerSubsystem,telemetry,drivePad);
         CommandGroupBase.clearGroupedCommands();
     }

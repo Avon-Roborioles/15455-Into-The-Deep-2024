@@ -6,7 +6,9 @@ import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.gamepad.ToggleButtonReader;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -29,8 +31,12 @@ public class DriveSubsystem extends SubsystemBase {
     private double startHeading;
 
     private IMU imu;
-
+    private int lockCount=0;
     private double timer=0;
+    MotorEx leftFront;
+    MotorEx rightFront;
+    MotorEx backLeft;
+    MotorEx backRight;
 
 
     private String telemetry = "";
@@ -39,20 +45,24 @@ public class DriveSubsystem extends SubsystemBase {
     private GamepadEx gamepadEx;
 
     public DriveSubsystem(HardwareMap hMap, GamepadEx gamepad, IMU imu){
-        MotorEx leftFront = new MotorEx(hMap,RobotConfig.DriveConstants.frontLeftWheelName);
-        MotorEx rightFront =  new MotorEx(hMap,RobotConfig.DriveConstants.frontRightWheelName);
-        MotorEx backLeft = new MotorEx(hMap,RobotConfig.DriveConstants.backLeftWheelName);
-        MotorEx backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
+        leftFront = new MotorEx(hMap,RobotConfig.DriveConstants.frontLeftWheelName);
+        rightFront = new MotorEx(hMap,RobotConfig.DriveConstants.frontRightWheelName);
+        backLeft = new MotorEx(hMap,RobotConfig.DriveConstants.backLeftWheelName);
+        backRight = new MotorEx(hMap,RobotConfig.DriveConstants.backRightWheelName);
+
+        leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
 
-        leftFront.setInverted(true);
-        rightFront.setInverted(true);
-        backLeft.setInverted(true);
-        backRight.setInverted(false);
+
+//        backLeft.setInverted(true);
+//        backRight.setInverted(true);
 
         imu.initialize(RobotConfig.DriveConstants.compIMUOrientation);
 
-        this.drive = new MecanumDrive(leftFront, rightFront,backLeft,backRight);
+        this.drive = new MecanumDrive(false,leftFront, rightFront,backLeft,backRight);
         forward = gamepad::getLeftY;
         strafe = gamepad::getLeftX;
         rotate = gamepad::getRightX;
@@ -62,6 +72,8 @@ public class DriveSubsystem extends SubsystemBase {
         this.imu = imu;
 
         this.gamepadEx = gamepad;
+
+
     }
 
     public void setBot(Bot bot){
@@ -73,7 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public String getTelemetry(){
-        String tele = ""+telemetry;
+        String tele = "In FTC Lib Drive"+telemetry;
         telemetry = "";
         return tele;
     }
@@ -81,29 +93,30 @@ public class DriveSubsystem extends SubsystemBase {
 
     public void driverControlDrive(){
 
-        double headingNum = heading.getAsDouble();
+        double heading = gamepadEx.getRightX();
+        leftFront.setInverted(true);
+        rightFront.setInverted(false);
 
-        if (Math.abs(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)-startHeading%Math.PI/4)<=Math.toRadians(5)){
-            timer+=.001;
-            headingNum *=-1;
-            telemetry = telemetry + "\nsnapping";
-        }
+//        if (Math.abs(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS)%(Math.PI/4))<=Math.toRadians(5)){
+//            heading = 0;
+//            lockCount++;
+//        }
+//
+//        if (lockCount>10){
+//            heading = gamepadEx.getRightX();
+//            lockCount = 0;
+//        }
 
-        if(timer>=1){
-            timer = 0;
-            headingNum = heading.getAsDouble();
-        }
-
-        drive.driveFieldCentric(
+        drive.driveRobotCentric(
                 strafe.getAsDouble(),
                 forward.getAsDouble(),
                 rotate.getAsDouble(),
-                headingNum,
+                //heading,
                 true
         );
 
         if (gamepadEx.gamepad.left_bumper&&gamepadEx.gamepad.right_bumper){
-            startHeading = heading.getAsDouble();
+            startHeading = this.heading.getAsDouble();
             telemetry = telemetry + "\nForward Set";
         }
 

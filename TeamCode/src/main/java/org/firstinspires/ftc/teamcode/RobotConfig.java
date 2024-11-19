@@ -46,18 +46,18 @@ public class RobotConfig {
         public static final double verticalServoMinDegrees = 0;
         public static final double verticalServoMaxDegrees = 300;
         public static final double verticalServoUpPosition = .835;
-        public static final double verticalServoDownPosition = .4833;
+        public static final double verticalServoDownPosition = .5;
 
 
         public static final String extendMotorName = "extendMotor";
         public static final int motorMaxPosition = 1800;
-        public static final int motorMinPosition = 0;
+        public static final int motorMinPosition = 20;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = 1;
         public static final double motorPCoefficient = .005;
         //The farthest in the intake can be before lowering it.
-        public static final double intakeClearBucketPos = -1700;
+        public static final double intakeClearBucketPos = -1800;
         public static final int motorDegreeOfError = 100;
 
     }

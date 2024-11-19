@@ -20,6 +20,7 @@ public class FollowerTeleOpCommand extends CommandBase {
         followerSubsystem = subsystem;
         this.gamepadEx = gamepadEx;
         follower = followerSubsystem.getFollower();
+        addRequirements(followerSubsystem);
     }
 
 
@@ -38,16 +39,16 @@ public class FollowerTeleOpCommand extends CommandBase {
             lockCount++;
         }
 
-        if (lockCount>10){
+        if (lockCount>1000){
             heading = gamepadEx.getRightX();
             lockCount = 0;
         }
 
         follower.setTeleOpMovementVectors(
                 gamepadEx.getLeftY(),
-                gamepadEx.getLeftX(),
-                heading,
-                false
+                -gamepadEx.getLeftX(),
+                -heading,
+                true
         );
         follower.update();
     }

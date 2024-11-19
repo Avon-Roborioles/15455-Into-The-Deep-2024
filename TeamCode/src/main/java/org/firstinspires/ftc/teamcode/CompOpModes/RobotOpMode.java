@@ -18,6 +18,8 @@ public abstract class RobotOpMode extends OpMode {
 
     protected AllianceColor allianceColor;
 
+    protected String telemetryToAdd = "";
+
 
 
     public abstract void createLogic();
@@ -30,6 +32,7 @@ public abstract class RobotOpMode extends OpMode {
         drivePad = new GamepadEx(gamepad1);
         gamepadEx2 = new GamepadEx(gamepad2);
         robot = new Robot(hardwareMap,drivePad,gamepadEx2,telemetry,allianceColor);
+        createLogic();
     }
 
     @Override
@@ -62,6 +65,7 @@ public abstract class RobotOpMode extends OpMode {
         gamepadEx2.readButtons();
 
         telemetry.addLine(getTelemetry());
+        telemetry.addLine(telemetryToAdd);
 
         CommandScheduler.getInstance().run();
     }

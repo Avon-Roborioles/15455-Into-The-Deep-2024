@@ -28,6 +28,10 @@ public class FollowerSubsystem extends SubsystemBase {
         return follower;
     }
 
+    public void resetHeading() {
+        follower.getPoseUpdater().resetHeadingToIMU();
+    }
+
     @Override
     public void periodic(){
         telemetry.addData("X",follower.getPose().getX());

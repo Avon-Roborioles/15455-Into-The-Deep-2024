@@ -234,6 +234,10 @@ public class Follower {
         return poseUpdater.getPose();
     }
 
+    public PoseUpdater getPoseUpdater(){
+        return poseUpdater;
+    }
+
     /**
      * This sets the current pose in the PoseUpdater without using offsets.
      *

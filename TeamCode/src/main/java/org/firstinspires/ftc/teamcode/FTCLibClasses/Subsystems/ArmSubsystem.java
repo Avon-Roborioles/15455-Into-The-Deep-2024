@@ -50,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void goDown(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingDefaultPos);
-        armSwing.set(.5);
+        armSwing.set(.25);
     }
     public boolean isDown(){
         return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;

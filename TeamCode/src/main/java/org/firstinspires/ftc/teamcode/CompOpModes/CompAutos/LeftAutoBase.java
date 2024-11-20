@@ -28,10 +28,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
     @Override
     public void specificInit(){
-        Point blueGoal = new Point(new Pose(25.54,-3.5));
+        Point blueGoal = new Point(new Pose(24,-4.5));
         Point rightWhiteSpike = new Point(new Pose(16.6,-22.1,Math.toRadians(270)));
         Point middleWhiteSpike = new Point(new Pose(26.27,-22.24));
-        Point leftWhiteSpike = new Point(new Pose(18.29,-33.29));
+        Point leftWhiteSpike = new Point(new Pose(21.29,-33.29));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(0,0,3*PI/2));
 
@@ -147,10 +147,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 //                        robot.moveIntakeDown,
 //                        robot.spinIntake
 //                ),
-                robot.verticalAndSpin,
+                robot.verticalAndSpin
 
-                new InstantCommand(() -> {telemetryToAdd = telemetryToAdd +"Pulling back";}),
-                groupRetractIntake
         );
 
         CommandGroupBase.clearGroupedCommands();
@@ -159,7 +157,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes to the goal from the right spike, extends the intake and dunks
         SequentialCommandGroup rightSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        robot.extendIntake,
+                        new SequentialCommandGroup(
+                                groupRetractIntake,
+                                robot.extendIntake
+                        ),
                         fromRightSpikeToGoalCommand
                 ),
                 dunkRoutine
@@ -182,7 +183,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup middleSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        robot.extendIntake,
+                        new SequentialCommandGroup(
+                                groupRetractIntake,
+                                robot.extendIntake
+                        ),
                         fromMiddleSpikeToGoalCommand
                 ),
                 dunkRoutine
@@ -204,7 +208,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup leftSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        robot.extendIntake,
+                        new SequentialCommandGroup(
+                                groupRetractIntake,
+                                robot.extendIntake
+                        ),
                         fromLeftSpikeToGoalCommand
                 ),
                 dunkRoutine

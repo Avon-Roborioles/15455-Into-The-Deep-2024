@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
@@ -33,22 +34,25 @@ public class FollowerTeleOpCommand extends CommandBase {
     @Override
     public void execute(){
         double heading = gamepadEx.getRightX();
-
-        if (Math.abs(follower.getPose().getHeading()%(Math.PI/4))<=Math.toRadians(5)){
-            heading = 0;
-            lockCount++;
+        if (gamepadEx.getButton(GamepadKeys.Button.A)){
+            followerSubsystem.resetHeading();
         }
 
-        if (lockCount>1000){
-            heading = gamepadEx.getRightX();
-            lockCount = 0;
-        }
+//        if (Math.abs(follower.getPose().getHeading()%(Math.PI/4))<=Math.toRadians(5)){
+//            heading = 0;
+//            lockCount++;
+//        }
+//
+//        if (lockCount>1000){
+//            heading = gamepadEx.getRightX();
+//            lockCount = 0;
+//        }
 
         follower.setTeleOpMovementVectors(
                 gamepadEx.getLeftY(),
                 -gamepadEx.getLeftX(),
-                -heading,
-                true
+                -heading*Math.abs(heading),
+                false
         );
         follower.update();
     }

@@ -32,4 +32,8 @@ public class RetractIntake extends CommandBase {
     public boolean isFinished(){
         return intake.extendFinished();
     }
+
+    public RetractIntake copy(){
+        return new RetractIntake(intake);
+    }
 }

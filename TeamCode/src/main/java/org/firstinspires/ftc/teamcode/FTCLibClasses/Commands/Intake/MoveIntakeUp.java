@@ -40,4 +40,8 @@ public class MoveIntakeUp extends CommandBase {
 
         return timer.done();
     }
+
+    public MoveIntakeUp copy(){
+        return new MoveIntakeUp(intake);
+    }
 }

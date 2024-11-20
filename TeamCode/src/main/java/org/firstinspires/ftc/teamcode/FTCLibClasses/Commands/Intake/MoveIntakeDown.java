@@ -32,5 +32,9 @@ public class MoveIntakeDown extends CommandBase {
 
     }
 
+    public MoveIntakeDown copy(){
+        return new MoveIntakeDown(intake);
+    }
+
 
 }

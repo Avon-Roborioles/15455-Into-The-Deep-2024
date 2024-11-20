@@ -37,4 +37,8 @@ public class PassIntoBucket extends CommandBase {
     public boolean isFinished(){
         return timer.done();
     }
+
+    public PassIntoBucket copy(){
+        return new PassIntoBucket(intake);
+    }
 }

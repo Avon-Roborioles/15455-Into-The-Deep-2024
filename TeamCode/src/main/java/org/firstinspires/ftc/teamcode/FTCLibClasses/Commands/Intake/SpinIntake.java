@@ -67,4 +67,8 @@ public class SpinIntake extends CommandBase {
     public void end(boolean interrupted){
         intake.stopIntakeWheels();
     }
+
+    public SpinIntake copy(){
+        return new SpinIntake(intake);
+    }
 }

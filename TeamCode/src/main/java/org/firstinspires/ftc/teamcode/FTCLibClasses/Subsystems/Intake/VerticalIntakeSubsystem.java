@@ -40,7 +40,7 @@ public class VerticalIntakeSubsystem extends SubsystemBase {
     public void moveIntakeUp(){
         switch (bot){
             case PRACTICE:
-                verticalServo.setPosition(.15);
+                verticalServo.setPosition(.34);
                 break;
             case COMP:
                 verticalServo.setPosition(RobotConfig.IntakeConstants.verticalServoUpPosition);

@@ -62,13 +62,9 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
         CommandGroupBase.clearGroupedCommands();
 
 
-        SequentialCommandGroup finishRoutine = new SequentialCommandGroup(
-                groupRetractIntake,
-                robot.extendIntake.copy()
-        );
 
-        CommandGroupBase.clearGroupedCommands();
         SequentialCommandGroup intakeRoutine = new SequentialCommandGroup(
+                robot.extendIntake.copy(),
                 robot.verticalAndSpin,
                 groupRetractIntake,
                 robot.extendIntake.copy()
@@ -128,6 +124,7 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
                                 ()-> true,
                                 robot.spinIntakeSubsystem
                         ),
+                        robot.moveIntakeUp.copy(),
                         robot.extendIntake.copy(),
                         robot.passIntoBucket.copy()
                 )
@@ -140,7 +137,7 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
                 robot.liftDownCommand,
                 robot.armDownCommand
         );
-        Trigger intakeTrigger = new Trigger(()->{return drivePad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>.7;});
+        Trigger intakeTrigger = new Trigger(()-> drivePad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>.7);
         intakeTrigger.whenActive(intakeRoutine);
 //        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(groupRetractIntake);
 

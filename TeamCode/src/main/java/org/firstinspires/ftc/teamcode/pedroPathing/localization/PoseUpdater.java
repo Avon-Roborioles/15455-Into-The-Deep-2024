@@ -59,6 +59,8 @@ public class PoseUpdater {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
+        this.imu =((TwoWheelLocalizer)localizer).imu;
+
         this.localizer = localizer;
     }
 

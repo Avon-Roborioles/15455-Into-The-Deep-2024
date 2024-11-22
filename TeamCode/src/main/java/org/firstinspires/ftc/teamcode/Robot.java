@@ -89,7 +89,7 @@ public class Robot {
         verticalAndSpin = new ParallelCommandGroup(
                 new SequentialCommandGroup(
                         moveIntakeDown,
-                        new WaitCommand(750),
+                        new WaitCommand(1500),
                         moveIntakeUp
                 ),
 
@@ -136,6 +136,7 @@ public class Robot {
         spinIntakeSubsystem.setBot(bot);
         verticalIntakeSubsystem.setBotType(bot);
         followerSubsystem.getFollower().setBot(bot);
+        extendMotorSubsystem.setBot(bot);
     }
 }
 

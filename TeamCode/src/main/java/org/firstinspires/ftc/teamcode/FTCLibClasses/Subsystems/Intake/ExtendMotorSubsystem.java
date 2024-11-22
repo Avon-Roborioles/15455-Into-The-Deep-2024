@@ -6,14 +6,17 @@ import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 
 public class ExtendMotorSubsystem extends SubsystemBase {
     private Motor extendMotor;
     private ExtendPos extendPos = ExtendPos.IN;
 
-    private Telemetry telemetry;
+    private int posMultiplier = 1;
 
+    private Telemetry telemetry;
+    private Bot bot = Bot.COMP;
     public ExtendMotorSubsystem(HardwareMap hMap, Telemetry telemetry){
         extendMotor = new MotorEx(hMap, RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
@@ -24,30 +27,39 @@ public class ExtendMotorSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
     }
 
+    public void setBot(Bot bot){
+        this.bot = bot;
+        if (bot == Bot.PRACTICE){
+            posMultiplier =-1;
+        } else {
+            posMultiplier =1;
+        }
+    }
+
     public void periodic(){
         telemetry.addLine("============Extend Motor============");
-        telemetry.addData("Motor Position",extendMotor.getCurrentPosition());
+        telemetry.addData("Motor Position",extendMotor.getCurrentPosition()*posMultiplier);
         telemetry.addData("Extend Target",extendPos);
     }
 
     public void extendMotorOutFully(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMaxPosition);
-        extendMotor.set(RobotConfig.IntakeConstants.motorExtendSpeed);
+        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMaxPosition*posMultiplier);
+        extendMotor.set(RobotConfig.IntakeConstants.motorExtendSpeed*posMultiplier);
         extendPos = ExtendPos.OUT;
     }
 
     public void retractMotorFully(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
-        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMinPosition);
-        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed);
+        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorMinPosition*posMultiplier);
+        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed*posMultiplier);
         extendPos = ExtendPos.IN;
     }
 
 
     public boolean isExtendAtClearPos(){
-        return (extendMotor.getCurrentPosition()< RobotConfig.IntakeConstants.intakeClearBucketPos+ RobotConfig.IntakeConstants.motorDegreeOfError)
-                ||(extendMotor.getCurrentPosition()>RobotConfig.IntakeConstants.intakeClearBucketPos - RobotConfig.IntakeConstants.motorDegreeOfError);
+        return (extendMotor.getCurrentPosition()*posMultiplier<(RobotConfig.IntakeConstants.intakeClearBucketPos+ RobotConfig.IntakeConstants.motorDegreeOfError)*posMultiplier)
+                ||(extendMotor.getCurrentPosition()*posMultiplier>(RobotConfig.IntakeConstants.intakeClearBucketPos - RobotConfig.IntakeConstants.motorDegreeOfError)*posMultiplier);
     }
 
     public void slowRetractMotor(){
@@ -62,11 +74,11 @@ public class ExtendMotorSubsystem extends SubsystemBase {
     public boolean extendFinished(){
         switch (extendPos){
             case IN:
-                return extendMotor.getCurrentPosition()<
-                        RobotConfig.IntakeConstants.motorMinPosition+RobotConfig.IntakeConstants.motorDegreeOfError;
+                return extendMotor.getCurrentPosition()*posMultiplier<
+                        (RobotConfig.IntakeConstants.motorMinPosition+RobotConfig.IntakeConstants.motorDegreeOfError);
             case OUT:
-                return extendMotor.getCurrentPosition()>
-                        RobotConfig.IntakeConstants.motorMaxPosition-RobotConfig.IntakeConstants.motorDegreeOfError;
+                return (extendMotor.getCurrentPosition()*posMultiplier)>
+                        (RobotConfig.IntakeConstants.motorMaxPosition-RobotConfig.IntakeConstants.motorDegreeOfError);
 
         }
         return extendMotor.atTargetPosition();

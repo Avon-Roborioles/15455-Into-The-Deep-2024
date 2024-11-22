@@ -33,17 +33,17 @@ public class FollowerTeleOpCommand extends CommandBase {
 
     @Override
     public void execute(){
-        double heading = gamepadEx.getRightX();
+        double heading = gamepadEx.getRightX()*.6;
         if (gamepadEx.getButton(GamepadKeys.Button.A)){
             followerSubsystem.resetHeading();
         }
-
+//
 //        if (Math.abs(follower.getPose().getHeading()%(Math.PI/4))<=Math.toRadians(5)){
 //            heading = 0;
 //            lockCount++;
 //        }
 //
-//        if (lockCount>1000){
+//        if (lockCount>50){
 //            heading = gamepadEx.getRightX();
 //            lockCount = 0;
 //        }

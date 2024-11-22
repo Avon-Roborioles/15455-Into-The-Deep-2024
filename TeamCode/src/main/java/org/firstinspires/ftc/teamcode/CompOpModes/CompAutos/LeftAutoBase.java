@@ -28,9 +28,9 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
     @Override
     public void specificInit(){
-        Point blueGoal = new Point(new Pose(24,-4.5));
-        Point rightWhiteSpike = new Point(new Pose(16.6,-22.1,Math.toRadians(270)));
-        Point middleWhiteSpike = new Point(new Pose(26.27,-22.24));
+        Point blueGoal = new Point(new Pose(27,-4));
+        Point rightWhiteSpike = new Point(new Pose(17.6,-20.1,Math.toRadians(270)));
+        Point middleWhiteSpike = new Point(new Pose(27.27,-21.24));
         Point leftWhiteSpike = new Point(new Pose(21.29,-33.29));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(0,0,3*PI/2));
@@ -175,8 +175,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 //                        robot.moveIntakeDown,
 //                        robot.spinIntake
 //                ),
-                robot.verticalAndSpin,
-                groupRetractIntake
+                robot.verticalAndSpin
         );
         CommandGroupBase.clearGroupedCommands();
 
@@ -195,12 +194,12 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
         SequentialCommandGroup goalLeftSpikeIntakePass = new SequentialCommandGroup(
                 fromGoalToLeftSpikeCommand,
-                new ParallelCommandGroup(
-                        robot.moveIntakeDown,
-                        robot.spinIntake
-                ),
-//                robot.verticalAndSpin,
-                groupRetractIntake
+//                new ParallelCommandGroup(
+//                        robot.moveIntakeDown,
+//                        robot.spinIntake
+//                ),
+                robot.verticalAndSpin
+                //groupRetractIntake
         );
 
         CommandGroupBase.clearGroupedCommands();

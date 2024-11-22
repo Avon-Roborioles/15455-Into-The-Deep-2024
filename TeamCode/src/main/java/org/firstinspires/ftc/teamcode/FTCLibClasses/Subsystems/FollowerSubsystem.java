@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.localizers.TwoWheelLocalizer;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.tuning.FollowerConstants;
 
 public class FollowerSubsystem extends SubsystemBase {
@@ -29,7 +31,7 @@ public class FollowerSubsystem extends SubsystemBase {
     }
 
     public void resetHeading() {
-        follower.getPoseUpdater().resetHeadingToIMU();
+        ((TwoWheelLocalizer)follower.getPoseUpdater().getLocalizer()).getStartPose().setHeading(MathFunctions.normalizeAngle(-follower.getTotalHeading()-0));
     }
 
     @Override

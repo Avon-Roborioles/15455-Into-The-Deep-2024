@@ -47,7 +47,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.util.NanoTimer;
 @Config
 public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo work
     private HardwareMap hardwareMap;
-    private IMU imu;
+    public IMU imu;
     private Pose startPose;
     private Pose displacementPose;
     private Pose currentVelocity;
@@ -123,7 +123,7 @@ public class TwoWheelLocalizer extends Localizer { // todo: make two wheel odo w
             imu.initialize(RobotConfig.DriveConstants.practiceIMUOrientation);
         }
     }
-
+    public Pose getStartPose(){return startPose;}
     /**
      * This returns the current pose estimate.
      *

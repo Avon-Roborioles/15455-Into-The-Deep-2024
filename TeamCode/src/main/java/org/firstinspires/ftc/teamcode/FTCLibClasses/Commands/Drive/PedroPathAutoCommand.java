@@ -33,7 +33,7 @@ public class PedroPathAutoCommand extends CommandBase {
         this.follower = follower;
         this.path = path;
         addRequirements(follower);
-        timer = new Timing.Timer(350,TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(150,TimeUnit.MILLISECONDS);
         lastPose = follower.getFollower().getPose();
 
     }

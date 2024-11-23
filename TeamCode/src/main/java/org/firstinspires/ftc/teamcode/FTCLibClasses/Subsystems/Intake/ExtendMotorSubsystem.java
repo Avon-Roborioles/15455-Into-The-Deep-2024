@@ -56,12 +56,6 @@ public class ExtendMotorSubsystem extends SubsystemBase {
         extendPos = ExtendPos.IN;
     }
 
-
-    public boolean isExtendAtClearPos(){
-        return (extendMotor.getCurrentPosition()*posMultiplier<(RobotConfig.IntakeConstants.intakeClearBucketPos+ RobotConfig.IntakeConstants.motorDegreeOfError)*posMultiplier)
-                ||(extendMotor.getCurrentPosition()*posMultiplier>(RobotConfig.IntakeConstants.intakeClearBucketPos - RobotConfig.IntakeConstants.motorDegreeOfError)*posMultiplier);
-    }
-
     public void slowRetractMotor(){
         extendMotor.setRunMode(Motor.RunMode.RawPower);
         extendMotor.set(RobotConfig.IntakeConstants.motorSlowRetractionRawPower);
@@ -79,9 +73,19 @@ public class ExtendMotorSubsystem extends SubsystemBase {
             case OUT:
                 return (extendMotor.getCurrentPosition()*posMultiplier)>
                         (RobotConfig.IntakeConstants.motorMaxPosition-RobotConfig.IntakeConstants.motorDegreeOfError);
+            case CLEAR:
+                return extendMotor.getCurrentPosition()*posMultiplier<
+                        (RobotConfig.IntakeConstants.motorClearPos+RobotConfig.IntakeConstants.motorDegreeOfError);
 
         }
         return extendMotor.atTargetPosition();
+    }
+
+    public void extendToClearPos(){
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorClearPos*posMultiplier);
+        extendMotor.set(posMultiplier);
+        extendPos = ExtendPos.CLEAR;
     }
 
     public enum ExtendPos{

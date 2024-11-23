@@ -28,12 +28,12 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
     @Override
     public void specificInit(){
-        Point blueGoal = new Point(new Pose(27,-4));
-        Point rightWhiteSpike = new Point(new Pose(17.6,-20.1,Math.toRadians(270)));
-        Point middleWhiteSpike = new Point(new Pose(27.27,-21.24));
-        Point leftWhiteSpike = new Point(new Pose(21.29,-33.29));
+        Point blueGoal = new Point(new Pose(27,-5));
+        Point rightWhiteSpike = new Point(new Pose(18.6,-17.1,Math.toRadians(270)));
+        Point middleWhiteSpike = new Point(new Pose(27.27,-17.24));
+        Point leftWhiteSpike = new Point(new Pose(21.29,-31.29));
 
-        robot.followerSubsystem.getFollower().setPose(new Pose(0,0,3*PI/2));
+        robot.followerSubsystem.getFollower().setPose(new Pose(8.27,0,3*PI/2));
 
         Path startToGoal =  new Path.PathBuilder(
                 new BezierLine(
@@ -130,12 +130,15 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
 
         //goes from the start to the goal and dunks
-        SequentialCommandGroup startGoalDunk = new SequentialCommandGroup(
-                new ParallelCommandGroup(
-                        startToGoalCommand,
-                        robot.extendIntake
-                ),
-                dunkRoutine
+        ParallelCommandGroup startGoalDunk = new ParallelCommandGroup(
+                startToGoalCommand,
+                new SequentialCommandGroup(
+                        robot.extendIntakeToClearPos.copy(),
+                        new ParallelCommandGroup(
+                                dunkRoutine,
+                                robot.extendIntake.copy()
+                        )
+                )
         );
 
         CommandGroupBase.clearGroupedCommands();
@@ -157,13 +160,16 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes to the goal from the right spike, extends the intake and dunks
         SequentialCommandGroup rightSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                groupRetractIntake,
-                                robot.extendIntake
-                        ),
+                        groupRetractIntake,
                         fromRightSpikeToGoalCommand
                 ),
-                dunkRoutine
+                new SequentialCommandGroup(
+                        robot.extendIntakeToClearPos.copy(),
+                        new ParallelCommandGroup(
+                                dunkRoutine,
+                                robot.extendIntake.copy()
+                        )
+                )
         );
 
         CommandGroupBase.clearGroupedCommands();
@@ -182,13 +188,16 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup middleSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                groupRetractIntake,
-                                robot.extendIntake
-                        ),
+                        groupRetractIntake,
                         fromMiddleSpikeToGoalCommand
                 ),
-                dunkRoutine
+                new SequentialCommandGroup(
+                        robot.extendIntakeToClearPos.copy(),
+                        new ParallelCommandGroup(
+                                dunkRoutine,
+                                robot.extendIntake.copy()
+                        )
+                )
         );
         CommandGroupBase.clearGroupedCommands();
 
@@ -207,13 +216,16 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         //goes from the middle spike to the middle spike and dunks
         SequentialCommandGroup leftSpikeGoalDunk = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                groupRetractIntake,
-                                robot.extendIntake
-                        ),
+                        groupRetractIntake,
                         fromLeftSpikeToGoalCommand
                 ),
-                dunkRoutine
+                new SequentialCommandGroup(
+                        robot.extendIntakeToClearPos.copy(),
+                        new ParallelCommandGroup(
+                                dunkRoutine,
+                                robot.extendIntake.copy()
+                        )
+                )
         );
 
         //puts all commands together

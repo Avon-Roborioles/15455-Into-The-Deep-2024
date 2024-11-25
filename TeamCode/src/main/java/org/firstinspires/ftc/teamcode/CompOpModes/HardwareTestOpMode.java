@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.UtilityOpModes;
+package org.firstinspires.ftc.teamcode.CompOpModes;
 
 import com.arcrobotics.ftclib.command.CommandGroupBase;
 import com.arcrobotics.ftclib.command.FunctionalCommand;
@@ -7,10 +7,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.AllianceColor;
-import org.firstinspires.ftc.teamcode.CompOpModes.RobotOpMode;
 
 
-@TeleOp(name = "Partial Auto Hardware Test", group = "Utility")
+@TeleOp(name = "Manual Override OpMode", group = "Comp")
 public class HardwareTestOpMode extends RobotOpMode {
     @Override
     public void setAllianceColor(){

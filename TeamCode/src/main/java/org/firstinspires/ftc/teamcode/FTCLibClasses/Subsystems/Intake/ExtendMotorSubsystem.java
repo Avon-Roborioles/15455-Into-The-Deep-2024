@@ -80,7 +80,14 @@ public class ExtendMotorSubsystem extends SubsystemBase {
         }
         return extendMotor.atTargetPosition();
     }
-
+    public void moveFullyIn(){
+        extendMotor.setRunMode(Motor.RunMode.PositionControl);
+        extendMotor.setTargetPosition(200);
+        extendMotor.set(posMultiplier);
+    }
+    public boolean isFullyIn(){
+        return extendMotor.getCurrentPosition()*posMultiplier<200+ RobotConfig.IntakeConstants.motorDegreeOfError;
+    }
     public void extendToClearPos(){
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
         extendMotor.setTargetPosition(RobotConfig.IntakeConstants.motorClearPos*posMultiplier);

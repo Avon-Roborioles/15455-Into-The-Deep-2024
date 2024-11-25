@@ -3,16 +3,11 @@ package org.firstinspires.ftc.teamcode.CompOpModes.CompAutos;
 import static java.lang.Math.PI;
 
 import com.arcrobotics.ftclib.command.CommandGroupBase;
-import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.LogCatCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.PedroPathAutoCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
@@ -28,12 +23,13 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
     @Override
     public void specificInit(){
-        Point blueGoal = new Point(new Pose(27,-5));
-        Point rightWhiteSpike = new Point(new Pose(18.6,-17.1,Math.toRadians(270)));
-        Point middleWhiteSpike = new Point(new Pose(27.27,-17.24));
-        Point leftWhiteSpike = new Point(new Pose(21.29,-31.29));
+        Point blueGoal = new Point(new Pose(26.8,-4.5));
+        Point rightWhiteSpike = new Point(new Pose(19,-17.1,Math.toRadians(270)));
+        Point middleWhiteSpike = new Point(new Pose(26.87,-17.54));
+        Point leftWhiteSpike = new Point(new Pose(22.5,-33.3));
 
-        robot.followerSubsystem.getFollower().setPose(new Pose(8.27,0,3*PI/2));
+        robot.followerSubsystem.getFollower().setPose(new Pose(8,0,3*PI/2));
+        //robot.followerSubsystem.getFollower().setMaxPower(.75);
 
         Path startToGoal =  new Path.PathBuilder(
                 new BezierLine(
@@ -230,7 +226,9 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
         //puts all commands together
         SequentialCommandGroup autoRoutine = new SequentialCommandGroup(
+                new InstantCommand(()->robot.followerSubsystem.getFollower().setMaxPower(.75)),
                 startGoalDunk,
+                new InstantCommand(()->robot.followerSubsystem.getFollower().setMaxPower(1)),
                 goalRightSpikeIntakePass,
                 rightSpikeGoalDunk,
                 goalMiddleSpikeIntakePass,

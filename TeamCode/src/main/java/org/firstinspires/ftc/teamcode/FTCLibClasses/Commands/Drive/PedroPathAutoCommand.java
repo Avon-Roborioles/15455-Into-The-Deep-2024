@@ -33,7 +33,7 @@ public class PedroPathAutoCommand extends CommandBase {
         this.follower = follower;
         this.path = path;
         addRequirements(follower);
-        timer = new Timing.Timer(150,TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(250,TimeUnit.MILLISECONDS);
         lastPose = follower.getFollower().getPose();
 
     }
@@ -83,7 +83,6 @@ public class PedroPathAutoCommand extends CommandBase {
     @Override
     public void execute(){
         follower.getFollower().update();
-        Limelight3A limelight3A;
 
     }
 
@@ -93,6 +92,7 @@ public class PedroPathAutoCommand extends CommandBase {
             isBusy = follower.getFollower().isBusy();
             if (!isBusy){
                 if (!timer.isTimerOn()) timer.start();
+
             } else {
                 timer.pause();
             }

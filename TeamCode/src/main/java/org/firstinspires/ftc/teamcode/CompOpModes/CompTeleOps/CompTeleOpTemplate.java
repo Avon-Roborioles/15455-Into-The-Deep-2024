@@ -34,7 +34,7 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
                                 () ->{},
                                 () ->{},
                                 (Boolean b) ->{},
-                                () ->{return drivePad.getButton(GamepadKeys.Button.RIGHT_BUMPER);}
+                                () -> drivePad.getButton(GamepadKeys.Button.RIGHT_BUMPER)|| drivePad.getButton(GamepadKeys.Button.Y)
                         ),
                         robot.moveIntakeUp.copy()
                 ),
@@ -101,18 +101,23 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
 
 
 //        intakeRoutine.interruptOn(() -> drivePad.getButton(GamepadKeys.Button.LEFT_BUMPER));
-
+        CommandGroupBase.clearGroupedCommands();
+        SequentialCommandGroup specimenDropRoutine = new SequentialCommandGroup(
+                robot.extendIntake.copy(),
+                robot.verticalAndSpin
+        );
         drivePad.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         robot.extendIntake.copy(),
                         robot.passIntoBucket.copy()
                 )
         );
+        drivePad.getGamepadButton(GamepadKeys.Button.Y).whenActive(specimenDropRoutine);
         CommandGroupBase.clearGroupedCommands();
         Trigger takeOutOfBucket = new Trigger(() -> {return drivePad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>.7;});
         takeOutOfBucket.whenActive(
                 new SequentialCommandGroup(
-                        robot.retractIntake.copy(),
+                        robot.retractFully.copy(),
                         robot.moveIntakeDown.copy(),
                         new FunctionalCommand(
                                 robot.spinIntakeSubsystem::spinWheelsUp,
@@ -124,6 +129,7 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
                                 ()-> true,
                                 robot.spinIntakeSubsystem
                         ),
+                        new WaitCommand(1250),
                         robot.moveIntakeUp.copy(),
                         robot.extendIntake.copy(),
                         robot.passIntoBucket.copy()
@@ -139,7 +145,8 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
         );
         Trigger intakeTrigger = new Trigger(()-> drivePad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>.7);
         intakeTrigger.whenActive(intakeRoutine);
-//        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(groupRetractIntake);
+
+
 
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(dunk);
 

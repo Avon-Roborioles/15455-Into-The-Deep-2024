@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.ExtendIntakeToClearPos;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractFully;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.ArmDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.ArmHighDunkCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.FollowerTeleOpCommand;
@@ -56,6 +57,7 @@ public class Robot {
     public MoveIntakeUp moveIntakeUp;
     public MoveIntakeDown moveIntakeDown;
     public ExtendIntakeToClearPos extendIntakeToClearPos;
+    public RetractFully retractFully;
     public ParallelCommandGroup verticalAndSpin;
 
 
@@ -86,13 +88,14 @@ public class Robot {
         passIntoBucket = new PassIntoBucket(spinIntakeSubsystem);
         moveIntakeDown = new MoveIntakeDown(verticalIntakeSubsystem);
         moveIntakeUp = new MoveIntakeUp(verticalIntakeSubsystem);
+        retractFully = new RetractFully(extendMotorSubsystem);
         extendIntakeToClearPos = new ExtendIntakeToClearPos(extendMotorSubsystem);
         CommandGroupBase.clearGroupedCommands();
 
         verticalAndSpin = new ParallelCommandGroup(
                 new SequentialCommandGroup(
                         moveIntakeDown,
-                        new WaitCommand(1000),
+                        new WaitCommand(1300),
                         moveIntakeUp
                 ),
 

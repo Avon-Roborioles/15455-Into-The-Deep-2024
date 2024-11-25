@@ -51,7 +51,7 @@ public class RobotConfig {
 
         public static final String extendMotorName = "extendMotor";
         public static final int motorMaxPosition = 1900;
-        public static final int motorMinPosition = 100;
+        public static final int motorMinPosition = 150;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = 1;
@@ -59,7 +59,7 @@ public class RobotConfig {
         //The farthest in the intake can be before lowering it.
         public static final double intakeClearBucketPos = -1800;
         public static final int motorDegreeOfError = 100;
-        public static final int motorClearPos = 900;
+        public static final int motorClearPos = 1000;
 
     }
 

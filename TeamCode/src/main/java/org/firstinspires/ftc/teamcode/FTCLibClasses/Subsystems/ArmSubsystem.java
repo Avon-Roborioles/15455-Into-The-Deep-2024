@@ -18,7 +18,6 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmSubsystem(HardwareMap hMap, Telemetry telemetry){
         armSwing = new MotorEx(hMap, RobotConfig.OuttakeConstants.armOuttakeName);
         armSwing.setRunMode(Motor.RunMode.PositionControl);
-        armSwing.set(1);
 
 
         armSwing.setInverted(false);

@@ -18,8 +18,8 @@ public class HardwareTestOpMode extends RobotOpMode {
     }
     @Override
     public void createLogic(){
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(robot.extendIntake);
-        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.retractIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.extendIntake);
+        drivePad.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(robot.retractIntake);
 
 
         drivePad.getGamepadButton(GamepadKeys.Button.Y).whileActiveContinuous(
@@ -31,7 +31,7 @@ public class HardwareTestOpMode extends RobotOpMode {
                         robot.spinIntakeSubsystem
                 )
         );
-        drivePad.getGamepadButton(GamepadKeys.Button.A).whileActiveContinuous(
+        drivePad.getGamepadButton(GamepadKeys.Button.B).whileActiveContinuous(
                 new FunctionalCommand(
                         ()->{},
                         ()->robot.spinIntakeSubsystem.spinWheelsDown(),
@@ -49,7 +49,28 @@ public class HardwareTestOpMode extends RobotOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(robot.liftCommand);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(robot.liftDownCommand);
 
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(robot.armDownCommand);
-        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.armCommand);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.armDownCommand);
+        gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(robot.armCommand);
+
+        robot.driveSubsystem.setDefaultCommand(robot.followerTeleOpCommand);
+    }
+
+    @Override
+    public String getTelemetry(){
+        return "==========INTAKE==========\n" +
+                "Intake Extend: Driver 1 DPAD LEFT\n" +
+                "Intake Retract: Driver 1 DPAD RIGHT\n" +
+                "Spin Wheels Up: Driver 1 Button Y\n" +
+                "Spin Wheels Down: Driver 1 Button B\n" +
+                "Move Intake Up: Driver 1 DPAD UP\n" +
+                "Move Intake Down: Diver 1 DPAD DOWN\n" +
+                "==========OUTAKE==========\n" +
+                "Move Lift Up: Driver 2 DPAD UP\n" +
+                "Move Lift Down: Driver 2 DPAD DOWN\n" +
+                "Swing Bucket Up: Driver 2 DPAD LEFT\n" +
+                "Swing Bucket Down: Driver 2 DPAD RIGHT\n" +
+                "==========DRIVE==========\n" +
+                "Drive is left and right joystick driver 1\n" +
+                "Reset Heading: Driver 1 Button A";
     }
 }

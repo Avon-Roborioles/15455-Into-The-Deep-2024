@@ -51,7 +51,7 @@ public class HardwareTestOpMode extends RobotOpMode {
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(robot.armDownCommand);
         gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(robot.armCommand);
 
-        robot.driveSubsystem.setDefaultCommand(robot.followerTeleOpCommand);
+        robot.followerSubsystem.setDefaultCommand(robot.followerTeleOpCommand);
     }
 
     @Override

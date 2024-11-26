@@ -19,6 +19,7 @@ public class FollowerSubsystem extends SubsystemBase {
     }
     public FollowerSubsystem(HardwareMap hardwareMap){
         this.follower = new Follower(hardwareMap);
+
     }
 
     public void setTelemetry(Telemetry telemetry){

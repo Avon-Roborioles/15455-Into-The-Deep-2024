@@ -95,7 +95,7 @@ public class Robot {
         verticalAndSpin = new ParallelCommandGroup(
                 new SequentialCommandGroup(
                         moveIntakeDown,
-                        new WaitCommand(1300),
+                        new WaitCommand(900),
                         moveIntakeUp
                 ),
 

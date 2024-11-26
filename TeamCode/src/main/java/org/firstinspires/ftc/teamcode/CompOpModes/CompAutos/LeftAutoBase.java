@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.PedroPathAutoCommand;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
@@ -27,6 +28,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         Point rightWhiteSpike = new Point(new Pose(19,-17.1,Math.toRadians(270)));
         Point middleWhiteSpike = new Point(new Pose(26.87,-17.54));
         Point leftWhiteSpike = new Point(new Pose(22.5,-33.3));
+        Point submersibleStart = new Point(new Pose(-8.8,-53.8));
+        Point submersibleParameterPoint = new Point(new Pose(15.9,-53.4));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(8,0,3*PI/2));
         //robot.followerSubsystem.getFollower().setMaxPower(.75);
@@ -95,7 +98,15 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         )
                 .setLinearHeadingInterpolation(0,5*PI/4)
                 .build();
-
+        Path fromGoalToSubmersible = new Path.PathBuilder(
+                new BezierCurve(
+                        blueGoal,
+                        submersibleParameterPoint,
+                        submersibleStart
+                )
+        )
+                .setLinearHeadingInterpolation(5*PI/4,PI)
+                .build();
 
         //makes paths into commands
         PedroPathAutoCommand startToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,startToGoal);
@@ -105,7 +116,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         PedroPathAutoCommand fromMiddleSpikeToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromMiddleSpikeToGoal);
         PedroPathAutoCommand fromGoalToLeftSpikeCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromGoalToLeftSpike);
         PedroPathAutoCommand fromLeftSpikeToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromLeftSpikeToGoal);
-
+        PedroPathAutoCommand fromGoalToSubmersibleCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromGoalToSubmersible);
 
         SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(robot.moveIntakeUp,robot.retractIntake,robot.passIntoBucket);
 
@@ -234,7 +245,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 goalMiddleSpikeIntakePass,
                 middleSpikeGoalDunk,
                 goalLeftSpikeIntakePass,
-                leftSpikeGoalDunk
+                leftSpikeGoalDunk,
+                fromGoalToSubmersibleCommand
         );
 
         autoRoutine.schedule();

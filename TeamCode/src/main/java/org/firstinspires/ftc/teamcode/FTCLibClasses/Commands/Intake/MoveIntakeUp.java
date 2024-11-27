@@ -17,7 +17,7 @@ public class MoveIntakeUp extends CommandBase {
         this.intake = intake;
         addRequirements(intake);
 
-        timer = new Timing.Timer(500, TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(400, TimeUnit.MILLISECONDS);
     }
 
     public String getTelemetry(){

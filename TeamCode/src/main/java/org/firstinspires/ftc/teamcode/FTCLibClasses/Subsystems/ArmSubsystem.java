@@ -52,7 +52,7 @@ public class ArmSubsystem extends SubsystemBase {
         armSwing.set(.25);
     }
     public boolean isDown(){
-        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;
+        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<50;
     }
 
     @Override

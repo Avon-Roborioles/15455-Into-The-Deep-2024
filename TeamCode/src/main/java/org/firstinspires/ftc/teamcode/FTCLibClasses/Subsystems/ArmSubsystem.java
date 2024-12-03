@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,18 +31,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void dunkHighPos(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingHighDunkPos);
-        armSwing.set(.2);
+        armSwing.set(.5);
     }
 
     public boolean hasDunked(){
         return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingHighDunkPos)<150;
     }
 
-    public void start(int value){
-        armSwing.set(1);
-        armSwing.setTargetPosition(value+startPos);
 
-    }
     public void stop(){
         armSwing.set(0);
     }
@@ -52,7 +49,7 @@ public class ArmSubsystem extends SubsystemBase {
         armSwing.set(.25);
     }
     public boolean isDown(){
-        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<50;
+        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;
     }
 
     @Override

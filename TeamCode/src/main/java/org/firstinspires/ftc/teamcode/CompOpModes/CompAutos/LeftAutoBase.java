@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.CompOpModes.CompAutos;
 import static java.lang.Math.PI;
 
 import com.arcrobotics.ftclib.command.CommandGroupBase;
+import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -25,10 +27,11 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
     @Override
     public void specificInit(){
         Point blueGoal = new Point(new Pose(26.8,-4.5));
-        Point rightWhiteSpike = new Point(new Pose(19,-17.1,Math.toRadians(270)));
-        Point middleWhiteSpike = new Point(new Pose(26.87,-17.54));
+        Point rightWhiteSpike = new Point(new Pose(19,-18.1,Math.toRadians(270)));
+        Point middleWhiteSpike = new Point(new Pose(26.87,-18.54));
         Point leftWhiteSpike = new Point(new Pose(22.5,-33.3));
-        Point submersibleStart = new Point(new Pose(-8.8,-53.8));
+        Point submersibleStart = new Point(new Pose(-7.8,-53.8));
+        Point submersibleEnd = new Point(new Pose(-8.8,-48.8));
         Point submersibleParameterPoint = new Point(new Pose(15.9,-53.4));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(8,0,3*PI/2));
@@ -108,6 +111,27 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 .setLinearHeadingInterpolation(5*PI/4,PI)
                 .build();
 
+        //Makes the path for scanning for samples in the submersible
+        Path submersibleToRightSubmersible = new Path.PathBuilder(
+                new BezierLine(
+                        submersibleStart,
+                        submersibleEnd
+                )
+        )
+                .setConstantHeadingInterpolation(PI)
+                .build();
+
+        Path fromSubmersibleToGoal = new Path.PathBuilder(
+                new BezierCurve(
+                        submersibleStart,
+                        submersibleParameterPoint,
+
+                        blueGoal
+                )
+        )
+                .setLinearHeadingInterpolation(5*PI/4,PI)
+                .build();
+
         //makes paths into commands
         PedroPathAutoCommand startToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,startToGoal);
         PedroPathAutoCommand fromGoalToRightSpikeCommand = new PedroPathAutoCommand(robot.followerSubsystem, fromGoalToRightSpike);
@@ -117,6 +141,9 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         PedroPathAutoCommand fromGoalToLeftSpikeCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromGoalToLeftSpike);
         PedroPathAutoCommand fromLeftSpikeToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromLeftSpikeToGoal);
         PedroPathAutoCommand fromGoalToSubmersibleCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromGoalToSubmersible);
+        PedroPathAutoCommand submersibleToRightSubmersibleCommand = new PedroPathAutoCommand(robot.followerSubsystem,submersibleToRightSubmersible);
+        PedroPathAutoCommand fromSubmersibleToGoalCommand = new PedroPathAutoCommand(robot.followerSubsystem,fromSubmersibleToGoal);
+
 
         SequentialCommandGroup groupRetractIntake = new SequentialCommandGroup(robot.moveIntakeUp,robot.retractIntake,robot.passIntoBucket);
 
@@ -135,6 +162,19 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         );
         CommandGroupBase.clearGroupedCommands();
 
+        SequentialCommandGroup dunk = new SequentialCommandGroup(
+                robot.liftCommand,
+                robot.armCommand,
+                new WaitCommand(200)
+        );
+        SequentialCommandGroup outtakeDown = new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        robot.liftDownCommand,
+                        robot.armDownCommand
+                )
+        );
+        CommandGroupBase.clearGroupedCommands();
+
 
         //goes from the start to the goal and dunks
         ParallelCommandGroup startGoalDunk = new ParallelCommandGroup(
@@ -142,7 +182,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 new SequentialCommandGroup(
                         robot.extendIntakeToClearPos.copy(),
                         new ParallelCommandGroup(
-                                dunkRoutine,
+                                dunk,
                                 robot.extendIntake.copy()
                         )
                 )
@@ -152,7 +192,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
         //goes from the goal to the right spike, intakes the sample, and passes the sample into the bucket
         SequentialCommandGroup goalRightSpikeIntakePass = new SequentialCommandGroup(
-                fromGoalToRightSpikeCommand,
+                new ParallelCommandGroup(
+                        fromGoalToRightSpikeCommand,
+                        outtakeDown
+                ),
 //                new ParallelCommandGroup(
 //                        robot.moveIntakeDown,
 //                        robot.spinIntake
@@ -173,7 +216,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 new SequentialCommandGroup(
                         robot.extendIntakeToClearPos.copy(),
                         new ParallelCommandGroup(
-                                dunkRoutine,
+                                dunk,
                                 robot.extendIntake.copy()
                         )
                 )
@@ -183,7 +226,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
         //goes to the middle spike from the goal, intakes and passes it in
         SequentialCommandGroup goalMiddleSpikeIntakePass = new SequentialCommandGroup(
-                fromGoalToMiddleSpikeCommand,
+                new ParallelCommandGroup(
+                        fromGoalToMiddleSpikeCommand,
+                        outtakeDown
+                ),
 //                new ParallelCommandGroup(
 //                        robot.moveIntakeDown,
 //                        robot.spinIntake
@@ -201,7 +247,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 new SequentialCommandGroup(
                         robot.extendIntakeToClearPos.copy(),
                         new ParallelCommandGroup(
-                                dunkRoutine,
+                                dunk,
                                 robot.extendIntake.copy()
                         )
                 )
@@ -209,7 +255,10 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         CommandGroupBase.clearGroupedCommands();
 
         SequentialCommandGroup goalLeftSpikeIntakePass = new SequentialCommandGroup(
-                fromGoalToLeftSpikeCommand,
+                new ParallelCommandGroup(
+                        fromGoalToLeftSpikeCommand,
+                        outtakeDown
+                ),
 //                new ParallelCommandGroup(
 //                        robot.moveIntakeDown,
 //                        robot.spinIntake
@@ -225,6 +274,39 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 new ParallelCommandGroup(
                         groupRetractIntake,
                         fromLeftSpikeToGoalCommand
+                ),
+                new SequentialCommandGroup(
+                        robot.extendIntakeToClearPos.copy(),
+                        new ParallelCommandGroup(
+                                dunk,
+                                robot.extendIntake.copy()
+                        )
+                )
+        );
+
+        //scan for samples in submersible
+
+        SequentialCommandGroup scanForSamples = new SequentialCommandGroup(
+                new InstantCommand(() ->robot.followerSubsystem.getFollower().setMaxPower(.2)),
+//                new ParallelCommandGroup(
+//                        submersibleToRightSubmersibleCommand,
+//                        new FunctionalCommand(
+//                                () ->{},
+//                                () ->{},
+//                                (Boolean b)->{},
+//                                () -> robot.spinIntakeSubsystem.hasCorrectSample()
+//                        )
+//                ),
+                robot.verticalAndSpin,
+                new InstantCommand(() ->robot.followerSubsystem.getFollower().setMaxPower(1))
+        );
+        CommandGroupBase.clearGroupedCommands();
+
+        //back to submersible and score
+        SequentialCommandGroup submersibleToBasketAndScore = new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        groupRetractIntake,
+                        fromSubmersibleToGoalCommand
                 ),
                 new SequentialCommandGroup(
                         robot.extendIntakeToClearPos.copy(),
@@ -246,7 +328,12 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 middleSpikeGoalDunk,
                 goalLeftSpikeIntakePass,
                 leftSpikeGoalDunk,
-                fromGoalToSubmersibleCommand
+                new ParallelCommandGroup(
+                        fromGoalToSubmersibleCommand,
+                        outtakeDown
+                ),
+                scanForSamples,
+                submersibleToBasketAndScore
         );
 
         autoRoutine.schedule();

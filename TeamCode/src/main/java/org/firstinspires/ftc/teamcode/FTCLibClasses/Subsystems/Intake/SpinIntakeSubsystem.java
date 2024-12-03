@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -11,19 +10,17 @@ import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
 
-import java.util.function.BooleanSupplier;
-
 public class SpinIntakeSubsystem extends SubsystemBase {
 
-    private ColorSensor colorSensor1;
-    private ColorSensor colorSensor2;
+    private final ColorSensor colorSensor1;
+    private final ColorSensor colorSensor2;
 
-    private CRServo intakeServo;
+    private final CRServo intakeServo;
 
 
-    private AllianceColor allianceColor;
+    private final AllianceColor allianceColor;
 
-    private Telemetry telemetry;
+    private final Telemetry telemetry;
 
     private Bot curBot = Bot.COMP;
 
@@ -61,7 +58,6 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         double blue = c1Blue + c2Blue;
         double green = c1Green + c2Green;
 
-        double max = red+blue+green;
         double[] percents = getPercents(red,blue, green);
         red = percents[0];
         green=percents[1];
@@ -77,13 +73,13 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         telemetry.addData("Red Raw",c1Red+c2Red);
         telemetry.addData("Blue Raw",c1Blue+c2Blue);
         telemetry.addData("Green Raw",c1Green+c2Green);
-        telemetry.addData("SAMPLE STATE",hasCorrectSample());
+        telemetry.addData("SAMPLE STATE", getSampleState());
 
         telemetry.addLine("============Intake Servo============");
         telemetry.addData("Intake Servo Power",intakeServo.getPower());
     }
 
-    public SampleState hasCorrectSample(){
+    public SampleState getSampleState(){
         //It adds both sensor values and then takes the proportion of the colors.
         //We do this because the closer the sample is, the more color it receives
         //The proportion of the colors is what matters
@@ -99,6 +95,25 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         double blue = c1Blue + c2Blue;
         double green = c1Green + c2Green;
         return calculateSampleColor(red,green,blue);
+    }
+
+
+    public boolean hasCorrectSample(){
+        double c1Red = colorSensor1.red();
+        double c1Blue = colorSensor1.blue();
+        double c1Green = colorSensor1.green();
+
+        double c2Red = colorSensor2.red();
+        double c2Blue = colorSensor2.blue();
+        double c2Green = colorSensor2.green();
+
+        SampleState c1Color = calculateSampleColor(c1Red,c1Green,c1Blue);
+        SampleState c2Color = calculateSampleColor(c2Red,c2Green,c2Blue);
+
+        if (!c1Color.correctSample||!c1Color.correctSample){
+            return false;
+        }
+        return true;
     }
 
     public void spinWheelsUp(){

@@ -35,7 +35,7 @@ public class SpinIntake extends CommandBase {
     @Override
     public void execute(){
         intake.spinWheelsUp();
-        SpinIntakeSubsystem.SampleState state = intake.hasCorrectSample();
+        SpinIntakeSubsystem.SampleState state = intake.getSampleState();
         detectsCorrectSample = state.correctSample;
 
         if (!correctSampleInIntake) {

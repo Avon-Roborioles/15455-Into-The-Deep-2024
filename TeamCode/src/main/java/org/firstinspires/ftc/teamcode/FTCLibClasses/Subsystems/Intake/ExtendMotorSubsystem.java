@@ -51,7 +51,7 @@ public class ExtendMotorSubsystem extends SubsystemBase {
 
     public void retractMotorFully(){
         extendMotor.setRunMode(Motor.RunMode.RawPower);
-        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed*posMultiplier*.5);
+        extendMotor.set(RobotConfig.IntakeConstants.motorRetractSpeed*posMultiplier);
         extendPos = ExtendPos.IN;
     }
 

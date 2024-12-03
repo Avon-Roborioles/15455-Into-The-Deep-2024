@@ -45,13 +45,13 @@ public class RobotConfig {
         public static final String verticalServoName = "verticalServo";
         public static final double verticalServoMinDegrees = 0;
         public static final double verticalServoMaxDegrees = 300;
-        public static final double verticalServoUpPosition = .3622;
+        public static final double verticalServoUpPosition = .3322;
         public static final double verticalServoDownPosition = 0;
 
 
         public static final String extendMotorName = "extendMotor";
         public static final int motorMaxPosition = 540;
-        public static final int motorMinPosition = 100;
+        public static final int motorMinPosition = 80;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = -1;
@@ -65,7 +65,7 @@ public class RobotConfig {
 
     public static class OuttakeConstants{
         public static final String armLiftName = "armLift";
-        public static final int armLiftHighDunkPos = -1970;
+        public static final int armLiftHighDunkPos = -2000;
         public static final int armLiftDefaultPos = 0;
 
 

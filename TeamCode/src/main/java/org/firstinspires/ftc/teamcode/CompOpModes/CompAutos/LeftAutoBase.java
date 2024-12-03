@@ -27,8 +27,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
     @Override
     public void specificInit(){
         Point blueGoal = new Point(new Pose(26.8,-4.5));
-        Point rightWhiteSpike = new Point(new Pose(19,-18.1,Math.toRadians(270)));
-        Point middleWhiteSpike = new Point(new Pose(26.87,-18.54));
+        Point rightWhiteSpike = new Point(new Pose(19,-17.1,Math.toRadians(270)));
+        Point middleWhiteSpike = new Point(new Pose(26.87,-18));
         Point leftWhiteSpike = new Point(new Pose(22.5,-33.3));
         Point submersibleStart = new Point(new Pose(-7.8,-53.8));
         Point submersibleEnd = new Point(new Pose(-8.8,-48.8));
@@ -46,6 +46,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
 
         )
                 .setConstantHeadingInterpolation(5*PI/4)
+                //.setPathEndVelocityConstraint(2)
                 .build();
         Path fromGoalToRightSpike = new Path.PathBuilder(
                 new BezierLine(
@@ -82,6 +83,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 )
         )
                 .setLinearHeadingInterpolation(3*PI/2,5*PI/4)
+                .setConstantHeadingInterpolation(5*PI/4)
+//                .setPathEndVelocityConstraint(.5)
 //                .setConstantHeadingInterpolation(5*PI/4)
                 .build();
         Path fromGoalToLeftSpike = new Path.PathBuilder(
@@ -100,6 +103,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 )
         )
                 .setLinearHeadingInterpolation(0,5*PI/4)
+                .setConstantHeadingInterpolation(5*PI/4)
+                //.setPathEndVelocityConstraint(.5)
                 .build();
         Path fromGoalToSubmersible = new Path.PathBuilder(
                 new BezierCurve(
@@ -130,6 +135,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 )
         )
                 .setLinearHeadingInterpolation(5*PI/4,PI)
+                .setConstantHeadingInterpolation(5*PI/4)
+                //.setPathEndVelocityConstraint(.5)
                 .build();
 
         //makes paths into commands

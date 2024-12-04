@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void dunkHighPos(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingHighDunkPos);
-        armSwing.set(.5);
+        armSwing.set(.4);
     }
 
     public boolean hasDunked(){
@@ -46,7 +46,7 @@ public class ArmSubsystem extends SubsystemBase {
     public void goDown(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingDefaultPos);
-        armSwing.set(.25);
+        armSwing.set(.1);
     }
     public boolean isDown(){
         return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;

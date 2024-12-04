@@ -51,7 +51,7 @@ public class RobotConfig {
 
         public static final String extendMotorName = "extendMotor";
         public static final int motorMaxPosition = 540;
-        public static final int motorMinPosition = 80;
+        public static final int motorMinPosition = 20;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = -1;
@@ -70,7 +70,7 @@ public class RobotConfig {
 
 
         public static final String armOuttakeName = "armOuttake";
-        public static int armSwingHighDunkPos = 432;
+        public static int armSwingHighDunkPos = 400;
         public static int armSwingDefaultPos = 0;
     }
 

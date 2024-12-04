@@ -117,7 +117,7 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
         Trigger takeOutOfBucket = new Trigger(() -> {return drivePad.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>.7;});
         takeOutOfBucket.whenActive(
                 new SequentialCommandGroup(
-                        robot.retractFully.copy(),
+                        robot.retractIntake.copy(),
                         robot.moveIntakeDown.copy(),
                         new FunctionalCommand(
                                 robot.spinIntakeSubsystem::spinWheelsUp,
@@ -140,8 +140,10 @@ public abstract class CompTeleOpTemplate extends RobotOpMode {
                 robot.liftCommand,
                 robot.armCommand,
                 new WaitCommand(150),
-                robot.liftDownCommand,
-                robot.armDownCommand
+                new ParallelCommandGroup(
+                        robot.liftDownCommand,
+                        robot.armDownCommand
+                )
         );
         Trigger intakeTrigger = new Trigger(()-> drivePad.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>.7);
         intakeTrigger.whenActive(intakeRoutine);

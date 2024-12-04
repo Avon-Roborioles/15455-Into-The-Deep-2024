@@ -30,8 +30,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         Point rightWhiteSpike = new Point(new Pose(19,-17.1,Math.toRadians(270)));
         Point middleWhiteSpike = new Point(new Pose(26.87,-18));
         Point leftWhiteSpike = new Point(new Pose(22.5,-33.3));
-        Point submersibleStart = new Point(new Pose(-7.8,-53.8));
-        Point submersibleEnd = new Point(new Pose(-8.8,-48.8));
+        Point submersibleStart = new Point(new Pose(-6.8,-53.8));
+        Point submersibleEnd = new Point(new Pose(-6.8,-48.8));
         Point submersibleParameterPoint = new Point(new Pose(15.9,-53.4));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(8,0,3*PI/2));

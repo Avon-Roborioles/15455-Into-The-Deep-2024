@@ -23,7 +23,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         armSwing.setInverted(false);
         armSwing.setPositionTolerance(20);
-        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         this.telemetry = telemetry;
     }
 
@@ -31,9 +31,17 @@ public class ArmSubsystem extends SubsystemBase {
     public void dunkHighPos(){
         armSwing.setRunMode(Motor.RunMode.PositionControl);
         armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingHighDunkPos);
-        armSwing.set(.4);
+        armSwing.set(.25);
     }
 
+    public void dunkLowPos(){
+        armSwing.setRunMode(Motor.RunMode.PositionControl);
+        armSwing.setTargetPosition(RobotConfig.OuttakeConstants.armSwingLowDunkPos);
+        armSwing.set(.25);
+    }
+    public boolean hasLowDunked(){
+        return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingLowDunkPos)<150;
+    }
     public boolean hasDunked(){
         return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingHighDunkPos)<150;
     }
@@ -50,6 +58,17 @@ public class ArmSubsystem extends SubsystemBase {
     }
     public boolean isDown(){
         return Math.abs(armSwing.getCurrentPosition()-RobotConfig.OuttakeConstants.armSwingDefaultPos)<150;
+    }
+    public void setBrake(){
+        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void setFloat(){
+        armSwing.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void setLowPower(){
+        armSwing.set(.12);
     }
 
     @Override

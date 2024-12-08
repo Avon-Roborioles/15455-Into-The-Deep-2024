@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive;
 
+import com.acmerobotics.roadrunner.Vector2d;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -7,6 +8,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
+import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 
 public class FollowerTeleOpCommand extends CommandBase {
 
@@ -47,10 +49,16 @@ public class FollowerTeleOpCommand extends CommandBase {
 //            heading = gamepadEx.getRightX();
 //            lockCount = 0;
 //        }
+        Vector vector = new Vector();
 
+        vector.setOrthogonalComponents(
+                gamepadEx.getLeftX(),
+                -gamepadEx.getLeftY()
+        );
+        vector.rotateVector(-1*followerSubsystem.getStartHeading()+Math.PI);
         follower.setTeleOpMovementVectors(
-                gamepadEx.getLeftY(),
-                -gamepadEx.getLeftX(),
+                vector.getYComponent(),
+                vector.getXComponent(),
                 -heading*Math.abs(heading),
                 false
         );

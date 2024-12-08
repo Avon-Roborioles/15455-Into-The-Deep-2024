@@ -21,7 +21,7 @@ public class ExtendMotorSubsystem extends SubsystemBase {
         extendMotor = new MotorEx(hMap, RobotConfig.IntakeConstants.extendMotorName);
         extendMotor.setRunMode(Motor.RunMode.PositionControl);
         extendMotor.setInverted(true);
-        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        extendMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         extendMotor.setPositionCoefficient(RobotConfig.IntakeConstants.motorPCoefficient);
 
         this.telemetry = telemetry;

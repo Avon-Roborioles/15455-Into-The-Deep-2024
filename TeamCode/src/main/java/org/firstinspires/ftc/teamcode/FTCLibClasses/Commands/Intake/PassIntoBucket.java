@@ -15,7 +15,7 @@ public class PassIntoBucket extends CommandBase {
 
     public PassIntoBucket(SpinIntakeSubsystem intake){
         this.intake = intake;
-        timer = new Timing.Timer(750, TimeUnit.MILLISECONDS);
+        timer = new Timing.Timer(1500, TimeUnit.MILLISECONDS);
     }
 
     @Override

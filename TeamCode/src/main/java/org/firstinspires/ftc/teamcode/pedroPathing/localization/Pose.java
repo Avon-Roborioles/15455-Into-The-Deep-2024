@@ -208,4 +208,7 @@ public class Pose {
     public Pose copy() {
         return new Pose(getX(), getY(), getHeading());
     }
+    public String toString(){
+        return "X:"+getX()+"\nY:"+getY()+"Heading:"+getHeading();
+    }
 }

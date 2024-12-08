@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.MoveIntakeUp
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.PassIntoBucket;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.RetractIntake;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Intake.SpinIntake;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.ArmLowDunkCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.LiftDownCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Outtake.LiftHighBasketCommand;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.TeleOpDriveCommand;
@@ -69,6 +70,7 @@ public class Robot {
     public ArmSubsystem armSubsystem;
     public ArmHighDunkCommand armCommand;
     public ArmDownCommand armDownCommand;
+    public ArmLowDunkCommand armLowDunkCommand;
 
     public Robot(HardwareMap hMap, GamepadEx drivePad, GamepadEx gamepadEx2, Telemetry telemetry,AllianceColor color){
         this.drivePad = drivePad;
@@ -95,7 +97,7 @@ public class Robot {
         verticalAndSpin = new ParallelCommandGroup(
                 new SequentialCommandGroup(
                         moveIntakeDown,
-                        new WaitCommand(900),
+                        new WaitCommand(1200),
                         moveIntakeUp
                 ),
 
@@ -122,6 +124,7 @@ public class Robot {
         liftDownCommand = new LiftDownCommand(liftSubsystem);
         armCommand = new ArmHighDunkCommand(armSubsystem);
         armDownCommand = new ArmDownCommand(armSubsystem);
+        armLowDunkCommand = new ArmLowDunkCommand(armSubsystem);
 
         /*
         ====================Drive====================

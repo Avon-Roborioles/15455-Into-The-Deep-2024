@@ -24,7 +24,7 @@ public class LiftSubsystem extends SubsystemBase {
 
         armLift.setInverted(false);
         armLift.setPositionTolerance(20);
-        //armLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        armLift.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         this.telemetry = telemetry;
     }
 

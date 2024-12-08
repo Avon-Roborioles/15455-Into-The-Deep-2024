@@ -14,6 +14,9 @@ public class FollowerSubsystem extends SubsystemBase {
     private Follower follower;
     private Telemetry telemetry;
 
+    //for teleop
+    private double startHeading = 0;
+
     public FollowerSubsystem(Follower follower){
         this.follower = follower;
     }
@@ -32,7 +35,10 @@ public class FollowerSubsystem extends SubsystemBase {
     }
 
     public void resetHeading() {
-        ((TwoWheelLocalizer)follower.getPoseUpdater().getLocalizer()).getStartPose().setHeading(MathFunctions.normalizeAngle(-follower.getTotalHeading()-0));
+        startHeading = follower.getPoseUpdater().getLocalizer().getPose().getHeading();
+    }
+    public double getStartHeading(){
+        return startHeading;
     }
 
     @Override

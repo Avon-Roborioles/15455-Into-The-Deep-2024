@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+
 //USE THIS CLASS TO PUT ALL CONSTANTS LIKE HARDWARE NAMES AND CONSTANTS
 public class RobotConfig {
     public static class DriveConstants {
@@ -51,7 +53,7 @@ public class RobotConfig {
 
         public static final String extendMotorName = "extendMotor";
         public static final int motorMaxPosition = 540;
-        public static final int motorMinPosition = 20;
+        public static final int motorMinPosition = 80;
         public static final double motorSlowRetractionRawPower = .2;
         public static final double motorExtendSpeed = 1;
         public static final double motorRetractSpeed = -1;
@@ -71,7 +73,8 @@ public class RobotConfig {
 
         public static final String armOuttakeName = "armOuttake";
         public static int armSwingHighDunkPos = 400;
-        public static int armSwingDefaultPos = 0;
+        public static int armSwingLowDunkPos = 503;
+        public static int armSwingDefaultPos = 50;
     }
 
     public static class CameraConstants{
@@ -79,6 +82,10 @@ public class RobotConfig {
         public static final float fy = 790.088f;
         public static final float cx = 320.002f;
         public static final float cy = 240.001f;
+    }
+
+    public static class GlobalConstants {
+        public static Pose lastPose = new Pose(0,0,0);
     }
 
 }

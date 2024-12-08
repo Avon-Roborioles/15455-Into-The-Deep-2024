@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Commands.Drive.PedroPathAutoCommand;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
@@ -35,6 +36,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         Point submersibleParameterPoint = new Point(new Pose(15.9,-53.4));
 
         robot.followerSubsystem.getFollower().setPose(new Pose(8,0,3*PI/2));
+        robot.armSubsystem.setBrake();
         //robot.followerSubsystem.getFollower().setMaxPower(.75);
 
         Path startToGoal =  new Path.PathBuilder(
@@ -161,7 +163,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         SequentialCommandGroup dunkRoutine = new SequentialCommandGroup(
                 robot.liftCommand,
                 robot.armCommand,
-                new WaitCommand(200),
+                new WaitCommand(1000),
                 new ParallelCommandGroup(
                         robot.liftDownCommand,
                         robot.armDownCommand
@@ -172,7 +174,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         SequentialCommandGroup dunk = new SequentialCommandGroup(
                 robot.liftCommand,
                 robot.armCommand,
-                new WaitCommand(200)
+                new InstantCommand(()->{robot.armSubsystem.setLowPower();}),
+                new WaitCommand(1000)
         );
         SequentialCommandGroup outtakeDown = new SequentialCommandGroup(
                 new ParallelCommandGroup(
@@ -339,8 +342,11 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                         fromGoalToSubmersibleCommand,
                         outtakeDown
                 ),
-                scanForSamples,
-                submersibleToBasketAndScore
+                new InstantCommand(()->{
+                    RobotConfig.GlobalConstants.lastPose = robot.followerSubsystem.getFollower().getPose();
+                }                )
+//                scanForSamples,
+//                submersibleToBasketAndScore
         );
 
         autoRoutine.schedule();

@@ -20,7 +20,7 @@ public class ArmLowDunkCommand extends CommandBase {
 
     @Override
     public void end(boolean b){
-        //armSubsystem.stop();
+        armSubsystem.stop();
     }
 
     @Override

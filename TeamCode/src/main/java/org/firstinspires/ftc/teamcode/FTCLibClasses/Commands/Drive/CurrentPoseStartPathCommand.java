@@ -35,7 +35,7 @@ public class CurrentPoseStartPathCommand extends CommandBase {
                 new Path.PathBuilder(
                         new BezierCurve(
                                 new Point(pose),
-                                new Point(new Pose(15.9,-53.4)),
+                                new Point(new Pose(27.9,-46.4)),
                                 point1
                         )
                 )

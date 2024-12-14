@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.RobotConfig;
 
 public abstract class RobotOpMode extends OpMode {
 
@@ -77,5 +78,6 @@ public abstract class RobotOpMode extends OpMode {
     @Override
     public void stop(){
         CommandScheduler.getInstance().reset();
+        RobotConfig.GlobalConstants.lastPose = robot.followerSubsystem.getFollower().getPose();
     }
 }

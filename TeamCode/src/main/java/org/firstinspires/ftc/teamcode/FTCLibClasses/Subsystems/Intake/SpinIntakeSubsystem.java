@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.AllianceColor;
 import org.firstinspires.ftc.teamcode.Bot;
 import org.firstinspires.ftc.teamcode.RobotConfig;
@@ -14,6 +16,7 @@ public class SpinIntakeSubsystem extends SubsystemBase {
 
     private final ColorSensor colorSensor1;
     private final ColorSensor colorSensor2;
+    private final DistanceSensor distanceSensor;
 
     private final CRServo intakeServo;
 
@@ -30,6 +33,7 @@ public class SpinIntakeSubsystem extends SubsystemBase {
     public SpinIntakeSubsystem(HardwareMap hMap, AllianceColor alliance, Telemetry telemetry){
         colorSensor1 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor1Name);
         colorSensor2 = hMap.get(ColorSensor.class, RobotConfig.IntakeConstants.colorSensor2Name);
+        distanceSensor = hMap.get(DistanceSensor.class,RobotConfig.IntakeConstants.distanceSensorName);
 
         intakeServo = hMap.get(CRServo.class,RobotConfig.IntakeConstants.intakeServoName);
         this.allianceColor = alliance;
@@ -63,20 +67,35 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         green=percents[1];
         blue=percents[2];
 
+        BothSampleState intakeState = getBothSampleStates();
+
+
 
 
         //if(doTelemetry.getAsBoolean()) {
+        telemetry.addLine("============General Intake============");
+        telemetry.addData("Left Sample",intakeState.leftSample);
+        telemetry.addData("Right Sample", intakeState.rightSample);
+        telemetry.addData("Num Samples",intakeState.numSamples);
         telemetry.addLine("============COLOR SENSORS============");
         telemetry.addData("Percent Red",red);
         telemetry.addData("Percent Blue Raw",blue);
         telemetry.addData("Percent Green Raw", green);
-        telemetry.addData("Red Raw",c1Red+c2Red);
-        telemetry.addData("Blue Raw",c1Blue+c2Blue);
-        telemetry.addData("Green Raw",c1Green+c2Green);
+        telemetry.addData("Red 1 Raw",c1Red);
+        telemetry.addData("Blue 1 Raw",c1Blue);
+        telemetry.addData("Green 1 Raw",c1Green);
+        telemetry.addData("Red 2 Raw",c2Red);
+        telemetry.addData("Blue 2 Raw",c2Blue);
+        telemetry.addData("Green 2 Raw",c2Green);
         telemetry.addData("SAMPLE STATE", getSampleState());
+
+        telemetry.addLine("============DISTANCE SENSOR============");
+        telemetry.addData("Distance Sensor (Inch)",distanceSensor.getDistance(DistanceUnit.INCH));
 
         telemetry.addLine("============Intake Servo============");
         telemetry.addData("Intake Servo Power",intakeServo.getPower());
+
+
     }
 
     public SampleState getSampleState(){
@@ -138,12 +157,44 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         return toRet;
     }
 
+    public BothSampleState getBothSampleStates(){
+        double c1Red = colorSensor1.red();
+        double c1Blue = colorSensor1.blue();
+        double c1Green = colorSensor1.green();
+
+        double c2Red = colorSensor2.red();
+        double c2Blue = colorSensor2.blue();
+        double c2Green = colorSensor2.green();
+
+        SampleState c1Color = calculateSampleColor(c1Red,c1Green,c1Blue);
+        SampleState c2Color = calculateSampleColor(c2Red,c2Green,c2Blue);
+
+        int numSampleInIntake =1;
+        if (distanceSensor.getDistance(DistanceUnit.INCH)<RobotConfig.IntakeConstants.distanceSensorLowThreshold
+                ||distanceSensor.getDistance(DistanceUnit.INCH)> RobotConfig.IntakeConstants.distanceSensorHighThreshold){
+            if (c1Color!=SampleState.NO_SAMPLE&&c2Color!=SampleState.NO_SAMPLE){
+                numSampleInIntake = 2;
+            }
+        }
+
+        return new BothSampleState(c1Color,c2Color,numSampleInIntake);
+
+    }
+
 
     private SampleState calculateSampleColor(double red, double green, double blue){
         double[] percents = getPercents(red,blue, green);
+        double origRed = red;
+        double origBlue = blue;
+        double origGreen = green;
         red = percents[0];
         green=percents[1];
         blue=percents[2];
+
+        double avg = (origRed+origGreen+origBlue)/3;
+        if (avg<70){
+            return SampleState.CORRESPONDING_SAMPLE;
+        }
 
         if (blue>.42){
             switch(allianceColor){
@@ -169,6 +220,17 @@ public class SpinIntakeSubsystem extends SubsystemBase {
         return SampleState.NO_SAMPLE;
     }
 
+    //object to store data
+    public class BothSampleState{
+        public SampleState leftSample;
+        public SampleState rightSample;
+        public final int numSamples;
+        BothSampleState(SampleState leftSample,SampleState rightSample, int numSamples){
+            this.leftSample = leftSample;
+            this.rightSample = rightSample;
+            this.numSamples = numSamples;
+        }
+    }
 
     public enum SampleState {
         CORRESPONDING_SAMPLE("Corresponding Sample",true),

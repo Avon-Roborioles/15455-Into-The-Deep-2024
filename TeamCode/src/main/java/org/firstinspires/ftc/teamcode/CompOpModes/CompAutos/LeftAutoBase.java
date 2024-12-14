@@ -163,7 +163,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         SequentialCommandGroup dunkRoutine = new SequentialCommandGroup(
                 robot.liftCommand,
                 robot.armCommand,
-                new WaitCommand(1000),
+                new WaitCommand(750),
                 new ParallelCommandGroup(
                         robot.liftDownCommand,
                         robot.armDownCommand
@@ -174,8 +174,8 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
         SequentialCommandGroup dunk = new SequentialCommandGroup(
                 robot.liftCommand,
                 robot.armCommand,
-                new InstantCommand(()->{robot.armSubsystem.setLowPower();}),
-                new WaitCommand(1000)
+
+                new WaitCommand(750)
         );
         SequentialCommandGroup outtakeDown = new SequentialCommandGroup(
                 new ParallelCommandGroup(
@@ -341,10 +341,7 @@ abstract public class LeftAutoBase extends AutoBaseRoutine{
                 new ParallelCommandGroup(
                         fromGoalToSubmersibleCommand,
                         outtakeDown
-                ),
-                new InstantCommand(()->{
-                    RobotConfig.GlobalConstants.lastPose = robot.followerSubsystem.getFollower().getPose();
-                }                )
+                )
 //                scanForSamples,
 //                submersibleToBasketAndScore
         );

@@ -63,6 +63,11 @@ public class RobotConfig {
         public static final int motorDegreeOfError = 25;
         public static final int motorClearPos = 322;
 
+
+        public static final String distanceSensorName = "intakeDistanceSensor";
+        public static final double distanceSensorLowThreshold = .8;
+        public static final double distanceSensorHighThreshold = 3.1;
+
     }
 
     public static class OuttakeConstants{

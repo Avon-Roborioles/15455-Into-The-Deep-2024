@@ -36,6 +36,7 @@ import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.FollowerSubsystem
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LiftSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.SpinIntakeSubsystem;
 import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.Intake.VerticalIntakeSubsystem;
+import org.firstinspires.ftc.teamcode.FTCLibClasses.Subsystems.LimelightSubsystem;
 
 public class Robot {
     public GamepadEx drivePad;
@@ -72,6 +73,10 @@ public class Robot {
     public ArmDownCommand armDownCommand;
     public ArmLowDunkCommand armLowDunkCommand;
 
+
+
+    public LimelightSubsystem limelightSubsystem;
+
     public Robot(HardwareMap hMap, GamepadEx drivePad, GamepadEx gamepadEx2, Telemetry telemetry,AllianceColor color){
         this.drivePad = drivePad;
         this.gamepadEx2 = gamepadEx2;
@@ -97,7 +102,7 @@ public class Robot {
         verticalAndSpin = new ParallelCommandGroup(
                 new SequentialCommandGroup(
                         moveIntakeDown,
-                        new WaitCommand(1200),
+                        new WaitCommand(750),
                         moveIntakeUp
                 ),
 
@@ -125,6 +130,12 @@ public class Robot {
         armCommand = new ArmHighDunkCommand(armSubsystem);
         armDownCommand = new ArmDownCommand(armSubsystem);
         armLowDunkCommand = new ArmLowDunkCommand(armSubsystem);
+
+
+        /*
+        ====================Limelight====================
+         */
+        //limelightSubsystem = new LimelightSubsystem(hMap);
 
         /*
         ====================Drive====================
